@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 #import urllib2, logging, csv, re
-#import requests
+import requests
 from io import StringIO
 import pandas as pd
 import numpy as np
@@ -25,16 +25,16 @@ for i in range(30):
         j = j+1
         
 for i in range(10):
-    print(worked_day[i].date())
+    print(worked_day[i].strftime("%Y%m%d"))
 
         
 #for i in range(10):
- #   r[i] = requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i] + '&type=ALL')
+r = requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[0].strftime("%Y%m%d") + '&type=ALL')
     # 整理資料，變成表格
-  #  df = pd.read_csv(StringIO(r.text.replace("=", "")),header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1)
+df = pd.read_csv(StringIO(r.text.replace("=", "")),header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
     # 整理一些字串：
-   # df = df.apply(lambda s: pd.to_numeric(s.astype(str).str.replace(",", "").replace("+", "1").replace("-", "-1"), errors='coerce'))
-    #df.head()
+df = df.apply(lambda s: pd.to_numeric(s.astype(str).str.replace(",", "").replace("+", "1").replace("-", "-1"), errors='coerce'))
+print(df.head())
 
 
 
