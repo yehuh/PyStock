@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 #import urllib2, logging, csv, re
 import requests
 from io import StringIO
-import pandas# as pd
+import pandas as pd
 import numpy as np
+from copy import deepcopy
 
 #找出股市工作日期
 daterange = datetime.today()
@@ -25,7 +26,8 @@ for i in range(10):
     print(worked_day[i].strftime("%Y%m%d"))
 
 
-# 下載股價	
+# 下載股價
+
 r=[]
 for i in range(4):
 	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
@@ -33,15 +35,15 @@ for i in range(4):
 # 整理資料，變成表格
 df =[]
 for i in range(3):
-	df.append(pandas.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+	df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
 
 for i in range(3):
-    print("              ")
-    print("-------------")
-    print('Date :'+ worked_day[i].strftime("%Y%m%d"))
-    print(df[i].head(3))
-    print("-------------")
-    print("              ")
+	print("              ")
+	print("-------------")
+	print('Date :'+ worked_day[i].strftime("%Y%m%d"))
+	print(df[i].head(3))
+	print("-------------")
+	print("              ")
 
 deal_cnt_frame = []
 for i in range(3):
@@ -50,6 +52,7 @@ for i in range(3):
 print(deal_cnt_frame[0].tail(5))
 print(deal_cnt_frame[1].tail(5))
 print(deal_cnt_frame[2].tail(5))
+
 
 
 deal_cnt = []
@@ -62,13 +65,37 @@ for i in range(2):
 	print(deal_cnt[i+1])
 	print("              ")
 
-deal_cnt_3day = deal_cnt[1]
-#deal_cnt_3day.iloc[:,2] = deal_cnt_3day.iloc[:,2] + deal_cnt[2].iloc[:,2]
 
+stock = []
+#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
+#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
+
+#deal_cnt = []
+#deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
+#deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
+
+for i in range(3):
+	buff = deal_cnt[i]["成交股數"].str.replace(",", "")#.astype(int)
+	deal_cnt[i]["成交股數"] = buff.astype(int)
+	
+deal_cnt_3day = deal_cnt[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy() 
+
+#deal_cnt_3day["成交股數"] = 0
+
+buff = deal_cnt_3day["成交股數"] + deal_cnt[1]["成交股數"]
+deal_cnt_3day["成交股數"] = buff
+
+print("-------------")
+print("deal cnt 1st day")
+print(deal_cnt[0])
+print(deal_cnt[0].dtypes)
+print("              ")
 print("-------------")
 print("deal cnt 3day")
 print(deal_cnt_3day)
+print(deal_cnt_3day.dtypes)
 print("              ")
+
 
 
 
