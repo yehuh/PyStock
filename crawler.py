@@ -5,11 +5,8 @@ from io import StringIO
 import pandas# as pd
 import numpy as np
 
+#找出股市工作日期
 daterange = datetime.today()
-
-# 下載股價
-days_ago = [15]
-worked_day = [10]
 
 days_ago = np.array([datetime.today() - timedelta(days =i) for i in range(30)]) 
 
@@ -27,13 +24,15 @@ for i in range(30):
 for i in range(10):
     print(worked_day[i].strftime("%Y%m%d"))
 
-        
-#for i in range(5):
-r = np.array([requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i].strftime("%Y%m%d") + '&type=ALL') for i in range(4)])
-    
-    # 整理資料，變成表格
-df =[]
+
+# 下載股價	
+r=[]
 for i in range(4):
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
+   
+# 整理資料，變成表格
+df =[]
+for i in range(3):
 	df.append(pandas.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
 
 for i in range(3):
@@ -57,16 +56,25 @@ deal_cnt = []
 for i in range(3):
 	deal_cnt.append(deal_cnt_frame[i].tail(5))
 
-for i in range(3):
+for i in range(2):
 	print("              ")
 	print("-------------")
-	print(deal_cnt[i])
+	print(deal_cnt[i+1])
 	print("              ")
 
-#deal_cnt_3day = deal_cnt[0]
+deal_cnt_3day = deal_cnt[1]
+#deal_cnt_3day.iloc[:,2] = deal_cnt_3day.iloc[:,2] + deal_cnt[2].iloc[:,2]
+
+print("-------------")
+print("deal cnt 3day")
+print(deal_cnt_3day)
+print("              ")
+
+
+
 
 #for i in range(1, 2):
 #	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
 
-#print(deal_cnt_3day) #.tail(5)
+
 
