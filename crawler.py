@@ -29,8 +29,8 @@ for i in range(10):
 # 下載股價
 
 r=[]
-for i in range(4):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
+for i in range(4,7):
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i].strftime("%Y%m%d") + '&type=ALL'))
    
 # 整理資料，變成表格
 df =[]
@@ -49,15 +49,15 @@ deal_cnt_frame = []
 for i in range(3):
 	deal_cnt_frame.append(df[i].iloc[:,[0,2]])
 	
-print(deal_cnt_frame[0].tail(5))
-print(deal_cnt_frame[1].tail(5))
-print(deal_cnt_frame[2].tail(5))
+print(deal_cnt_frame[0].head(5))
+print(deal_cnt_frame[1].head(5))
+print(deal_cnt_frame[2].head(5))
 
 
 
 deal_cnt = []
 for i in range(3):
-	deal_cnt.append(deal_cnt_frame[i].tail(5))
+	deal_cnt.append(deal_cnt_frame[i].head(5))
 
 for i in range(2):
 	print("              ")
@@ -65,38 +65,50 @@ for i in range(2):
 	print(deal_cnt[i+1])
 	print("              ")
 
-
+'''
 stock = []
-#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
-#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
+stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
+stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
 
-#deal_cnt = []
-#deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
-#deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
+deal_cnt = []
+deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
+deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
+'''
 
 for i in range(3):
 	buff = deal_cnt[i]["成交股數"].str.replace(",", "")#.astype(int)
 	deal_cnt[i]["成交股數"] = buff.astype(int)
 	
-deal_cnt_3day = deal_cnt[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy() 
+deal_cnt_3day = deal_cnt[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy()
 
-#deal_cnt_3day["成交股數"] = 0
+for i in range(2):
+	deal_cnt_3day["成交股數"] = deal_cnt_3day["成交股數"]+deal_cnt[i+1]["成交股數"]
 
-buff = deal_cnt_3day["成交股數"] + deal_cnt[1]["成交股數"]
-deal_cnt_3day["成交股數"] = buff
+#buffj = []
+#for i in range(3):
+buffj = deal_cnt[0].iloc[:,[1]] + deal_cnt[1].iloc[:,[1]]
+
+#deal_cnt_3day["成交股數"] = buffj.copy()
 
 print("-------------")
 print("deal cnt 1st day")
 print(deal_cnt[0])
-print(deal_cnt[0].dtypes)
 print("              ")
 print("-------------")
-print("deal cnt 3day")
-print(deal_cnt_3day)
-print(deal_cnt_3day.dtypes)
+print("deal cnt 2nd day")
+print(deal_cnt[1])
 print("              ")
-
-
+print("-------------")
+print("deal cnt 3rd day")
+print(deal_cnt[2])
+print("              ")
+print("              ")
+print("              ")
+print("-------------")
+print("deal cnt sum")
+print(deal_cnt_3day)#[1]deal_cnt_3day
+print(deal_cnt_3day.dtypes)#[1]deal_cnt_3day
+print("              ")
 
 
 
