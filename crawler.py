@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 #import urllib2, logging, csv, re
 import requests
 from io import StringIO
@@ -6,7 +6,32 @@ import pandas as pd
 import numpy as np
 from copy import deepcopy
 
+#設定2021的假日
+holidays_taiwan_2021 = []
+holidays_taiwan_2021.append(date(2021, 1, 1))
+holidays_taiwan_2021.append(date(2021, 2, 10))
+holidays_taiwan_2021.append(date(2021, 2, 11))
+holidays_taiwan_2021.append(date(2021, 2, 12))
+holidays_taiwan_2021.append(date(2021, 2, 15))
+holidays_taiwan_2021.append(date(2021, 2, 16))
+holidays_taiwan_2021.append(date(2021, 3, 1))
+holidays_taiwan_2021.append(date(2021, 4, 2))
+holidays_taiwan_2021.append(date(2021, 4, 5))
+holidays_taiwan_2021.append(date(2021, 4, 30))
+holidays_taiwan_2021.append(date(2021, 6, 14))
+holidays_taiwan_2021.append(date(2021, 9, 20))
+holidays_taiwan_2021.append(date(2021, 9, 21))
+holidays_taiwan_2021.append(date(2021, 10, 11))
+holidays_taiwan_2021.append(date(2021, 12, 31))
+
+for day in holidays_taiwan_2021:
+	print(day.strftime("%Y%m%d"))
+	print("week day is %d" % day.weekday())
+	print("                               ")
+
+
 #找出股市工作日期
+
 daterange = datetime.today()
 
 days_ago = np.array([datetime.today() - timedelta(days =i) for i in range(30)]) 
@@ -66,13 +91,13 @@ for i in range(2):
 	print("              ")
 
 '''
-stock = []
-stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
-stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
+#stock = []
+#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
+#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
 
-deal_cnt = []
-deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
-deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
+#deal_cnt = []
+#deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
+#deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
 '''
 
 for i in range(3):
