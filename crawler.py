@@ -24,33 +24,50 @@ holidays_taiwan_2021.append(date(2021, 9, 21))
 holidays_taiwan_2021.append(date(2021, 10, 11))
 holidays_taiwan_2021.append(date(2021, 12, 31))
 
+'''
 for day in holidays_taiwan_2021:
 	print(day.strftime("%Y%m%d"))
 	print("week day is %d" % day.weekday())
 	print("                               ")
-
+'''
 
 #找出股市工作日期
 
-daterange = datetime.today()
-
-days_ago = np.array([datetime.today() - timedelta(days =i) for i in range(60)]) 
-
-worked_day = np.array([datetime.today() - timedelta(days =i) for i in range(30)])
-
-j= 0
+days_ago = []
 for i in range(60):
-    if(days_ago[i].weekday() <5):
-        #print(days_ago[i])
-        for holiday in holidays_taiwan_2021:
-            if(days_ago[i]!=holiday):
-                worked_day[j] = days_ago[i]
-                j = j+1
+	days_ago.append(datetime.today() - timedelta(days = i))
+# = np.array([datetime.today() - timedelta(days =i) for i in range(60)]) 
+
+worked_day = []
+real_work_day =[]
+#np.array([datetime.today() - timedelta(days =i) for i in range(60)])
+
+#print(days_ago[i])
+j= 0
+
+for dayyy in days_ago:
+	if dayyy.weekday() < 5:
+		worked_day.append(dayyy)
+
+#for i in range(60):
+#	if days_ago[i].weekday() <5:
+#		worked_day.append(days_ago[i])
+        		
+				#break
+				#
+
+for dayy in worked_day:
+	was_holiday = False
+	for holiday in holidays_taiwan_2021:
+		if dayy.date() == holiday:
+			was_holiday = True
+			break
+	if was_holiday == False:
+		real_work_day.append(dayy)
+
         
-        
-        
-for i in range(30):
-    print(worked_day[i].strftime("%Y%m%d"))
+#for day in real_work_day:
+#	print(day.strftime("%Y%m%d"))
 
 
 # 下載股價
@@ -142,5 +159,4 @@ print("              ")
 
 #for i in range(1, 2):
 #	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
-
 
