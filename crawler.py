@@ -34,24 +34,27 @@ for day in holidays_taiwan_2021:
 
 daterange = datetime.today()
 
-days_ago = np.array([datetime.today() - timedelta(days =i) for i in range(30)]) 
+days_ago = np.array([datetime.today() - timedelta(days =i) for i in range(60)]) 
 
-worked_day = np.array([datetime.today() - timedelta(days =i) for i in range(10)])
+worked_day = np.array([datetime.today() - timedelta(days =i) for i in range(30)])
 
 j= 0
-for i in range(30):
+for i in range(60):
     if(days_ago[i].weekday() <5):
         #print(days_ago[i])
-        if(j<10):
-            worked_day[j] = days_ago[i]
+        for holiday in holidays_taiwan_2021:
+            if(days_ago[i]!=holiday):
+                worked_day[j] = days_ago[i]
+                j = j+1
         
-        j = j+1
         
-for i in range(10):
+        
+for i in range(30):
     print(worked_day[i].strftime("%Y%m%d"))
 
 
 # 下載股價
+
 
 r=[]
 for i in range(4,7):
@@ -139,6 +142,5 @@ print("              ")
 
 #for i in range(1, 2):
 #	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
-
 
 
