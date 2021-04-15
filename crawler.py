@@ -31,10 +31,31 @@ for day in holidays_taiwan_2021:
 	print("                               ")
 '''
 
-#找出股市工作日期
+all_stock = pd.read_html("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2", match ="有價證券代號及名稱")
+print(len(all_stock))
+df = all_stock[0]
+print(df.loc[df["0"]=="上市認購(售)權證"])
 
+
+#設定台股代號
+stock_code = []
+stock_code.append("1101")
+stock_code.append("1102")
+stock_code.append("1103")
+stock_code.append("1104")
+stock_code.append("1108")
+stock_code.append("1109")
+stock_code.append("1109")
+stock_code.append("1110")
+stock_code.append("1201")
+stock_code.append("1203")
+stock_code.append("1210")
+stock_code.append("1213")
+
+#找出股市工作日期
+'''
 days_ago = []
-for i in range(60):
+for i in range(80):
 	days_ago.append(datetime.today() - timedelta(days = i))
 # = np.array([datetime.today() - timedelta(days =i) for i in range(60)]) 
 
@@ -74,13 +95,16 @@ for dayy in worked_day:
 
 
 r=[]
-for i in range(4,7):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + worked_day[i].strftime("%Y%m%d") + '&type=ALL'))
+for i in range(1,4):
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
    
 # 整理資料，變成表格
 df =[]
 for i in range(3):
 	df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+
+
+
 
 for i in range(3):
 	print("              ")
@@ -89,6 +113,7 @@ for i in range(3):
 	print(df[i].head(3))
 	print("-------------")
 	print("              ")
+
 
 deal_cnt_frame = []
 for i in range(3):
@@ -102,13 +127,14 @@ print(deal_cnt_frame[2].head(5))
 
 deal_cnt = []
 for i in range(3):
-	deal_cnt.append(deal_cnt_frame[i].head(5))
+	deal_cnt.append(deal_cnt_frame[i])
 
 for i in range(2):
 	print("              ")
 	print("-------------")
-	print(deal_cnt[i+1])
-	print("              ")
+	print("Date:"+real_work_day[i].strftime("%Y%m%d"))
+	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[0]])
+	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[1]])
 
 '''
 #stock = []
@@ -120,6 +146,8 @@ for i in range(2):
 #deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
 '''
 
+'''
+'''
 for i in range(3):
 	buff = deal_cnt[i]["成交股數"].str.replace(",", "")#.astype(int)
 	deal_cnt[i]["成交股數"] = buff.astype(int)
@@ -154,9 +182,8 @@ print("deal cnt sum")
 print(deal_cnt_3day)#[1]deal_cnt_3day
 print(deal_cnt_3day.dtypes)#[1]deal_cnt_3day
 print("              ")
-
+'''
 
 
 #for i in range(1, 2):
 #	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
-
