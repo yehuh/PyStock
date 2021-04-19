@@ -30,12 +30,34 @@ for day in holidays_taiwan_2021:
 	print("week day is %d" % day.weekday())
 	print("                               ")
 '''
-
-all_stock = pd.read_html("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2", match ="有價證券代號及名稱")
-print(len(all_stock))
+#, match ="有價證券代號及名稱"
+all_stock = pd.read_html("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2")
+#all_stock = pd.read_html("file:///home/yehuh/PythonStock/C_public.jsp.html")
+#print(len(all_stock))
 df = all_stock[0]
-print(df.loc[df["0"]=="上市認購(售)權證"])
+#print(all_stock.index(n1))
+#n=list1. 	
+#df['0']=="上市認購(售)權證"])
 
+stock_names =df.loc[:,0]
+first_stock = []
+first_stock_index = -1
+last_stock_index = -1
+for i in range(len(stock_names.index)):
+	if(stock_names.iloc[i] == '股票'):  #1101　台泥
+		first_stock.append(stock_names.iloc[i])
+		first_stock_index = i
+	elif(stock_names.iloc[i] == '上市認購(售)權證'):
+		last_stock_index = i
+		first_stock.append(stock_names.iloc[i])
+
+print('first_stock_index : ')
+print(first_stock_index)
+print('last_stock_index : ')
+print(last_stock_index)
+print(first_stock)
+#last_stock = stock_name.loc['上市認購(售)權證 ',:] 
+#print(last_stock.index())
 
 #設定台股代號
 stock_code = []
