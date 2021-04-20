@@ -30,27 +30,33 @@ for day in holidays_taiwan_2021:
 	print("week day is %d" % day.weekday())
 	print("                               ")
 '''
+#counter_stock = pd.read_html("file:///home/yehuh/PythonStock/counter_class_main.jsp.html")
+#df_counter = counter_stock[0]
 
-all_stock = pd.read_html("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2")
-df = all_stock[0]
+#https://isin.twse.com.tw/isin/C_public.jsp?strMode=2
+#https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
+market_stock = pd.read_html("file:///home/yehuh/PythonStock/C_public.jsp.html")
+df = market_stock[0]
 
 stock_names =df.loc[:,0]
-first_stock = []
+#first_stock = []
 first_stock_index = -1
 last_stock_index = -1
 for i in range(len(stock_names.index)):
 	if(stock_names.iloc[i] == '股票'):
-		first_stock.append(stock_names.iloc[i])
+		#first_stock.append(stock_names.iloc[i])
 		first_stock_index = i
 	elif(stock_names.iloc[i] == '上市認購(售)權證'):
 		last_stock_index = i
-		first_stock.append(stock_names.iloc[i])
+		#first_stock.append(stock_names.iloc[i])
 
-print('first_stock_index : ')
-print(first_stock_index)
-print('last_stock_index : ')
-print(last_stock_index)
-print(first_stock)
+maket_stock_no = []
+for i in range(first_stock_index+1, last_stock_index):
+	stock_name_str = stock_names.iloc[i].split()
+	maket_stock_no.append(int(stock_name_str[0]))
+
+print('stock_index : ')
+print(maket_stock_no)
 
 #設定台股代號
 stock_code = []
