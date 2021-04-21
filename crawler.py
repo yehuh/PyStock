@@ -5,6 +5,7 @@ from io import StringIO
 import pandas as pd
 import numpy as np
 from copy import deepcopy
+import json
 
 #設定2021的假日
 holidays_taiwan_2021 = []
@@ -30,6 +31,8 @@ for day in holidays_taiwan_2021:
 	print("week day is %d" % day.weekday())
 	print("                               ")
 '''
+
+'''
 counter_stock = pd.read_html("file:///home/yehuh/PythonStock/counter_class_main.jsp.html")
 df_counter = counter_stock[0]
 stock_names = df_counter.loc[:,2]
@@ -39,13 +42,17 @@ for i in range(1, len(stock_names.index)):
 	stock_str = stock_names.iloc[i].split()
 	counter_stock_no.append(stock_str[0])
 
+
+with open('counter_stock_index.json', 'w') as c_stock_id:
+	json.dump(counter_stock_no, c_stock_id)
+
 print('counter stockindex : ')
 print(counter_stock_no)
-
+'''
 #https://isin.twse.com.tw/isin/C_public.jsp?strMode=2
 #https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
 
-'''
+
 market_stock = pd.read_html("file:///home/yehuh/PythonStock/C_public.jsp.html")
 df = market_stock[0]
 
@@ -61,14 +68,17 @@ for i in range(len(stock_names.index)):
 		last_stock_index = i
 		#first_stock.append(stock_names.iloc[i])
 
-maket_stock_no = []
+market_stock_no = []
 for i in range(first_stock_index+1, last_stock_index):
 	stock_name_str = stock_names.iloc[i].split()
-	maket_stock_no.append(stock_name_str[0])
+	market_stock_no.append(stock_name_str[0])
+
+with open('market_stock_index.json', 'w') as m_stock_id:
+	json.dump(market_stock_no, m_stock_id)
 
 print('stock_index : ')
-print(maket_stock_no)
-'''
+print(market_stock_no)
+
 
 #設定台股代號
 stock_code = []
