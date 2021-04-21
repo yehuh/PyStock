@@ -32,8 +32,13 @@ for day in holidays_taiwan_2021:
 	print("                               ")
 '''
 
-'''
-counter_stock = pd.read_html("file:///home/yehuh/PythonStock/counter_class_main.jsp.html")
+#找出台股上市上櫃代號
+
+#上櫃股票
+#https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y
+
+
+counter_stock = pd.read_html("https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y")
 df_counter = counter_stock[0]
 stock_names = df_counter.loc[:,2]
 
@@ -48,40 +53,31 @@ with open('counter_stock_index.json', 'w') as c_stock_id:
 
 print('counter stockindex : ')
 print(counter_stock_no)
-'''
-#https://isin.twse.com.tw/isin/C_public.jsp?strMode=2
+
+
+#https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Yhttps://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
+
+
+#上市股票
 #https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
 
+'''
+market_stock = pd.read_html("https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y")
+df_market = market_stock[0]
+m_stock_names =df_market.loc[:,2]
 
-market_stock = pd.read_html("file:///home/yehuh/PythonStock/C_public.jsp.html")
-df = market_stock[0]
-
-stock_names =df.loc[:,0]
-#first_stock = []
-first_stock_index = -1
-last_stock_index = -1
-for i in range(len(stock_names.index)):
-	if(stock_names.iloc[i] == '股票'):
-		#first_stock.append(stock_names.iloc[i])
-		first_stock_index = i
-	elif(stock_names.iloc[i] == '上市認購(售)權證'):
-		last_stock_index = i
-		#first_stock.append(stock_names.iloc[i])
-
-market_stock_no = []
-for i in range(first_stock_index+1, last_stock_index):
-	stock_name_str = stock_names.iloc[i].split()
-	market_stock_no.append(stock_name_str[0])
+market_stock_no =[]
+for i in range(1, len(m_stock_names.index)):
+	stock_str = m_stock_names.iloc[i].split()
+	market_stock_no.append(stock_str[0])
 
 with open('market_stock_index.json', 'w') as m_stock_id:
 	json.dump(market_stock_no, m_stock_id)
 
 print('stock_index : ')
 print(market_stock_no)
+'''
 
-
-#設定台股代號
-stock_code = []
 
 
 #找出股市工作日期
