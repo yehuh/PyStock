@@ -15,14 +15,14 @@ this_mon = today_date - datetime.timedelta(days = days_to_mon)
 last_mon = this_mon - datetime.timedelta(days = 7)
 
 #寄件者使用的Gmail帳戶資訊
-gmail_user = 'yehuh@wonder-system.com'
-gmail_password = 'e2542254'
+gmail_user = 'yehuhuh@gmail.com'
+gmail_password = 'dkx6irsw'
 from_address = gmail_user
 
 
 
 
-to_address = ['yehuhuh@gmail.com', 'yeh_uh@yahoo.com.tw']  
+to_address = ['yeh_uh@yahoo.com.tw']  
 Subject = "Here is the Weekly Report ({})".format(last_mon)
 contents = """
 Hi my friend,

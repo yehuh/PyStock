@@ -33,12 +33,17 @@ for day in holidays_taiwan_2021:
 '''
 
 
+f = open('counter_stock_index.json')
+data = json.load(f)
+print(data[0])
+
 
 #找出台股上市上櫃代號
 
 #上櫃股票
 #https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y
 
+'''
 counter_stock = pd.read_html("https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y")
 df_counter = counter_stock[0]
 stock_names = df_counter.loc[:,2]
@@ -54,6 +59,7 @@ with open('counter_stock_index.json', 'w') as c_stock_id:
 
 print('counter stockindex : ')
 print(counter_stock_no)
+'''
 
 #上市股票
 #https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
