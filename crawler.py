@@ -33,9 +33,6 @@ for day in holidays_taiwan_2021:
 '''
 
 
-f = open('counter_stock_index.json')
-data = json.load(f)
-print(data[0])
 
 
 #找出台股上市上櫃代號
@@ -84,7 +81,7 @@ print(market_stock_no)
 
 
 #找出股市工作日期
-'''
+
 days_ago = []
 for i in range(80):
 	days_ago.append(datetime.today() - timedelta(days = i))
@@ -119,24 +116,48 @@ for dayy in worked_day:
 
         
 #for day in real_work_day:
-#	print(day.strftime("%Y%m%d"))
+#    print(day.strftime("%Y%m%d"))
 
 
 # 下載股價
 
 
-r=[]
-for i in range(1,4):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
-   
+#r=[]
+#for i in range(3):
+#	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
+
 # 整理資料，變成表格
-df =[]
-for i in range(3):
-	df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+#df =[]
+#for i in range(3):
+#df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
+f = open('counter_stock_index.json')
+counter_stock = json.load(f)
+#print(data[0])
 
 
+print(counter_stock[0])
+print("              ")
+print("-------------")
+print("              ")
+print(df.iloc[100,[0,2]])
 
+deal_cnt_frame = []
+for i in range(5):#len(counter_stock)
+    for j in range(len(df.index)):
+        if (counter_stock[i] == df.iloc[j,0]):
+            deal_cnt_frame.append(df.iloc[i,[0,2]])
+            break;
 
+print("              ")
+print("-------------")
+print('Date :'+ real_work_day[0].strftime("%Y%m%d"))
+print(deal_cnt_frame)
+print("-------------")
+print("              ")
+
+'''
 for i in range(3):
 	print("              ")
 	print("-------------")
@@ -166,8 +187,8 @@ for i in range(2):
 	print("Date:"+real_work_day[i].strftime("%Y%m%d"))
 	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[0]])
 	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[1]])
-
 '''
+
 #stock = []
 #stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
 #stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
