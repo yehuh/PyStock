@@ -136,23 +136,25 @@ f = open('counter_stock_index.json')
 counter_stock = json.load(f)
 #print(data[0])
 
+f =open('market_stock_index.json')
+market_stock = json.load(f)
 
 print(counter_stock[0])
 print("              ")
 print("-------------")
 print("              ")
-print(df.iloc[100,[0,2]])
+
 
 deal_cnt_frame = []
 for i in range(5):#len(counter_stock)
     for j in range(len(df.index)):
-        if (counter_stock[i] == df.iloc[j,0]):
+        if (market_stock[i] == df.iloc[j,0]):
             deal_cnt_frame.append(df.iloc[i,[0,2]])
             break;
 
 print("              ")
 print("-------------")
-print('Date :'+ real_work_day[0].strftime("%Y%m%d"))
+print('Date :'+ real_work_day[1].strftime("%Y%m%d"))
 print(deal_cnt_frame)
 print("-------------")
 print("              ")
