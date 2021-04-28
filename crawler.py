@@ -120,18 +120,19 @@ for dayy in worked_day:
 
 
 # 下載股價
-
-
-#r=[]
-#for i in range(3):
-#	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
-r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
+r=[]
+for i in range(3):
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+#r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
 
 # 整理資料，變成表格
-#df =[]
-#for i in range(3):
-#df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
-df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
+df =[]
+for i in range(3):
+    df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+
+#df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
+
+#讀取證券代號
 f = open('counter_stock_index.json')
 counter_stock = json.load(f)
 #print(data[0])
@@ -139,25 +140,21 @@ counter_stock = json.load(f)
 f =open('market_stock_index.json')
 market_stock = json.load(f)
 
-print(counter_stock[0])
-print("              ")
-print("-------------")
-print("              ")
+
+#找出證券代號中對應的成交量並存於 deal_cnt_frame_array
+deal_cnt_frame_array = []
 
 
-deal_cnt_frame = []
-for i in range(5):#len(counter_stock)
-    for j in range(len(df.index)):
-        if (market_stock[i] == df.iloc[j,0]):
-            deal_cnt_frame.append(df.iloc[i,[0,2]])
-            break;
+for k in range(3):
+    deal_cnt_frame =[]
+    for i in range(int((len(market_stock)/100))):
+        for j in range(len(df[0].index)):
+            if (market_stock[i] == df[k].iloc[j,0]):
+                deal_cnt_frame.append(df[k].iloc[j,[0,2]])
+                break;
+    deal_cnt_frame_array.append(deal_cnt_frame)
+    
 
-print("              ")
-print("-------------")
-print('Date :'+ real_work_day[1].strftime("%Y%m%d"))
-print(deal_cnt_frame)
-print("-------------")
-print("              ")
 
 '''
 for i in range(3):
@@ -201,33 +198,42 @@ for i in range(2):
 '''
 
 '''
-'''
+print("deal_cnt_frame_array[0].index")
+print(deal_cnt_frame_array[0][0]["成交股數"])
+
+#將成交股數的型態換成int
 for i in range(3):
-	buff = deal_cnt[i]["成交股數"].str.replace(",", "")#.astype(int)
-	deal_cnt[i]["成交股數"] = buff.astype(int)
+    for j in range(len(deal_cnt_frame_array[0])):
+        buff = deal_cnt_frame_array[i][j]["成交股數"].replace(",", "")
+        deal_cnt_frame_array[i][j]["成交股數"] = int(buff)#.astype(int)
+
+print("-------------")
+print("deal cnt 1st day")
+print(deal_cnt_frame_array[0][0]["成交股數"])
 	
-deal_cnt_3day = deal_cnt[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy()
+deal_cnt_3day = deal_cnt_frame_array[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy()
 
 for i in range(2):
-	deal_cnt_3day["成交股數"] = deal_cnt_3day["成交股數"]+deal_cnt[i+1]["成交股數"]
+    for j in range(len(deal_cnt_frame_array[0])):
+        deal_cnt_3day[j]["成交股數"] = deal_cnt_3day[j]["成交股數"]+deal_cnt_frame_array[i+1][j]["成交股數"]
 
 #buffj = []
 #for i in range(3):
-buffj = deal_cnt[0].iloc[:,[1]] + deal_cnt[1].iloc[:,[1]]
+#buffj = deal_cnt[0].iloc[:,[1]] + deal_cnt[1].iloc[:,[1]]
 
 #deal_cnt_3day["成交股數"] = buffj.copy()
 
 print("-------------")
 print("deal cnt 1st day")
-print(deal_cnt[0])
+print(deal_cnt_frame_array[0])
 print("              ")
 print("-------------")
 print("deal cnt 2nd day")
-print(deal_cnt[1])
+print(deal_cnt_frame_array[1])
 print("              ")
 print("-------------")
 print("deal cnt 3rd day")
-print(deal_cnt[2])
+print(deal_cnt_frame_array[2])
 print("              ")
 print("              ")
 print("              ")
@@ -236,7 +242,7 @@ print("deal cnt sum")
 print(deal_cnt_3day)#[1]deal_cnt_3day
 print(deal_cnt_3day.dtypes)#[1]deal_cnt_3day
 print("              ")
-'''
+
 
 
 #for i in range(1, 2):
