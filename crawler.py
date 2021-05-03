@@ -3,8 +3,6 @@ from datetime import datetime, timedelta, date
 import requests
 from io import StringIO
 import pandas as pd
-import numpy as np
-from copy import deepcopy
 import json
 
 #設定2021的假日
@@ -31,8 +29,6 @@ for day in holidays_taiwan_2021:
 	print("week day is %d" % day.weekday())
 	print("                               ")
 '''
-
-
 
 
 #找出台股上市上櫃代號
@@ -198,8 +194,8 @@ for i in range(2):
 '''
 
 '''
-print("deal_cnt_frame_array[0].index")
-print(deal_cnt_frame_array[0][0]["成交股數"])
+#print("deal_cnt_frame_array[0].index")
+#print(deal_cnt_frame_array[0][0]["成交股數"])
 
 #將成交股數的型態換成int
 for i in range(3):
@@ -207,21 +203,20 @@ for i in range(3):
         buff = deal_cnt_frame_array[i][j]["成交股數"].replace(",", "")
         deal_cnt_frame_array[i][j]["成交股數"] = int(buff)#.astype(int)
 
-print("-------------")
-print("deal cnt 1st day")
-print(deal_cnt_frame_array[0][0]["成交股數"])
-	
-deal_cnt_3day = deal_cnt_frame_array[0].copy()#.loc[deal_cnt[0]['成交股數']==specific_id,:].copy()
+    
+#deal_cnt_3day = pd.DataFrame(columns=("證券代號","成交股數"))
 
-for i in range(2):
-    for j in range(len(deal_cnt_frame_array[0])):
-        deal_cnt_3day[j]["成交股數"] = deal_cnt_3day[j]["成交股數"]+deal_cnt_frame_array[i+1][j]["成交股數"]
+#print(deal_cnt_3day)
 
-#buffj = []
-#for i in range(3):
-#buffj = deal_cnt[0].iloc[:,[1]] + deal_cnt[1].iloc[:,[1]]
+stock_row =[]
+for j in range(len(deal_cnt_frame_array[0])):
+    buff =0
+    for i in range(3):
+        buff = buff+int(deal_cnt_frame_array[i][j]["成交股數"])
+    row_data = {"證券代號": [deal_cnt_frame_array[0][j]["證券代號"]], "成交股數":[buff]}
+    stock_row.append(row_data)
 
-#deal_cnt_3day["成交股數"] = buffj.copy()
+deal_cnt_3day = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
 
 print("-------------")
 print("deal cnt 1st day")
@@ -239,8 +234,8 @@ print("              ")
 print("              ")
 print("-------------")
 print("deal cnt sum")
-print(deal_cnt_3day)#[1]deal_cnt_3day
-print(deal_cnt_3day.dtypes)#[1]deal_cnt_3day
+print(deal_cnt_3day)
+print(type(deal_cnt_3day))#[1]deal_cnt_3day
 print("              ")
 
 
