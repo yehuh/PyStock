@@ -73,8 +73,9 @@ with open('market_stock_index.json', 'w') as m_stock_id:
 print('stock_index : ')
 print(market_stock_no)
 '''
+import time
 
-
+start_time = time.time()
 
 #找出股市工作日期
 
@@ -114,16 +115,16 @@ for dayy in worked_day:
 #for day in real_work_day:
 #    print(day.strftime("%Y%m%d"))
 
-
+days_to_calc = 10
 # 下載股價
 r=[]
-for i in range(3):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+for i in range(days_to_calc):
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
 #r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
 
 # 整理資料，變成表格
 df =[]
-for i in range(3):
+for i in range(days_to_calc):
     df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
@@ -141,9 +142,9 @@ market_stock = json.load(f)
 deal_cnt_frame_array = []
 
 
-for k in range(3):
+for k in range(days_to_calc):
     deal_cnt_frame =[]
-    for i in range(int((len(market_stock)/100))):
+    for i in range(int(len(market_stock)/2)):
         for j in range(len(df[0].index)):
             if (market_stock[i] == df[k].iloc[j,0]):
                 deal_cnt_frame.append(df[k].iloc[j,[0,2]])
@@ -198,7 +199,7 @@ for i in range(2):
 #print(deal_cnt_frame_array[0][0]["成交股數"])
 
 #將成交股數的型態換成int
-for i in range(3):
+for i in range(days_to_calc):
     for j in range(len(deal_cnt_frame_array[0])):
         buff = deal_cnt_frame_array[i][j]["成交股數"].replace(",", "")
         deal_cnt_frame_array[i][j]["成交股數"] = int(buff)#.astype(int)
@@ -211,13 +212,19 @@ for i in range(3):
 stock_row =[]
 for j in range(len(deal_cnt_frame_array[0])):
     buff =0
-    for i in range(3):
+    for i in range(days_to_calc):
         buff = buff+int(deal_cnt_frame_array[i][j]["成交股數"])
     row_data = {"證券代號": [deal_cnt_frame_array[0][j]["證券代號"]], "成交股數":[buff]}
     stock_row.append(row_data)
 
-deal_cnt_3day = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
+deal_cnt_for_days_to_calc = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
 
+end_time = time.time()
+print("-------------")
+print("calculating time is")
+print(end_time - start_time)
+
+'''
 print("-------------")
 print("deal cnt 1st day")
 print(deal_cnt_frame_array[0])
@@ -232,10 +239,11 @@ print(deal_cnt_frame_array[2])
 print("              ")
 print("              ")
 print("              ")
+'''
 print("-------------")
 print("deal cnt sum")
-print(deal_cnt_3day)
-print(type(deal_cnt_3day))#[1]deal_cnt_3day
+print(deal_cnt_for_days_to_calc)
+print(type(deal_cnt_for_days_to_calc))#[1]deal_cnt_3day
 print("              ")
 
 
