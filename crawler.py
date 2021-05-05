@@ -148,20 +148,23 @@ print("                 ")
 print("len of market_stock")
 print(len(market_stock))
 print("                 ")
+start_pos = 0
 for k in range(days_to_calc):
     deal_cnt_frame =[]
     if(df[k]is None):
         continue
-    for i in range(int(len(market_stock)/1.8)):
+    for i in range(int(len(market_stock))):
         if(market_stock[i] is None):
             continue
-        for j in range(len(df[k].index)):
+        for j in range(start_pos, len(df[k].index)):
             if(df[k].iloc[j,0] is None):
                 print("dataframe not exist")
                 print("-------------------")
                 continue
             if (market_stock[i] == df[k].iloc[j,0]):
                 deal_cnt_frame.append(df[k].iloc[j,[0,2]])
+                print(market_stock[i]+" stock added")
+                start_pos = j
                 break;
     deal_cnt_frame_array.append(deal_cnt_frame)
     
@@ -214,7 +217,7 @@ for i in range(2):
 
 #將成交股數的型態換成int
 for i in range(days_to_calc):
-    for j in range(len(deal_cnt_frame_array[0])):
+    for j in range(len(deal_cnt_frame_array[i])):
         buff = deal_cnt_frame_array[i][j]["成交股數"].replace(",", "")
         deal_cnt_frame_array[i][j]["成交股數"] = int(buff)#.astype(int)
 
@@ -223,13 +226,19 @@ for i in range(days_to_calc):
 
 #print(deal_cnt_3day)
 
+print("1st deal_cnt_frame")
+print(deal_cnt_frame_array[0][0])
 stock_row =[]
-for j in range(len(deal_cnt_frame_array[0])):
-    buff =0
-    for i in range(days_to_calc):
-        buff = buff+int(deal_cnt_frame_array[i][j]["成交股數"])
-    row_data = {"證券代號": [deal_cnt_frame_array[0][j]["證券代號"]], "成交股數":[buff]}
-    stock_row.append(row_data)
+for i in range(days_to_calc):
+    for j in range(len(deal_cnt_frame_array[i])):
+        buff =0
+        for k in range(10):
+            buff = buff+int(deal_cnt_frame_array[k][j].iloc[0,1])
+            print("證券代號 = "+deal_cnt_frame_array[k][j]["證券代號"])
+            print(str(k) + "days ago")
+            print("stock no" + str(j) )
+        row_data = {"證券代號": [deal_cnt_frame_array[k][j]["證券代號"]], "成交股數":[buff]}
+        stock_row.append(row_data)
 
 deal_cnt_for_days_to_calc = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
 
