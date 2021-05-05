@@ -141,11 +141,25 @@ market_stock = json.load(f)
 #找出證券代號中對應的成交量並存於 deal_cnt_frame_array
 deal_cnt_frame_array = []
 
+print("len of df")
+print(len(df[0].index))
+print("                 ")
 
+print("len of market_stock")
+print(len(market_stock))
+print("                 ")
 for k in range(days_to_calc):
     deal_cnt_frame =[]
-    for i in range(int(len(market_stock)/2)):
-        for j in range(len(df[0].index)):
+    if(df[k]is None):
+        continue
+    for i in range(int(len(market_stock)/1.8)):
+        if(market_stock[i] is None):
+            continue
+        for j in range(len(df[k].index)):
+            if(df[k].iloc[j,0] is None):
+                print("dataframe not exist")
+                print("-------------------")
+                continue
             if (market_stock[i] == df[k].iloc[j,0]):
                 deal_cnt_frame.append(df[k].iloc[j,[0,2]])
                 break;
