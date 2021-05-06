@@ -227,16 +227,18 @@ for i in range(days_to_calc):
 #print(deal_cnt_3day)
 
 print("1st deal_cnt_frame")
-print(deal_cnt_frame_array[0][0])
+print(deal_cnt_frame_array[0][0]["成交股數"])
 stock_row =[]
 for i in range(days_to_calc):
     for j in range(len(deal_cnt_frame_array[i])):
+        print("day "+str(i))
+        print("證券總數 = "+str(len(deal_cnt_frame_array[i])))
         buff =0
         for k in range(10):
-            buff = buff+int(deal_cnt_frame_array[k][j].iloc[0,1])
-            print("證券代號 = "+deal_cnt_frame_array[k][j]["證券代號"])
             print(str(k) + "days ago")
             print("stock no" + str(j) )
+            print("證券代號 = "+deal_cnt_frame_array[k][j]["證券代號"])
+            buff = buff+int(deal_cnt_frame_array[k][j]["成交股數"])
         row_data = {"證券代號": [deal_cnt_frame_array[k][j]["證券代號"]], "成交股數":[buff]}
         stock_row.append(row_data)
 
