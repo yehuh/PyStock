@@ -236,6 +236,9 @@ total_deal_cnt = copy.copy(deal_cnt_per_day[0])
     
 stock_row =[]
 for day in range(1,days_to_calc):
+    print("證券代號數量 = ")
+    index = len(deal_cnt_per_day[0].index)
+    print(index)
     for stock_index in deal_cnt_per_day[day].index:
         print("-------------------")
         print("                   ")
