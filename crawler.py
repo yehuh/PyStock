@@ -167,8 +167,11 @@ for k in range(days_to_calc):
                 stock_no.append(market_stock[i])
                 d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                 deal_cnt.append(int(d_c_temp))
+                print("-----------------------------------")
                 print(market_stock[i]+" stock added")
                 print("deal count = " + d_c_temp)
+                print("-----------------------------------")
+                print("                                   ")
                 start_pos = j
                 break;
     df_data = {"證券代號":stock_no, "成交股數":deal_cnt}
@@ -240,13 +243,13 @@ for day in range(1,days_to_calc):
     index = len(deal_cnt_per_day[0].index)
     print(index)
     for stock_index in deal_cnt_per_day[day].index:
-        print("-------------------")
-        print("                   ")
-        print("day "+str(day))
-        print("證券代號 = ")
-        print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
-        print("                   ")
-        print("-------------------")
+        #print("-------------------")
+        #print("                   ")
+        #print("day "+str(day))
+        #print("證券代號 = ")
+        #print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
+        #print("                   ")
+        #print("-------------------")
         for tdc_index in total_deal_cnt.index:
             if(str(deal_cnt_per_day[day].loc[stock_index,["證券代號"]]) == str(total_deal_cnt.loc[tdc_index,["證券代號"]])):
                 buff = total_deal_cnt.loc[tdc_index,["成交股數"]] + deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
