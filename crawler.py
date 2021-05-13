@@ -231,30 +231,33 @@ for i in range(2):
 #print(deal_cnt_3day)
 import copy
 total_deal_cnt = copy.copy(deal_cnt_per_day[0])
+stock_no = deal_cnt_per_day[1].loc[:,["證券代號"]]
 
 #print("index of df in day 1")
 #for stock_index in total_deal_cnt.index:
 #    print(total_deal_cnt.loc[stock_index,["證券代號"]])
     
-    
+
+print("stock num of 1st day= ")
+print(stock_no)
+
 stock_row =[]
 for day in range(1,days_to_calc):
-    print("證券代號數量 = ")
-    index = len(deal_cnt_per_day[0].index)
-    print(index)
     for stock_index in deal_cnt_per_day[day].index:
-        #print("-------------------")
-        #print("                   ")
-        #print("day "+str(day))
-        #print("證券代號 = ")
-        #print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
-        #print("                   ")
-        #print("-------------------")
+        print("-------------------")
+        print("                   ")
+        print("day "+str(day))
+        print("Deal Count")
+        print("證券代號 = ")
+        print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
+        #print(total_deal_cnt.loc[stock_index,["證券代號"]])
+        print("                   ")
+        print("-------------------")
         for tdc_index in total_deal_cnt.index:
             if(str(deal_cnt_per_day[day].loc[stock_index,["證券代號"]]) == str(total_deal_cnt.loc[tdc_index,["證券代號"]])):
                 buff = total_deal_cnt.loc[tdc_index,["成交股數"]] + deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
                 total_deal_cnt.loc[tdc_index,["成交股數"]] = buff
-                print("證券代號 " + total_deal_cnt.loc[tdc_index,["成交股數"]])
+                print("證券代號 " + total_deal_cnt.loc[tdc_index,["證券代號"]])
                 print("加入")                               
                 break
         #for day in range(days_to_calc):
@@ -289,7 +292,7 @@ print("              ")
 '''
 print("-------------")
 print("deal cnt sum")
-print(total_deal_cnt)
+print(total_deal_cnt.head(10))
 #print(total_deal_cnt.loc["成交股數"])#[1]deal_cnt_3day
 print("              ")
 
