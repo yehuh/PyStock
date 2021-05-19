@@ -78,8 +78,7 @@ import time
 
 start_time = time.time()
 
-#找出股市工作日期
-
+################################找出股市工作日期################################
 days_ago = []
 for i in range(80):
 	days_ago.append(datetime.today() - timedelta(days = i))
@@ -113,11 +112,13 @@ for dayy in worked_day:
 		real_work_day.append(dayy)
 
         
-#for day in real_work_day:
-#    print(day.strftime("%Y%m%d"))
+for day in real_work_day:
+    print(day.strftime("%Y%m%d"))
+''################################找出股市工作日期################################
 
+
+#下載股價
 days_to_calc = 10
-# 下載股價
 r=[]
 for i in range(days_to_calc):
 	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
@@ -139,7 +140,8 @@ f =open('market_stock_index.json')
 market_stock = json.load(f)
 
 
-#找出證券代號中對應的成交量並存於 deal_cnt_per_day
+
+#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 deal_cnt_per_day = []
 
 #print("len of df")
@@ -154,6 +156,8 @@ for k in range(days_to_calc):
     deal_cnt =[]
     stock_no =[]
     if(df[k]is None):
+        print("dataframe on line not exist")
+        print("-------------------")
         continue
     for i in range(int(len(market_stock))):
         if(market_stock[i] is None):
@@ -167,51 +171,24 @@ for k in range(days_to_calc):
                 stock_no.append(market_stock[i])
                 d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                 deal_cnt.append(int(d_c_temp))
-                print("-----------------------------------")
-                print(market_stock[i]+" stock added")
-                print("deal count = " + d_c_temp)
-                print("-----------------------------------")
-                print("                                   ")
+                #print("-----------------------------------")
+                #print(market_stock[i]+" stock added")
+                #print("deal count = " + d_c_temp)
+                #print("-----------------------------------")
+                #print("                                   ")
                 start_pos = j
                 break;
     df_data = {"證券代號":stock_no, "成交股數":deal_cnt}
     df_temp = pd.DataFrame(df_data)
     deal_cnt_per_day.append(df_temp)
     
-print("deal count 1st day = ")    
-print(deal_cnt_per_day[0].head(10))
+#print("deal count 1st day = ")    
+#print(deal_cnt_per_day[0].head(10))
 
-'''
-for i in range(3):
-	print("              ")
-	print("-------------")
-	print('Date :'+ worked_day[i].strftime("%Y%m%d"))
-	print(df[i].head(3))
-	print("-------------")
-	print("              ")
+##
+#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 
 
-deal_cnt_frame = []
-for i in range(3):
-	deal_cnt_frame.append(df[i].iloc[:,[0,2]])
-	
-print(deal_cnt_frame[0].head(5))
-print(deal_cnt_frame[1].head(5))
-print(deal_cnt_frame[2].head(5))
-
-
-
-deal_cnt = []
-for i in range(3):
-	deal_cnt.append(deal_cnt_frame[i])
-
-for i in range(2):
-	print("              ")
-	print("-------------")
-	print("Date:"+real_work_day[i].strftime("%Y%m%d"))
-	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[0]])
-	print(deal_cnt[i].loc[deal_cnt[i]["證券代號"]==stock_code[1]])
-'''
 
 #stock = []
 #stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
@@ -231,30 +208,32 @@ for i in range(2):
 #print(deal_cnt_3day)
 import copy
 total_deal_cnt = copy.copy(deal_cnt_per_day[0])
-stock_no = deal_cnt_per_day[1].loc[:,["證券代號"]]
 
-#print("index of df in day 1")
-#for stock_index in total_deal_cnt.index:
-#    print(total_deal_cnt.loc[stock_index,["證券代號"]])
-    
+deal_cnt_per_stock = []
 
-print("stock num of 1st day= ")
-print(stock_no)
+for day in range(days_to_calc):
+    print("stock cnt in day"+ str(day))
+    print(len(deal_cnt_per_day[day]))
 
 stock_row =[]
 for day in range(1,days_to_calc):
+    print("###################")
+    print("                   ")
+    print("day :"+str(day))
+    print("                   ")
+    print("###################")
+    print("                   ")
+    print("                   ")
     for stock_index in deal_cnt_per_day[day].index:
         print("-------------------")
-        print("                   ")
-        print("day "+str(day))
-        print("Deal Count")
-        print("證券代號 = ")
         print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
-        #print(total_deal_cnt.loc[stock_index,["證券代號"]])
         print("                   ")
-        print("-------------------")
+        #print(deal_cnt_per_day[day].loc[stock_index,["成交股數"]])
+        #print("                   ")
+        stock_to_found = deal_cnt_per_day[day].loc[stock_index,["證券代號"]]
         for tdc_index in total_deal_cnt.index:
-            if(str(deal_cnt_per_day[day].loc[stock_index,["證券代號"]]) == str(total_deal_cnt.loc[tdc_index,["證券代號"]])):
+            stock_compare_to = total_deal_cnt.loc[tdc_index,["證券代號"]]
+            if(stock_to_found.astype(str).astype(int) == stock_compare_to.astype(str).astype(int)):
                 buff = total_deal_cnt.loc[tdc_index,["成交股數"]] + deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
                 total_deal_cnt.loc[tdc_index,["成交股數"]] = buff
                 print("證券代號 " + total_deal_cnt.loc[tdc_index,["證券代號"]])
