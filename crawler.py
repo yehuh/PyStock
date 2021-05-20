@@ -118,7 +118,7 @@ for day in real_work_day:
 
 
 #下載股價
-days_to_calc = 10
+days_to_calc = 3
 r=[]
 for i in range(days_to_calc):
 	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
@@ -159,6 +159,7 @@ for k in range(days_to_calc):
         print("dataframe on line not exist")
         print("-------------------")
         continue
+    #########df的證券代號與 market_stock 比對後加入#########
     for i in range(int(len(market_stock))):
         if(market_stock[i] is None):
             continue
@@ -176,11 +177,17 @@ for k in range(days_to_calc):
                 #print("deal count = " + d_c_temp)
                 #print("-----------------------------------")
                 #print("                                   ")
-                start_pos = j
+                
+                #df的證券代號與 market_stock 為一對一且順序皆為由小到大
+                #=>下個證券代號從現在的位置找起
+                start_pos = j 
                 break;
+    start_pos = 0
     df_data = {"證券代號":stock_no, "成交股數":deal_cnt}
     df_temp = pd.DataFrame(df_data)
     deal_cnt_per_day.append(df_temp)
+    #
+    #########df的證券代號與market_stock 比對後加入#########
     
 #print("deal count 1st day = ")    
 #print(deal_cnt_per_day[0].head(10))
@@ -213,7 +220,7 @@ deal_cnt_per_stock = []
 
 for day in range(days_to_calc):
     print("stock cnt in day"+ str(day))
-    print(len(deal_cnt_per_day[day]))
+    print(len(deal_cnt_per_day[day].index))
 
 stock_row =[]
 for day in range(1,days_to_calc):
@@ -225,19 +232,19 @@ for day in range(1,days_to_calc):
     print("                   ")
     print("                   ")
     for stock_index in deal_cnt_per_day[day].index:
-        print("-------------------")
-        print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
-        print("                   ")
+        #print("-------------------")
+        #print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
+        #print("                   ")
         #print(deal_cnt_per_day[day].loc[stock_index,["成交股數"]])
         #print("                   ")
         stock_to_found = deal_cnt_per_day[day].loc[stock_index,["證券代號"]]
         for tdc_index in total_deal_cnt.index:
             stock_compare_to = total_deal_cnt.loc[tdc_index,["證券代號"]]
-            if(stock_to_found.astype(str).astype(int) == stock_compare_to.astype(str).astype(int)):
+            if(str(stock_to_found) == str(stock_compare_to)):
                 buff = total_deal_cnt.loc[tdc_index,["成交股數"]] + deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
                 total_deal_cnt.loc[tdc_index,["成交股數"]] = buff
-                print("證券代號 " + total_deal_cnt.loc[tdc_index,["證券代號"]])
-                print("加入")                               
+                #print("證券代號 " + total_deal_cnt.loc[tdc_index,["證券代號"]])
+                #print("加入")                               
                 break
         #for day in range(days_to_calc):
         #    print("證券代號 = ")
@@ -269,6 +276,14 @@ print("              ")
 print("              ")
 print("              ")
 '''
+
+for day in range(days_to_calc):
+    print("-------------")
+    print("deal cnt Day"+ str(day))
+    print(deal_cnt_per_day[day].head(10))
+    print("             ")
+    
+    
 print("-------------")
 print("deal cnt sum")
 print(total_deal_cnt.head(10))
