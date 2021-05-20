@@ -118,15 +118,18 @@ for day in real_work_day:
 
 
 #下載股價
-days_to_calc = 3
+DaysToCalc = 5
+str_buff = "deal cnt sum for " + str(DaysToCalc)
+str_buff = str_buff + " days"
+print(str_buff)
 r=[]
-for i in range(days_to_calc):
+for i in range(DaysToCalc):
 	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
 #r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
 
 # 整理資料，變成表格
 df =[]
-for i in range(days_to_calc):
+for i in range(DaysToCalc):
     df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
@@ -152,7 +155,7 @@ deal_cnt_per_day = []
 #print(len(market_stock))
 #print("                 ")
 start_pos = 0
-for k in range(days_to_calc):
+for k in range(DaysToCalc):
     deal_cnt =[]
     stock_no =[]
     if(df[k]is None):
@@ -188,6 +191,9 @@ for k in range(days_to_calc):
     deal_cnt_per_day.append(df_temp)
     #
     #########df的證券代號與market_stock 比對後加入#########
+
+if(int(deal_cnt_per_day[0].iloc[0,1]) >int(deal_cnt_per_day[0].iloc[1,1])):
+    print("Test Success")
     
 #print("deal count 1st day = ")    
 #print(deal_cnt_per_day[0].head(10))
@@ -218,12 +224,12 @@ total_deal_cnt = copy.copy(deal_cnt_per_day[0])
 
 deal_cnt_per_stock = []
 
-for day in range(days_to_calc):
+for day in range(DaysToCalc):
     print("stock cnt in day"+ str(day))
     print(len(deal_cnt_per_day[day].index))
 
 stock_row =[]
-for day in range(1,days_to_calc):
+for day in range(1,DaysToCalc):
     print("###################")
     print("                   ")
     print("day :"+str(day))
@@ -277,20 +283,39 @@ print("              ")
 print("              ")
 '''
 
-for day in range(days_to_calc):
-    print("-------------")
-    print("deal cnt Day"+ str(day))
-    print(deal_cnt_per_day[day].head(10))
-    print("             ")
-    
-    
+
+
+deal_cnt_over_deal =[]
+stock_no_over_deal =[]
+
+for stock_index in total_deal_cnt.index:
+    deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["成交股數"]])
+    deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
+    if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
+        deal_cnt_over_deal.append(deal_cnt_today)
+        stock_no_over_deal.append(deal_cnt_per_day[0].loc[stock_index,["證券代號"]])
+over_deal_data = {"證券代號":stock_no_over_deal, "成交股數":deal_cnt_over_deal}
+OverDealDf = pd.DataFrame(over_deal_data)
+
+#for day in range(DaysToCalc):
 print("-------------")
-print("deal cnt sum")
-print(total_deal_cnt.head(10))
+print("deal cnt Day 0")
+print(deal_cnt_per_day[day].head(50))
+print("             ")
+    
+
+str_buff = "deal cnt sum for " + str(DaysToCalc)
+str_buff = str_buff + " days:"
+print("-------------")
+print(str_buff)
+print(total_deal_cnt.head(50))
 #print(total_deal_cnt.loc["成交股數"])#[1]deal_cnt_3day
 print("              ")
+print("              ")
 
-
+print("-------------")
+print("over deal stock")
+print(OverDealDf)
 
 #for i in range(1, 2):
 #	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
