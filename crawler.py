@@ -118,13 +118,10 @@ for day in real_work_day:
 
 
 #下載股價
-DaysToCalc = 5
-str_buff = "deal cnt sum for " + str(DaysToCalc)
-str_buff = str_buff + " days"
-print(str_buff)
+DaysToCalc = 4
 r=[]
 for i in range(DaysToCalc):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
+	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
 #r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
 
 # 整理資料，變成表格
@@ -191,9 +188,6 @@ for k in range(DaysToCalc):
     deal_cnt_per_day.append(df_temp)
     #
     #########df的證券代號與market_stock 比對後加入#########
-
-if(int(deal_cnt_per_day[0].iloc[0,1]) >int(deal_cnt_per_day[0].iloc[1,1])):
-    print("Test Success")
     
 #print("deal count 1st day = ")    
 #print(deal_cnt_per_day[0].head(10))
@@ -265,6 +259,9 @@ end_time = time.time()
 print("-------------")
 print("calculating time is")
 print(end_time - start_time)
+
+print("Stock Cnt For Total Deal Count:")
+print(len(total_deal_cnt.index))
 
 '''
 print("-------------")
