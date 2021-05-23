@@ -112,32 +112,69 @@ for dayy in worked_day:
 		real_work_day.append(dayy)
 
         
-for day in real_work_day:
-    print(day.strftime("%Y%m%d"))
+#for day in real_work_day:
+#    print(day.strftime("%Y%m%d"))
 ''################################找出股市工作日期################################
+
+roc_year = int(real_work_day[0].year) - 1911
+print("Year of ROC Now:")
+print(str(roc_year))
 
 
 #下載股價
-DaysToCalc = 4
+DaysToCalc = 1
 r=[]
-for i in range(DaysToCalc):
-	r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
-#r =(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[1].strftime("%Y%m%d") + '&type=ALL'))
 
-# 整理資料，變成表格
-df =[]
+whaha = 'https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year)
+whaha+='/'
+whaha+=real_work_day[0].strftime("%m/%d")
+whaha+='&s=0,asc,0'
+
+print(whaha)
+
+market_stock = []
+market_stock.append(real_work_day[0].max)
 for i in range(DaysToCalc):
-    df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+    r.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i].strftime("%m/%d") + '&s=0,asc,0'))
+	#r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+
+
+
+                                                                                                                                #110/05/21&s=0,asc,0
+# 整理資料，變成表格
+#df =[]
+#for i in range(DaysToCalc):
+#    df.append(pd.read_csv(StringIO(r[i].text, header=["代號" in l for l in r[i].text.split("\n")].index(True)-1)))
+    #df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+   
+k = r[0].text.split("\n")
+
+df = pd.read_csv(r[0].text,header = ["代號" in l for l in r[0].text.split("\n")].index(True)-1)
+print("                   ")
+print("counter stock today")
+print(df)
+print("                   ")
+print("                   ")
+print("counter stock today above")
+
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
 
 #讀取證券代號
-f = open('counter_stock_index.json')
+f = open('counter_stock_index.jn')
 counter_stock = json.load(f)
 #print(data[0])
 
 f =open('market_stock_index.json')
 market_stock = json.load(f)
+for i in range(len(counter_stock)):
+    market_stock.append(counter_stock[i])
+
+print("----------------------")
+print("Count of Stock in Taiwan")
+print(len(market_stock))
+print("                   ")
+print("                   ")
 
 
 
