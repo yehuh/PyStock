@@ -150,46 +150,45 @@ for i in range(DaysToCalc):
 
 couter_stock_data =[]
 df =[]
-#for idd in range(DaysToCalc):
-k = r[0].text.split("\n")
-index_line = 0
-for i in range(len(k)):
-    if(k[i].find("代號")!=-1):
-        index_line = i
-        break
+for idd in range(DaysToCalc):
+    k = r[idd].text.split("\n")
+    index_line = 0
+    for i in range(len(k)):
+        if(k[i].find("代號")!=-1):
+            index_line = i
+            break
     
-for i in range(index_line):
+    for i in range(index_line):
+        k.pop(0)
+    
+    stock_data_index = k[idd].split(",")
+
+
+    index_str = ""
+    for l in stock_data_index:
+        buffd = '\"' + l.strip()
+        buffd = buffd+ '\"'
+        buffd = buffd+ ','
+        index_str += buffd
+    
+    index_str = index_str.rstrip(',')
+
     k.pop(0)
-    
-stock_data_index = k[0].split(",")
+    k.insert(0,index_str)
 
-stock_data_index_mod =[]
+    couter_stock_data.append("")
+    for data_str in k:
+        couter_stock_data[-1] += data_str
+        couter_stock_data[-1] +='\n'
 
-index_str = ""
-for l in stock_data_index:
-    buffd = '\"' + l.strip()
-    buffd = buffd+ '\"'
-    buffd = buffd+ ','
-    index_str += buffd
-    
-index_str = index_str.rstrip(',')
-
-k.pop(0)
-k.insert(0,index_str)
-
-couter_stock_data=""
-for data_str in k:
-    couter_stock_data += data_str
-    couter_stock_data +='\n'
-
-couter_stock_data = couter_stock_data.strip()
-df= pd.read_csv(StringIO(couter_stock_data),header=0)
+    couter_stock_data[-1] = couter_stock_data[-1].strip()
+    df.append(pd.read_csv(StringIO(couter_stock_data[-1]),header=0))
 
 
 
 print("                   ")
 print("index line of counter data")
-print(df)
+print(df[0])
 print("                   ")
 print("                   ")
 
@@ -251,24 +250,24 @@ for k in range(DaysToCalc):
         if(counter_stock[i] is None):
             continue
         for j in range(len(df[k].index)):  #start_pos,
-            print("-------------")    
-            print("counter no =")
-            buff0 = df[k].iloc[j,:]
+            #print("-------------")    
+            #print("counter no =")
+            #buff0 = df[k].iloc[j,:]
             #buff1 = buff0.loc["代號"]
-            print(buff0)
-            print("              ")
+            #print(buff0)
+            #print("              ")
             if(df[k].iloc[j,0] is None):
                 print("dataframe not exist")
                 print("-------------------")
                 continue
             if (counter_stock[i] == df[k].iloc[j,0]):
                 stock_no.append(counter_stock[i])
-                d_c_temp = str(df[k].iloc[j,8]).replace(",", "")
-                #d_c_temp = df[k].iloc[j,:]
-                #d_c_temp = d_c_temp.loc["成交股數"].replace(",", "")
+                #d_c_temp = str(df[k].iloc[j,8]).replace(",", "")
+                d_c_temp = df[k].iloc[j,:]
+                d_c_temp = d_c_temp.loc["成交股數"].replace(",", "")
                 deal_cnt.append(int(d_c_temp))
                 print("-----------------------------------")
-                print(market_stock[i]+" stock added")
+                print(counter_stock[i]+" stock added")
                 print("deal count = " + d_c_temp)
                 print("-----------------------------------")
                 print("                                   ")
