@@ -122,7 +122,7 @@ print(str(roc_year))
 
 
 #下載股價
-DaysToCalc = 1
+DaysToCalc = 2
 r=[]
 
 whaha = 'https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year)
@@ -144,24 +144,71 @@ for i in range(DaysToCalc):
 # 整理資料，變成表格
 #df =[]
 #for i in range(DaysToCalc):
-#    df.append(pd.read_csv(StringIO(r[i].text, header=["代號" in l for l in r[i].text.split("\n")].index(True)-1)))
+    #df.append(pd.read_csv(StringIO(r[i].text), header=["代號" in l for l in r[i].text.split("\n")].index(True)-1))
     #df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
-   
-k = r[0].text.split("\n")
 
-df = pd.read_csv(r[0].text,header = ["代號" in l for l in r[0].text.split("\n")].index(True)-1)
+
+couter_stock_data =[]
+df =[]
+#for idd in range(DaysToCalc):
+k = r[0].text.split("\n")
+index_line = 0
+for i in range(len(k)):
+    if(k[i].find("代號")!=-1):
+        index_line = i
+        break
+    
+for i in range(index_line):
+    k.pop(0)
+    
+stock_data_index = k[0].split(",")
+
+stock_data_index_mod =[]
+
+index_str = ""
+for l in stock_data_index:
+    buffd = '\"' + l.strip()
+    buffd = buffd+ '\"'
+    buffd = buffd+ ','
+    index_str += buffd
+    
+index_str = index_str.rstrip(',')
+
+k.pop(0)
+k.insert(0,index_str)
+
+couter_stock_data=""
+for data_str in k:
+    couter_stock_data += data_str
+    couter_stock_data +='\n'
+
+couter_stock_data = couter_stock_data.strip()
+df= pd.read_csv(StringIO(couter_stock_data),header=0)
+
+
+
 print("                   ")
-print("counter stock today")
+print("index line of counter data")
 print(df)
 print("                   ")
 print("                   ")
-print("counter stock today above")
 
+'''
+df = pd.read_csv(r[0].text, header = None)
+print("                   ")
+print("counter stock today")
+print(k[0])
+print(k[1])
+print(k[2])
+print("                   ")
+print("                   ")
+print("counter stock today above")
+'''
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
 
 #讀取證券代號
-f = open('counter_stock_index.jn')
+f = open('counter_stock_index.json')
 counter_stock = json.load(f)
 #print(data[0])
 
@@ -190,6 +237,9 @@ deal_cnt_per_day = []
 #print("                 ")
 start_pos = 0
 for k in range(DaysToCalc):
+    print("len of df")
+    print(len(df[k].index))
+    print("                 ")
     deal_cnt =[]
     stock_no =[]
     if(df[k]is None):
@@ -197,29 +247,37 @@ for k in range(DaysToCalc):
         print("-------------------")
         continue
     #########df的證券代號與 market_stock 比對後加入#########
-    for i in range(int(len(market_stock))):
-        if(market_stock[i] is None):
+    for i in range(int(len(counter_stock))):
+        if(counter_stock[i] is None):
             continue
-        for j in range(start_pos, len(df[k].index)):
+        for j in range(len(df[k].index)):  #start_pos,
+            print("-------------")    
+            print("counter no =")
+            buff0 = df[k].iloc[j,:]
+            #buff1 = buff0.loc["代號"]
+            print(buff0)
+            print("              ")
             if(df[k].iloc[j,0] is None):
                 print("dataframe not exist")
                 print("-------------------")
                 continue
-            if (market_stock[i] == df[k].iloc[j,0]):
-                stock_no.append(market_stock[i])
-                d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
+            if (counter_stock[i] == df[k].iloc[j,0]):
+                stock_no.append(counter_stock[i])
+                d_c_temp = str(df[k].iloc[j,8]).replace(",", "")
+                #d_c_temp = df[k].iloc[j,:]
+                #d_c_temp = d_c_temp.loc["成交股數"].replace(",", "")
                 deal_cnt.append(int(d_c_temp))
-                #print("-----------------------------------")
-                #print(market_stock[i]+" stock added")
-                #print("deal count = " + d_c_temp)
-                #print("-----------------------------------")
-                #print("                                   ")
+                print("-----------------------------------")
+                print(market_stock[i]+" stock added")
+                print("deal count = " + d_c_temp)
+                print("-----------------------------------")
+                print("                                   ")
                 
                 #df的證券代號與 market_stock 為一對一且順序皆為由小到大
                 #=>下個證券代號從現在的位置找起
-                start_pos = j 
+                #start_pos = j 
                 break;
-    start_pos = 0
+    #start_pos = 0
     df_data = {"證券代號":stock_no, "成交股數":deal_cnt}
     df_temp = pd.DataFrame(df_data)
     deal_cnt_per_day.append(df_temp)
@@ -255,7 +313,7 @@ total_deal_cnt = copy.copy(deal_cnt_per_day[0])
 
 deal_cnt_per_stock = []
 
-for day in range(DaysToCalc):
+for day in range(DaysToCalc): 
     print("stock cnt in day"+ str(day))
     print(len(deal_cnt_per_day[day].index))
 
