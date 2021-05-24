@@ -122,7 +122,7 @@ print(str(roc_year))
 
 
 #下載股價
-DaysToCalc = 2
+DaysToCalc = 5
 r=[]
 
 whaha = 'https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year)
@@ -185,13 +185,6 @@ for idd in range(DaysToCalc):
     df.append(pd.read_csv(StringIO(couter_stock_data[-1]),header=0))
 
 
-
-print("                   ")
-print("index line of counter data")
-print(df[0])
-print("                   ")
-print("                   ")
-
 '''
 df = pd.read_csv(r[0].text, header = None)
 print("                   ")
@@ -249,7 +242,7 @@ for k in range(DaysToCalc):
     for i in range(int(len(counter_stock))):
         if(counter_stock[i] is None):
             continue
-        for j in range(len(df[k].index)):  #start_pos,
+        for j in range(start_pos,len(df[k].index)):  #,
             #print("-------------")    
             #print("counter no =")
             #buff0 = df[k].iloc[j,:]
@@ -262,21 +255,19 @@ for k in range(DaysToCalc):
                 continue
             if (counter_stock[i] == df[k].iloc[j,0]):
                 stock_no.append(counter_stock[i])
-                #d_c_temp = str(df[k].iloc[j,8]).replace(",", "")
-                d_c_temp = df[k].iloc[j,:]
-                d_c_temp = d_c_temp.loc["成交股數"].replace(",", "")
+                d_c_temp = str(df[k].iloc[j,8]).replace(",", "")
+                #print("-----------------------------------")
+                #print(counter_stock[i]+" stock added")
+                #print("deal count = ")
+                #print(d_c_temp)
+                #print("-----------------------------------")
+                #print("                                   ")
                 deal_cnt.append(int(d_c_temp))
-                print("-----------------------------------")
-                print(counter_stock[i]+" stock added")
-                print("deal count = " + d_c_temp)
-                print("-----------------------------------")
-                print("                                   ")
-                
                 #df的證券代號與 market_stock 為一對一且順序皆為由小到大
                 #=>下個證券代號從現在的位置找起
-                #start_pos = j 
+                start_pos = j 
                 break;
-    #start_pos = 0
+    start_pos = 0
     df_data = {"證券代號":stock_no, "成交股數":deal_cnt}
     df_temp = pd.DataFrame(df_data)
     deal_cnt_per_day.append(df_temp)
