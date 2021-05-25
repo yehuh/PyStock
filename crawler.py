@@ -141,8 +141,8 @@ DaysToCalc = 2
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i].strftime("%m/%d") + '&s=0,asc,0'))
-    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+1].strftime("%m/%d") + '&s=0,asc,0'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
@@ -168,7 +168,7 @@ for i in range(DaysToCalc):
 #df = pd.read_csv(r[0].text, header = None)
 print("                   ")
 print("market stock today colum name")
-print(df_buff3)
+print(df_market[0])
 #print(df_buff2.columns[2])
 #print(df_buff2.columns[3])
 print("                   ")
@@ -218,15 +218,13 @@ for idd in range(DaysToCalc):
     df_buff1 = df_buff.drop(columns=["名稱", "收盤", "開盤", "最高", "最低", "成交筆數","最後買價", "最後買量(千股)"])
     df_buff2= df_buff1.drop(columns=["最後賣價","最後賣量(千股)","發行股數" ,"次日參考價" , "次日漲停價"])
     df_buff2 = df_buff2.drop(columns=["均價","成交金額(元)","次日跌停價"])#,"次日跌停價\r" 
-    
     df_counter.append(df_buff2)
-
 
 
 #df = pd.read_csv(r[0].text, header = None)
 print("                   ")
 print("counter stock today colum name")
-print(df_buff2)
+print(df_counter[0])
 #print(df_buff.columns[1])
 #print(df_buff.columns[2])
 print("                   ")
@@ -239,6 +237,20 @@ print("counter stock today above")
 #df_buff2.to_json(r'OverDealCntCounter.json')
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
+
+df =[]
+for dayk in range(DaysToCalc):
+    df.append(pd.concat([df_market[dayk], df_counter[dayk]], ignore_index=True))
+
+print("                   ")
+print("modified counter stock today ")
+print(df[0])
+#print(df_buff.columns[1])
+#print(df_buff.columns[2])
+print("                   ")
+print("                   ")
+print("counter stock today above")
+
 
 #讀取證券代號
 f = open('counter_stock_index.json')
