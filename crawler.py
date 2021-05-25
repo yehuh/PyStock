@@ -3,7 +3,9 @@ from datetime import datetime, timedelta, date
 import requests
 from io import StringIO
 import pandas as pd
+#import DataFrameToJSONArray
 import json
+
 
 
 #設定2021的假日
@@ -121,10 +123,7 @@ print("Year of ROC Now:")
 print(str(roc_year))
 
 
-#下載股價
-DaysToCalc = 2
-r_counter=[]
-r_market=[]
+
 
 whaha = 'https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year)
 whaha+='/'
@@ -133,20 +132,49 @@ whaha+='&s=0,asc,0'
 
 print(whaha)
 
-market_stock = []
-market_stock.append(real_work_day[0].max)
+#market_stock = []
+#market_stock.append(real_work_day[0].max)
+
+
+#下載股價
+DaysToCalc = 2
+r_counter=[]
+r_market=[]
 for i in range(DaysToCalc):
     r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i].strftime("%m/%d") + '&s=0,asc,0'))
-	#r.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
                                                                                                                                 #110/05/21&s=0,asc,0
 # 整理資料，變成表格
-#df =[]
-#for i in range(DaysToCalc):
-    #df.append(pd.read_csv(StringIO(r[i].text), header=["代號" in l for l in r[i].text.split("\n")].index(True)-1))
-    #df.append(pd.read_csv(StringIO(r[i].text.replace("=", "")), header=["證券代號" in l for l in r[i].text.split("\n")].index(True)-1))
+df_market =[]
+for i in range(DaysToCalc):
+    df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=["證券代號" in l for l in r_market[i].text.split("\n")].index(True)-1)
+    #"證券代號","證券名稱","成交股數","成交筆數","成交金額","開盤價","最高價","最低價","收盤價","漲跌(+/-)","漲跌價差","最後揭示買價","最後揭示買量","最後揭示賣價","最後揭示賣量","本益比"
+    df_buff1 = df_buff.drop(columns=["證券名稱","成交筆數","成交金額","開盤價","最高價","最低價","收盤價"])
+    df_buff2 = df_buff1.drop(columns=["最後揭示買價","最後揭示買量","最後揭示賣價","最後揭示賣量","本益比"])
+    df_buff2 = df_buff2.drop(columns=["漲跌(+/-)","Unnamed: 16"])
+    columns_titles = ["證券代號","漲跌價差","成交股數"]
+    df_buff2=df_buff2.reindex(columns=columns_titles)
+    df_buff3 = df_buff2.rename(columns = {"證券代號": "代號", "漲跌價差": "漲跌"}, inplace = False)
+    #for j in df_buff2.index:
+    #    buff = str(df_buff2.loc[j,["漲跌(+/-)"]])
+    #    buff2 = buff+str(df_buff2.loc[j,["漲跌價差"]])
+    #    df_buff2.loc[j,["漲跌價差"]] = buff2
+    df_market.append(df_buff3)
+
+
+#df = pd.read_csv(r[0].text, header = None)
+print("                   ")
+print("market stock today colum name")
+print(df_buff3)
+#print(df_buff2.columns[2])
+#print(df_buff2.columns[3])
+print("                   ")
+print("                   ")
+print("market stock today above")
+
 
 
 couter_stock_data =[]
@@ -163,10 +191,10 @@ for idd in range(DaysToCalc):
         k.pop(0)
     
     stock_data_index = k[0].split(",")
-    print("                   ")
-    print("dataframe index" + str(idd))
-    print(stock_data_index)
-    print("                   ")
+    #print("                   ")
+    #print("dataframe index" + str(idd))
+    #print(stock_data_index)
+    #print("                   ")
 
     index_str = ""
     for l in stock_data_index:
@@ -205,6 +233,10 @@ print("                   ")
 print("                   ")
 print("counter stock today above")
 
+#dfts = DataFrameToJSONArray(df_buff2, 'OverDealCntCounter.json') # 引數(df資料,檔案儲存路徑)
+#dfts.funChangeDataFrameType() # 自動轉換DataFrame的列資料型別
+#dfts.funSaveJSONArrayFile() # 儲存JSON格式檔案
+#df_buff2.to_json(r'OverDealCntCounter.json')
 
 #df = pd.read_csv(StringIO(r.text.replace("=", "")), header=["證券代號" in l for l in r.text.split("\n")].index(True)-1)
 
