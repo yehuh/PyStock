@@ -1,0 +1,69 @@
+                                     證券代號       成交股數
+0    證券代號    1310
+Name: 34, dtype: object   13809259
+1    證券代號    1324
+Name: 43, dtype: object     181147
+2    證券代號    1451
+Name: 78, dtype: object   10083844
+3    證券代號    1452
+Name: 79, dtype: object   46970414
+4    證券代號    1460
+Name: 86, dtype: object   36957534
+5    證券代號    1466
+Name: 90, dtype: object   16545543
+6    證券代號    1474
+Name: 97, dtype: object   21225303
+7   證券代號    1526
+Name: 116, dtype: object    2044885
+8   證券代號    1538
+Name: 127, dtype: object      75808
+9   證券代號    1539
+Name: 128, dtype: object     229005
+10  證券代號    2328
+Name: 273, dtype: object   36300333
+11  證券代號    2344
+Name: 282, dtype: object  240978416
+12  證券代號    2363
+Name: 298, dtype: object   60820398
+13  證券代號    2393
+Name: 319, dtype: object   10425394
+14  證券代號    2401
+Name: 323, dtype: object   54983176
+15  證券代號    2451
+Name: 359, dtype: object    3030203
+16  證券代號    2476
+Name: 378, dtype: object   10610305
+17  證券代號    2514
+Name: 403, dtype: object     444444
+18  證券代號    2608
+Name: 430, dtype: object   30831115
+19  證券代號    2642
+Name: 446, dtype: object   34925179
+20  證券代號    2816
+Name: 463, dtype: object    1165675
+21  證券代號    2841
+Name: 470, dtype: object    3574384
+22  證券代號    3016
+Name: 518, dtype: object    7654886
+23  證券代號    3094
+Name: 562, dtype: object    5458968
+24  證券代號    3532
+Name: 603, dtype: object    5284181
+25  證券代號    3607
+Name: 619, dtype: object    2672580
+26  證券代號    3682
+Name: 629, dtype: object   18338831
+27  證券代號    5607
+Name: 738, dtype: object    4007252
+28  證券代號    6202
+Name: 778, dtype: object    4395393
+29  證券代號    6225
+Name: 787, dtype: object      31421
+30  證券代號    6668
+Name: 843, dtype: object    2255016
+31  證券代號    6768
+Name: 855, dtype: object    1362173
+32  證券代號    8021
+Name: 860, dtype: object    5875253
+33  證券代號    9911
+Name: 920, dtype: object     981634
