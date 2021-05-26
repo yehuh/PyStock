@@ -1,0 +1,26 @@
+0   證券代號    3221
+Name: 102, dtype: object   3946908
+1   證券代號    3332
+Name: 137, dtype: object     38000
+2   證券代號    3354
+Name: 139, dtype: object    631853
+3   證券代號    3426
+Name: 150, dtype: object      2025
+4   證券代號    3466
+Name: 157, dtype: object    389999
+5   證券代號    4513
+Name: 287, dtype: object   1091363
+6   證券代號    4609
+Name: 308, dtype: object     17000
+7   證券代號    4707
+Name: 311, dtype: object  27494123
+8   證券代號    5205
+Name: 366, dtype: object      1305
+9   證券代號    5364
+Name: 409, dtype: object     32603
+10  證券代號    6574
+Name: 619, dtype: object     28006
+11  證券代號    6593
+Name: 626, dtype: object    121985
+12  證券代號    8921
+Name: 762, dtype: object     19000
