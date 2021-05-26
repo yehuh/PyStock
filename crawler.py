@@ -137,7 +137,7 @@ print(whaha)
 
 
 #下載股價
-DaysToCalc = 2
+DaysToCalc = 5
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
@@ -283,32 +283,32 @@ deal_cnt_per_day = []
 start_pos = 0
 for k in range(DaysToCalc):
     print("len of df")
-    print(len(df_counter[k].index))
+    print(len(df[k].index))
     print("                 ")
     deal_cnt =[]
     stock_no =[]
-    if(df_counter[k]is None):
+    if(df[k]is None):
         print("dataframe on line not exist")
         print("-------------------")
         continue
     #########df的證券代號與 market_stock 比對後加入#########
-    for i in range(int(len(counter_stock))):
-        if(counter_stock[i] is None):
+    for i in range(int(len(market_stock))):
+        if(market_stock[i] is None):
             continue
-        for j in range(start_pos,len(df_counter[k].index)):  #,
+        for j in range(start_pos,len(df[k].index)):  #,
             #print("-------------")    
             #print("counter no =")
             #buff0 = df[k].iloc[j,:]
             #buff1 = buff0.loc["代號"]
             #print(buff0)
             #print("              ")
-            if(df_counter[k].iloc[j,0] is None):
+            if(df[k].iloc[j,0] is None):
                 print("dataframe not exist")
                 print("-------------------")
                 continue
-            if (counter_stock[i] == df_counter[k].iloc[j,0]):
-                stock_no.append(counter_stock[i])
-                d_c_temp = str(df_counter[k].iloc[j,2]).replace(",", "")
+            if (market_stock[i] == df[k].iloc[j,0]):
+                stock_no.append(market_stock[i])
+                d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                 #print("-----------------------------------")
                 #print(counter_stock[i]+" stock added")
                 #print("deal count = ")
