@@ -137,7 +137,7 @@ print(whaha)
 
 
 #下載股價
-DaysToCalc = 5
+DaysToCalc = 7
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
@@ -361,6 +361,7 @@ for day in range(DaysToCalc):
     print(len(deal_cnt_per_day[day].index))
 
 stock_row =[]
+start_pos = 0
 for day in range(1,DaysToCalc):
     print("###################")
     print("                   ")
@@ -376,14 +377,16 @@ for day in range(1,DaysToCalc):
         #print(deal_cnt_per_day[day].loc[stock_index,["成交股數"]])
         #print("                   ")
         stock_to_found = deal_cnt_per_day[day].loc[stock_index,["證券代號"]]
-        for tdc_index in total_deal_cnt.index:
+        for tdc_index in range(start_pos ,len(total_deal_cnt.index)):
             stock_compare_to = total_deal_cnt.loc[tdc_index,["證券代號"]]
             if(str(stock_to_found) == str(stock_compare_to)):
                 buff = total_deal_cnt.loc[tdc_index,["成交股數"]] + deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
                 total_deal_cnt.loc[tdc_index,["成交股數"]] = buff
                 #print("證券代號 " + total_deal_cnt.loc[tdc_index,["證券代號"]])
-                #print("加入")                               
+                #print("加入")
+                start_pos = tdc_index
                 break
+    start_pos = 0;
         #for day in range(days_to_calc):
         #    print("證券代號 = ")
         #    print(deal_cnt_per_day[day].loc[stock_index,["證券代號"]])
