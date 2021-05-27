@@ -141,8 +141,8 @@ DaysToCalc = 7
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+1].strftime("%m/%d") + '&s=0,asc,0'))
-    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i].strftime("%m/%d") + '&s=0,asc,0'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
@@ -431,10 +431,13 @@ for stock_index in total_deal_cnt.index:
     deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
     if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
         deal_cnt_over_deal.append(deal_cnt_today)
-        stock_no_over_deal.append(deal_cnt_per_day[0].loc[stock_index,["證券代號"]])
-over_deal_data = {"證券代號":stock_no_over_deal, "成交股數":deal_cnt_over_deal}
+        stock_no_over_deal.append(deal_cnt_per_day[0].iloc[stock_index,0])
+over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
 OverDealDf = pd.DataFrame(over_deal_data)
 
+file_name_str = real_work_day[0].strftime("%Y%m%d")
+file_name_str = file_name_str+"OverDealStocks.json"
+OverDealDf.to_json(file_name_str, orient='records')
 #for day in range(DaysToCalc):
 print("-------------")
 print("deal cnt Day 0")
