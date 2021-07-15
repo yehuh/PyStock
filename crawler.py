@@ -146,8 +146,8 @@ for i in range(DaysToCalc):
 
 
 
-                                                                                                                                #110/05/21&s=0,asc,0
-# 整理資料，變成表格
+                                                                                                                      
+############################################################整理上市股票資料，變成表格############################################################
 df_market =[]
 for i in range(DaysToCalc):
     df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=["證券代號" in l for l in r_market[i].text.split("\n")].index(True)-1)
@@ -163,7 +163,7 @@ for i in range(DaysToCalc):
     #    buff2 = buff+str(df_buff2.loc[j,["漲跌價差"]])
     #    df_buff2.loc[j,["漲跌價差"]] = buff2
     df_market.append(df_buff3)
-
+'' ############################################################整理上市股票資料，變成表格############################################################
 
 #df = pd.read_csv(r[0].text, header = None)
 print("                   ")
@@ -176,7 +176,7 @@ print("                   ")
 print("market stock today above")
 
 
-
+############################################################整理上櫃股票資料，變成表格############################################################
 couter_stock_data =[]
 df_counter =[]
 for idd in range(DaysToCalc):
@@ -219,7 +219,7 @@ for idd in range(DaysToCalc):
     df_buff2= df_buff1.drop(columns=["最後賣價","最後賣量(千股)","發行股數" ,"次日參考價" , "次日漲停價"])
     df_buff2 = df_buff2.drop(columns=["均價","成交金額(元)","次日跌停價"])#,"次日跌停價\r" 
     df_counter.append(df_buff2)
-
+'' ############################################################整理上櫃股票資料，變成表格############################################################
 
 #df = pd.read_csv(r[0].text, header = None)
 print("                   ")
@@ -330,31 +330,15 @@ for k in range(DaysToCalc):
 #print("deal count 1st day = ")    
 #print(deal_cnt_per_day[0].head(10))
 
-##
-#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
+
+''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 
 
 
-#stock = []
-#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[11,22,33]})
-#stock.append({"證券代號":["0050","0051","0052"], "成交股數":[44,55,66]})
 
-#deal_cnt = []
-#deal_cnt.append(pd.DataFrame.from_dict(stock[0]))
-#deal_cnt.append(pd.DataFrame.from_dict(stock[1]))
-'''
-
-'''
-#print("deal_cnt_frame_array[0].index")
-#print(deal_cnt_frame_array[0][0]["成交股數"])
-    
-#deal_cnt_3day = pd.DataFrame(columns=("證券代號","成交股數"))
-
-#print(deal_cnt_3day)
+##################################個別股票的交易量加總##################################
 import copy
 total_deal_cnt = copy.copy(deal_cnt_per_day[0])
-
-deal_cnt_per_stock = []
 
 for day in range(DaysToCalc): 
     print("stock cnt in day"+ str(day))
@@ -395,6 +379,8 @@ for day in range(1,DaysToCalc):
         #stock_row.append(row_data)
 
 #total_deal_cnt_for_days_to_calc = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
+'' ##################################個別股票的交易量加總##################################
+
 
 end_time = time.time()
 print("-------------")
@@ -422,7 +408,7 @@ print("              ")
 '''
 
 
-
+######################################找今天交易量大於前幾天總和的股票######################################
 deal_cnt_over_deal =[]
 stock_no_over_deal =[]
 
@@ -432,8 +418,11 @@ for stock_index in total_deal_cnt.index:
     if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
         deal_cnt_over_deal.append(deal_cnt_today)
         stock_no_over_deal.append(deal_cnt_per_day[0].iloc[stock_index,0])
+        
 over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
 OverDealDf = pd.DataFrame(over_deal_data)
+''######################################找今天交易量大於前幾天總和的股票######################################
+
 
 file_name_str = real_work_day[0].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
@@ -458,5 +447,27 @@ print("-------------")
 print("over deal stock")
 print(OverDealDf)
 
-#for i in range(1, 2):
-#	deal_cnt_3day.iloc[:,2] = deal_cnt[i].iloc[:,2]+deal_cnt_3day.iloc[:,2]
+
+######################################找今天交易量大於前幾天總和10倍的股票######################################
+#start_pos =0
+#deal_cnt_extrem_over_deal=[]
+#stock_no_extrem_over_deal=[]
+#for over_deal_index in OverDealDf.index:
+#    for index_today in  range(start_pos,len(deal_cnt_per_day[0].index)):
+#        if(OverDealDf.iloc[over_deal_index,0] == deal_cnt_per_day[0].iloc[index_today,0]):
+#            start_pos = index_today
+#            deal_cnt_today = int(deal_cnt_per_day[0].iloc[index_today,1])
+#            deal_cnt_sum = int(OverDealDf.iloc[over_deal_index,1])
+#            if(deal_cnt_today> 10*deal_cnt_sum):
+#                deal_cnt_extrem_over_deal.append(deal_cnt_today)
+#                stock_no_extrem_over_deal.append(OverDealDf.iloc[over_deal_index,0])
+#            break;
+
+
+#extreme_over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
+#ExOverDealDf = pd.DataFrame(extreme_over_deal_data)
+
+#print("-------------")
+#print("extreme over deal stock")
+#print(ExOverDealDf)
+''######################################找今天交易量大於前幾天總和10倍的股票######################################
