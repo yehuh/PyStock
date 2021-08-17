@@ -5,7 +5,7 @@ from io import StringIO
 import pandas as pd
 #import DataFrameToJSONArray
 import json
-
+import GetWorkedDay
 
 
 #設定2021的假日
@@ -80,49 +80,11 @@ import time
 
 start_time = time.time()
 
-################################找出股市工作日期################################
-days_ago = []
-for i in range(80):
-	days_ago.append(datetime.today() - timedelta(days = i))
-# = np.array([datetime.today() - timedelta(days =i) for i in range(60)]) 
-
-worked_day = []
-real_work_day =[]
-#np.array([datetime.today() - timedelta(days =i) for i in range(60)])
-
-#print(days_ago[i])
-j= 0
-
-for dayyy in days_ago:
-	if dayyy.weekday() < 5:
-		worked_day.append(dayyy)
-
-#for i in range(60):
-#	if days_ago[i].weekday() <5:
-#		worked_day.append(days_ago[i])
-        		
-				#break
-				#
-
-for dayy in worked_day:
-	was_holiday = False
-	for holiday in holidays_taiwan_2021:
-		if dayy.date() == holiday:
-			was_holiday = True
-			break
-	if was_holiday == False:
-		real_work_day.append(dayy)
-
-        
-#for day in real_work_day:
-#    print(day.strftime("%Y%m%d"))
-''################################找出股市工作日期################################
+real_work_day = GetWorkedDay.GetWorkedDay(80)
 
 roc_year = int(real_work_day[0].year) - 1911
 print("Year of ROC Now:")
 print(str(roc_year))
-
-
 
 
 whaha = 'https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year)
