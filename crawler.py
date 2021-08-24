@@ -6,76 +6,12 @@ import pandas as pd
 #import DataFrameToJSONArray
 import json
 import GetWorkedDay
-
-
-#設定2021的假日
-holidays_taiwan_2021 = []
-holidays_taiwan_2021.append(date(2021, 1, 1))
-holidays_taiwan_2021.append(date(2021, 2, 10))
-holidays_taiwan_2021.append(date(2021, 2, 11))
-holidays_taiwan_2021.append(date(2021, 2, 12))
-holidays_taiwan_2021.append(date(2021, 2, 15))
-holidays_taiwan_2021.append(date(2021, 2, 16))
-holidays_taiwan_2021.append(date(2021, 3, 1))
-holidays_taiwan_2021.append(date(2021, 4, 2))
-holidays_taiwan_2021.append(date(2021, 4, 5))
-holidays_taiwan_2021.append(date(2021, 4, 30))
-holidays_taiwan_2021.append(date(2021, 6, 14))
-holidays_taiwan_2021.append(date(2021, 9, 20))
-holidays_taiwan_2021.append(date(2021, 9, 21))
-holidays_taiwan_2021.append(date(2021, 10, 11))
-holidays_taiwan_2021.append(date(2021, 12, 31))
-
-'''
-for day in holidays_taiwan_2021:
-	print(day.strftime("%Y%m%d"))
-	print("week day is %d" % day.weekday())
-	print("                               ")
-'''
+import StockOnline
 
 
 #找出台股上市上櫃代號
+#stock_noooo = StockOnline.GetStockNo(StockOnline.eStockType.CONTER)
 
-#上櫃股票
-#https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y
-
-'''
-counter_stock = pd.read_html("https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=2&issuetype=4&industry_code=&Page=1&chklike=Y")
-df_counter = counter_stock[0]
-stock_names = df_counter.loc[:,2]
-
-counter_stock_no =[]
-for i in range(1, len(stock_names.index)):
-	stock_str = stock_names.iloc[i].split()
-	counter_stock_no.append(stock_str[0])
-
-
-with open('counter_stock_index.json', 'w') as c_stock_id:
-	json.dump(counter_stock_no, c_stock_id)
-
-print('counter stockindex : ')
-print(counter_stock_no)
-'''
-
-#上市股票
-#https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y
-
-'''
-market_stock = pd.read_html("https://isin.twse.com.tw/isin/class_main.jsp?owncode=&stockname=&isincode=&market=1&issuetype=1&industry_code=&Page=1&chklike=Y")
-df_market = market_stock[0]
-m_stock_names =df_market.loc[:,2]
-
-market_stock_no =[]
-for i in range(1, len(m_stock_names.index)):
-	stock_str = m_stock_names.iloc[i].split()
-	market_stock_no.append(stock_str[0])
-
-with open('market_stock_index.json', 'w') as m_stock_id:
-	json.dump(market_stock_no, m_stock_id)
-
-print('stock_index : ')
-print(market_stock_no)
-'''
 import time
 
 start_time = time.time()
