@@ -15,9 +15,10 @@ import DealCnt
 deal_cnt_p_day = []
 
 deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
-deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
 deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
+deal_cnt = DealCnt.CalDealCntSum(2,deal_cnt_p_day)
 
-deal_cnt = DealCnt.CalDealCntSum(3,deal_cnt_p_day)
+print(deal_cnt_p_day)
 
 print(deal_cnt)
