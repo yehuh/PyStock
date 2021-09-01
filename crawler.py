@@ -22,7 +22,6 @@ roc_year = int(real_work_day[0].year) - 1911
 print("Year of ROC Now:")
 print(str(roc_year))
 
-
 #market_stock = []
 #market_stock.append(real_work_day[0].max)
 
@@ -227,6 +226,7 @@ for k in range(DaysToCalc):
 
 
 ##################################個別股票的交易量加總##################################
+'''
 import copy
 total_deal_cnt = copy.copy(deal_cnt_per_day[0])
 
@@ -267,13 +267,17 @@ for day in range(1,DaysToCalc):
         #    buff = buff+deal_cnt_per_day[day].loc[stock_index,["成交股數"]]
         #row_data = {"證券代號": [deal_cnt_per_day[day].loc[stock_index,["證券代號"]]], "成交股數":[buff]}
         #stock_row.append(row_data)
-
+'''
 #total_deal_cnt_for_days_to_calc = pd.DataFrame(stock_row, columns=["證券代號","成交股數"])    
 '' ##################################個別股票的交易量加總##################################
+    
 
+
+print("Caculating Days:")
+print(len(deal_cnt_per_day))
 import DealCnt
 
-#total_deal_cnt0 = DealCnt.CalDealCntSum(deal_cnt_per_day,deal_cnt_per_day.count())
+total_deal_cnt = DealCnt.CalDealCntSum(len(deal_cnt_per_day), deal_cnt_per_day)
 #total_deal_cnt_yesterday = DealCnt.CalDealCntSum(deal_cnt_per_day,deal_cnt_per_day.count() - 1)
 
 end_time = time.time()
@@ -282,11 +286,11 @@ print("calculating time is")
 print(end_time - start_time)
 
 print("Stock Cnt For Total Deal Count:")
-print(len(total_deal_cnt.index))
+#print(len(total_deal_cnt))
 
 
 print("Total Deal Count From Function:")
-#print(len(total_deal_cnt0.index))
+print(len(total_deal_cnt))
 '''
 print("-------------")
 print("deal cnt 1st day")
@@ -306,6 +310,7 @@ print("              ")
 
 
 ######################################找今天交易量大於前幾天總和的股票######################################
+
 deal_cnt_over_deal =[]
 stock_no_over_deal =[]
 
@@ -318,6 +323,7 @@ for stock_index in total_deal_cnt.index:
         
 over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
 OverDealDf = pd.DataFrame(over_deal_data)
+
 ''######################################找今天交易量大於前幾天總和的股票######################################
 
 
@@ -325,20 +331,20 @@ file_name_str = real_work_day[0].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
 OverDealDf.to_json(file_name_str, orient='records')
 #for day in range(DaysToCalc):
-print("-------------")
-print("deal cnt Day 0")
-print(deal_cnt_per_day[day].head(50))
-print("             ")
+#print("-------------")
+#print("deal cnt Day 0")
+#print(deal_cnt_per_day[day].head(50))
+#print("             ")
     
 
-str_buff = "deal cnt sum for " + str(DaysToCalc)
-str_buff = str_buff + " days:"
-print("-------------")
-print(str_buff)
-print(total_deal_cnt.head(50))
+#str_buff = "deal cnt sum for " + str(DaysToCalc)
+#str_buff = str_buff + " days:"
+#print("-------------")
+#print(str_buff)
+#print(total_deal_cnt.head(50))
 #print(total_deal_cnt.loc["成交股數"])#[1]deal_cnt_3day
-print("              ")
-print("              ")
+#print("              ")
+#print("              ")
 
 print("-------------")
 print("over deal stock")

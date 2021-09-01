@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep  1 21:27:44 2021
+
+@author: yehuh
+"""
+import pandas as pd
+#import DataFrameToJSONArray
+import json
+import DealCnt
+
+#deal_cnt_per_day[0].to_json(r'C:\Users\yehuh\py_stock\deal_count_today.json',force_ascii=False)
+#deal_cnt_per_day[1].to_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json',force_ascii=False)
+
+deal_cnt_p_day = []
+
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
+
+deal_cnt = DealCnt.CalDealCntSum(3,deal_cnt_p_day)
+
+print(deal_cnt)

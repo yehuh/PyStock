@@ -8,11 +8,7 @@ Created on Wed Aug 25 21:35:17 2021
 import pandas
 import copy
 
-def CalDealCntSum(*deal_cnt_per_day,calc_days):
-    #DealCntSum = pd.DataFrame()
-    #if not isinstance(deal_cnt_per_day[0], pd.DataFrame()):
-    #    raise TypeError('stock_type must be an instance of eStockType Enum')
-    #    return DealCntSum
+def CalDealCntSum(calc_days, deal_cnt_per_day):
     DealCntSum = copy.copy(deal_cnt_per_day[0])
     start_pos = 0
     for day in range(1,calc_days):
