@@ -15,10 +15,34 @@ import DealCnt
 deal_cnt_p_day = []
 
 deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
-deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_today.json'))
 deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
-deal_cnt = DealCnt.CalDealCntSum(2,deal_cnt_p_day)
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
+deal_cnt_p_day.append(pd.read_json(r'C:\Users\yehuh\py_stock\deal_count_yesterday.json'))
+deal_cnt = DealCnt.CalDealCntSum(5,deal_cnt_p_day)
+OverDeal = DealCnt.FindOverDeal(deal_cnt, deal_cnt_p_day[0])
 
-print(deal_cnt_p_day)
+print('DEAL COUNT PER DAY')
+print(deal_cnt_p_day[0].head(50))
+print('-------------------')
+print('-------------------')
+print('-------------------')
+print('-------------------')
+print('                   ')
+print(deal_cnt_p_day[1].head(50))
+print('-------------------')
+print('-------------------')
+print('-------------------')
+print('-------------------')
+print('                   ')
 
+print('SUM OF DEAL COUNT')
 print(deal_cnt)
+print('-------------------')
+print('-------------------')
+print('-------------------')
+print('                   ')
+
+
+print('Over Deal Stock')
+print(OverDeal)

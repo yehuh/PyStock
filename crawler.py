@@ -31,8 +31,8 @@ DaysToCalc = 7
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i].strftime("%m/%d") + '&s=0,asc,0'))
-    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i].strftime("%Y%m%d") + '&type=ALL'))
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+1].strftime("%m/%d") + '&s=0,asc,0'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
@@ -230,7 +230,8 @@ print(len(deal_cnt_per_day))
 import DealCnt
 
 total_deal_cnt = DealCnt.CalDealCntSum(len(deal_cnt_per_day), deal_cnt_per_day)
-#total_deal_cnt_yesterday = DealCnt.CalDealCntSum(deal_cnt_per_day,deal_cnt_per_day.count() - 1)
+
+
 
 end_time = time.time()
 print("-------------")
@@ -301,8 +302,29 @@ OverDealDf.to_json(file_name_str, orient='records')
 print("-------------")
 print("over deal stock")
 print(OverDealDf)
+print("-------------")
+print("             ")
 
 
+total_deal_cnt_yesterday = DealCnt.CalDealCntSum( len(deal_cnt_per_day)-1, deal_cnt_per_day)
+OverDealYesterday = DealCnt.FindOverDeal(total_deal_cnt_yesterday, deal_cnt_per_day[1])
+print("-------------")
+print("over deal yesterday")
+print(OverDealYesterday)
+print("-------------")
+print("             ")
+
+deal_cnt_df_today = deal_cnt_per_day[0]
+over_deal_2_days = []
+for stock_yesterday in OverDealYesterday:
+    stock_today = deal_cnt_df_today.loc[deal_cnt_df_today['證券代號'] == stock_yesterday['STOCK_NO']]
+    if(int(stock_today['成交股數']) > int(stock_yesterday['DEAL_COUNT'])):
+        over_deal_2_days.append(stock_today)
+
+
+print("-------------")
+print("over deal 2days")
+print(over_deal_2_days)
 ######################################找今天交易量大於前幾天總和10倍的股票######################################
 #start_pos =0
 #deal_cnt_extrem_over_deal=[]
