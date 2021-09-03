@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, time
 #import urllib2, logging, csv, re
 import requests
 from io import StringIO
@@ -12,11 +12,22 @@ import StockOnline
 #找出台股上市上櫃代號
 #stock_noooo = StockOnline.GetStockNo(StockOnline.eStockType.CONTER)
 
-import time
+#import time
 
-start_time = time.time()
+start_time = datetime.now()
 
 real_work_day = GetWorkedDay.GetWorkedDay(80)
+
+stock_closed_time = time(15,0,0)
+work_day_shift = 0
+if(date.today() ==  real_work_day[0].date()):
+    print("today is work day")
+    if(datetime.now().time() < stock_closed_time):
+        print("Stock Dealing data of Today is not prepared")
+        work_day_shift =1
+else:
+    print("today is not work day")
+
 
 roc_year = int(real_work_day[0].year) - 1911
 print("Year of ROC Now:")
@@ -26,13 +37,14 @@ print(str(roc_year))
 #market_stock.append(real_work_day[0].max)
 
 
+
 #下載股價
 DaysToCalc = 7
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+1].strftime("%m/%d") + '&s=0,asc,0'))
-    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+1].strftime("%Y%m%d") + '&type=ALL'))
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+work_day_shift].strftime("%m/%d") + '&s=0,asc,0'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+work_day_shift].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
@@ -233,7 +245,7 @@ total_deal_cnt = DealCnt.CalDealCntSum(len(deal_cnt_per_day), deal_cnt_per_day)
 
 
 
-end_time = time.time()
+end_time = datetime.now()
 print("-------------")
 print("calculating time is")
 print(end_time - start_time)
@@ -306,6 +318,7 @@ print("-------------")
 print("             ")
 
 
+'''
 total_deal_cnt_yesterday = DealCnt.CalDealCntSum( len(deal_cnt_per_day)-1, deal_cnt_per_day)
 OverDealYesterday = DealCnt.FindOverDeal(total_deal_cnt_yesterday, deal_cnt_per_day[1])
 print("-------------")
@@ -325,6 +338,7 @@ for stock_yesterday in OverDealYesterday:
 print("-------------")
 print("over deal 2days")
 print(over_deal_2_days)
+'''
 ######################################找今天交易量大於前幾天總和10倍的股票######################################
 #start_pos =0
 #deal_cnt_extrem_over_deal=[]
