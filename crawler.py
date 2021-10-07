@@ -195,6 +195,8 @@ deal_cnt_per_day = []
 #print("len of market_stock")
 #print(len(market_stock))
 #print("                 ")
+
+import ast
 start_pos = 0
 for k in range(DaysToCalc):
     print("len of df")
@@ -224,7 +226,11 @@ for k in range(DaysToCalc):
                 continue
             if (mod_market_stock[i] == df[k].iloc[j,0]):
                 stock_no.append(mod_market_stock[i])
-                deal_price.append(df[k].iloc[j,3])
+                try:
+                    d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
+                except:
+                    d_p_tmp = -0.8787
+                deal_price.append(d_p_tmp)
                 d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                 #print("-----------------------------------")
                 #print(counter_stock[i]+" stock added")
