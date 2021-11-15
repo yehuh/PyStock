@@ -77,7 +77,7 @@ print(df_market[0])
 #print(df_buff2.columns[3])
 print("                   ")
 print("                   ")
-print("market stock today above")
+print("market stock today are listed above")
 
 
 ############################################################整理上櫃股票資料，變成表格############################################################
@@ -137,7 +137,7 @@ print(df_counter[0])
 #print(df_buff.columns[2])
 print("                   ")
 print("                   ")
-print("counter stock today above")
+print("counter stock today are listed above")
 
 #dfts = DataFrameToJSONArray(df_buff2, 'OverDealCntCounter.json') # 引數(df資料,檔案儲存路徑)
 #dfts.funChangeDataFrameType() # 自動轉換DataFrame的列資料型別
@@ -255,8 +255,12 @@ print(deal_cnt_per_day[0].head(10))
 
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
+for i in range(DaysToCalc):
+    file_name_str = real_work_day[i].strftime("%Y%m%d")
+    file_name_str = file_name_str+"DealCntStocks.json"
+    deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
-
+print("Deal Count To JSON is Done!!!")
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))
@@ -300,15 +304,20 @@ print("              ")
     
 deal_cnt_over_deal =[]
 stock_no_over_deal =[]
+deal_price_over_deal = []
+total_deal_amount =[]
 
 over_deal_num = 0
 start_pos = 0
 for stock_index in total_deal_cnt.index:
     deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["成交股數"]])
     deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
+    deal_price_today = int(deal_cnt_per_day[0].loc[stock_index,["收盤價"]])
     if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
         deal_cnt_over_deal.append(deal_cnt_today)
         stock_no_over_deal.append(deal_cnt_per_day[0].iloc[stock_index,0])
+        deal_price_over_deal.append(deal_price_today)
+        total_deal_amount.append(deal_price_today * deal_cnt_today)
     #deal_cnt_sum_no = total_deal_cnt.loc[stock_index,["證券代號"]]
     #deal_cnt_today_no = deal_cnt_per_day[0].loc[stock_index,["證券代號"]]
     #deal_cnt_today = 0
@@ -328,7 +337,7 @@ for stock_index in total_deal_cnt.index:
     #    break;
     #deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
         
-over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
+over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal, "DEAL_PRICE":deal_price_over_deal, "DEAL_AMOUNT":total_deal_amount}
 OverDealDf = pd.DataFrame(over_deal_data)
 
 ''######################################找今天交易量大於前幾天總和的股票######################################
