@@ -255,12 +255,16 @@ print(deal_cnt_per_day[0].head(10))
 
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
+
+''' export deal cnt as json
 for i in range(DaysToCalc):
     file_name_str = real_work_day[i].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
     deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
 print("Deal Count To JSON is Done!!!")
+export deal cnt as json '''
+
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))
@@ -275,7 +279,7 @@ print("-------------")
 print("calculating time is")
 print(end_time - start_time)
 
-print("Stock Cnt For Total Deal Count:")
+#print("Stock Cnt For Total Deal Count:")
 #print(len(total_deal_cnt))
 
 
@@ -312,12 +316,22 @@ start_pos = 0
 for stock_index in total_deal_cnt.index:
     deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["成交股數"]])
     deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
-    deal_price_today = int(deal_cnt_per_day[0].loc[stock_index,["收盤價"]])
+    deal_price_today = deal_cnt_per_day[0].loc[stock_index,["收盤價"]]
     if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
         deal_cnt_over_deal.append(deal_cnt_today)
         stock_no_over_deal.append(deal_cnt_per_day[0].iloc[stock_index,0])
         deal_price_over_deal.append(deal_price_today)
+        deal_amount_str = deal_price_today * deal_cnt_today
+        
+        
         total_deal_amount.append(deal_price_today * deal_cnt_today)
+    
+    print("deal_amount_str")
+    try:
+        print(deal_amount_str)
+        print(type(deal_amount_str))
+    except:
+        print("total_deal_amount not exist")
     #deal_cnt_sum_no = total_deal_cnt.loc[stock_index,["證券代號"]]
     #deal_cnt_today_no = deal_cnt_per_day[0].loc[stock_index,["證券代號"]]
     #deal_cnt_today = 0
@@ -337,7 +351,7 @@ for stock_index in total_deal_cnt.index:
     #    break;
     #deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
         
-over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal, "DEAL_PRICE":deal_price_over_deal, "DEAL_AMOUNT":total_deal_amount}
+over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal, "DEAL_AMOUNT":total_deal_amount}
 OverDealDf = pd.DataFrame(over_deal_data)
 
 ''######################################找今天交易量大於前幾天總和的股票######################################
