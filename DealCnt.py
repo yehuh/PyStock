@@ -15,10 +15,10 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
         deal_cnt_per_day_rev.append(deal_cnt_per_day[total_df-i-1])
         
     DealCntSum = copy.copy(deal_cnt_per_day_rev[0])
-    print("Deal Count of Today")
-    print(deal_cnt_per_day_rev)
-    print("                   ")
-    print("-------------------")
+    #print("Deal Count of Today")
+    #print(deal_cnt_per_day_rev)
+    #print("                   ")
+    #print("-------------------")
     start_pos = 0
     for day in range(1,calc_days):
         for stock_index in deal_cnt_per_day_rev[day].index:
@@ -51,6 +51,7 @@ def FindOverDeal(total_deal_cnt, deal_cnt_today_df):
     OverDealDf = pd.DataFrame(over_deal_data)
     return OverDealDf
 
+''' for DealCntSum test
 import GetWorkedDay
 import json
 
@@ -71,13 +72,20 @@ for i in range(7):
         cnt_per_day.append(stock_data["成交股數"])
         price_per_day.append(stock_data["收盤價"])
     
-    print("DEAL CNT YESTERDAY")
-    print(cnt_per_day[1])
+    
     deal_cnt_data = {"證券代號":stock_no_per_day, "成交股數":cnt_per_day, "收盤價":price_per_day}
     df = pd.DataFrame(deal_cnt_data)
+    stock_no_per_day.clear()
+    cnt_per_day.clear()
+    price_per_day.clear()
+    print("DEAL CNT OF DAY")
+    print(i)
+    print("---------------------")
+    print(df)
     deal_cnt_per_day.append(df)
 
 deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
 
 print("DEAL CNT SUM")
 print(deal_cnt_sum)
+DealCntSum'''
