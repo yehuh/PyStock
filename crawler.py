@@ -244,7 +244,7 @@ for k in range(DaysToCalc):
                 start_pos = j 
                 break;
     start_pos = 0
-    df_data = {"證券代號":stock_no, "成交股數":deal_cnt, "收盤價":deal_price}
+    df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_PRICE":deal_price}
     df_temp = pd.DataFrame(df_data)
     deal_cnt_per_day.append(df_temp)
     #
@@ -256,14 +256,14 @@ print(deal_cnt_per_day[0].head(10))
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 
-''' export deal cnt as json
+''' export deal cnt as json'''
 for i in range(DaysToCalc):
     file_name_str = real_work_day[i].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
     deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
 print("Deal Count To JSON is Done!!!")
-export deal cnt as json '''
+''''export deal cnt as json '''
 
 
 print("Caculating Days:")
@@ -272,6 +272,13 @@ import DealCnt
 
 total_deal_cnt = DealCnt.CalDealCntSum(len(deal_cnt_per_day), deal_cnt_per_day)
 
+file_name_str = real_work_day[0].strftime("%Y%m%d")
+file_name_str +="And"
+file_name_str +=str(DaysToCalc)
+file_name_str += "DaysBefore"
+file_name_str = file_name_str+"DealCntSum.json"
+deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
+print("DealCntSum To JSON is Done!!!")
 
 
 end_time = datetime.now()
@@ -314,9 +321,9 @@ total_deal_amount =[]
 over_deal_num = 0
 start_pos = 0
 for stock_index in total_deal_cnt.index:
-    deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["成交股數"]])
-    deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["成交股數"]])
-    deal_price_today = deal_cnt_per_day[0].loc[stock_index,["收盤價"]]
+    deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["DEAL_COUNT"]])
+    deal_cnt_today = int(deal_cnt_per_day[0].loc[stock_index,["DEAL_COUNT"]])
+    deal_price_today = deal_cnt_per_day[0].loc[stock_index,["DEAL_PRICE"]]
     if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
         deal_cnt_over_deal.append(deal_cnt_today)
         stock_no_over_deal.append(deal_cnt_per_day[0].iloc[stock_index,0])
