@@ -312,7 +312,10 @@ print("              ")
 '''
 ######################################找今天交易量大於前幾天總和的股票######################################
 
-    
+import GetOverDeal
+
+OverDealDf = GetOverDeal(deal_cnt_per_day, total_deal_cnt)
+'''    
 deal_cnt_over_deal =[]
 stock_no_over_deal =[]
 deal_price_over_deal = []
@@ -363,7 +366,7 @@ OverDealDf = pd.DataFrame(over_deal_data)
 
 ''######################################找今天交易量大於前幾天總和的股票######################################
 
-
+'''
 file_name_str = real_work_day[0].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
 OverDealDf.to_json(file_name_str, orient='records')
