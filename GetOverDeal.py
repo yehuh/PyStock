@@ -5,29 +5,88 @@ Created on Sat Nov 27 19:38:50 2021
 @author: yehuh
 """
 import pandas as pd
+
+def getStockNoDF(stock_df_big, stock_df_small):
+    start_pos = 0
+    big_index = []
+    small_index = []
+    total_stocks = len(stock_df_big.index)
+    small_stocks =len(stock_df_small.index)
+    for stock_large_index in range(total_stocks):#stock_df_big.index:
+        stock_to_be_found_str = str(stock_df_big.iloc[[stock_large_index],[0]]).split()
+        stock_to_be_found = stock_to_be_found_str[2]
+        index_in_stock_df_small_as_large_df =-1
+        for stock_small_index in range(start_pos,len(stock_df_small.index)):#range(small_stocks):
+            #stock_df_small:
+            stock_compare_to_str = str(stock_df_small.iloc[[stock_small_index],[0]]).split()
+            stock_compare_to = stock_compare_to_str[2]
+            if(str(stock_to_be_found) == str(stock_compare_to)):
+                start_pos = stock_small_index
+                index_in_stock_df_small_as_large_df = stock_small_index
+                break
+        
+        if(stock_large_index<1):
+           stock_small_str = str(stock_df_small.iloc[[0],[0]]).split()
+           print("SMALL STOCK DF:")
+           
+           for str_id in stock_small_str:
+               print(str_id)
+        
+           print("----------------")
+        if(index_in_stock_df_small_as_large_df<0):
+            error_str = "STOCK_NO:"
+            error_str = error_str + str(+stock_to_be_found)
+            error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
+            print(error_str)
+        
+        big_index.append(int(stock_large_index))
+        small_index.append(int(index_in_stock_df_small_as_large_df))
+    
+    index_data = {"BIG_INDEX":big_index, "SMALL_INDEX":small_index}
+    StockNoIndexDF = pd.DataFrame(index_data)
+    return StockNoIndexDF
+
+
 def GetOverDeal(deals_cnt_today, total_deal_cnt):
     deal_cnt_over_deal =[]
     stock_no_over_deal =[]
     deal_price_over_deal = []
     total_deal_amount =[]
 
-    print("Deal------Price")
-    deal_pr = str(deals_cnt_today.loc[0,["DEAL_PRICE"]])
-    deal_str = deal_pr.split()
-    print(float(deal_str[1]))
+    #print("Deal------Price")
+    #deal_pr = str(deals_cnt_today.loc[0,["DEAL_PRICE"]])
+    #deal_str = deal_pr.split()
+    #print(float(deal_str[1]))
     
 
-    error_str = "Stock no:"
-    print(int(total_deal_cnt.loc[0,["DEAL_COUNT"]]))
+    #error_str = "Stock no:"
+    #print(int(total_deal_cnt.loc[0,["DEAL_COUNT"]]))
     over_deal_num = 0
     start_pos = 0
+    test_cnt =0
     for stock_index in total_deal_cnt.index:
         deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["DEAL_COUNT"]])
-        deal_cnt_today = int(deals_cnt_today.loc[stock_index,["DEAL_COUNT"]])
-        deal_price_today_strs = str(deals_cnt_today.loc[stock_index,["DEAL_PRICE"]]).split()
+        stock_to_be_found = total_deal_cnt.loc[stock_index,["STOCK_NO"]]
+        index_stock_today = -1
+        for dc_today_index in range(start_pos ,len(deals_cnt_today.index)):
+            stock_compare_to = deals_cnt_today.loc[dc_today_index,["STOCK_NO"]]
+            if(str(stock_to_be_found) == str(stock_compare_to)):
+                start_pos = dc_today_index
+                index_stock_today = dc_today_index
+                break
+        
+        if(index_stock_today < 0):
+            error_str = "STOCK NO:"
+            error_str = error_str+str(stock_to_be_found)
+            error_str = error_str+"Not Found in Stocks today!!"
+            print(error_str)
+            break
+        
+        deal_cnt_today = int(deals_cnt_today.loc[index_stock_today,["DEAL_COUNT"]])
+        deal_price_today_strs = str(deals_cnt_today.loc[index_stock_today,["DEAL_PRICE"]]).split()
         
         try:
-            deal_price_today = float(deal_price_today_strs[1])
+            deal_price_today = float(deal_price_today_strs[1])           
         except:
             deal_price_today = 0
             stock_no = total_deal_cnt.loc[stock_index,["STOCK_NO"]]
@@ -35,6 +94,10 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
             error_str+=str(stock_no)
             error_str+=" is not exist!!!!!"
             print(error_str)
+            for d_str in deal_price_today_strs:
+                print(d_str)
+            print("---------------------------------")
+            
             
         if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
             deal_cnt_over_deal.append(deal_cnt_today)
@@ -135,7 +198,13 @@ total_deal_cnt = pd.read_json("20211129And7DaysBeforeDealCntSum.json")
 print("Total Deal Count IS:")
 print(total_deal_cnt)
 
-over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
-print("OVER DEAL STOCKS")
-print(over_deal_stock)
+print("Deal Cnt of Today is:")
+print(df_deal_cnt_today)
+
+df_test = getStockNoDF(total_deal_cnt,df_deal_cnt_today)
+print("INDEX DATAFRAME:")
+print(df_test)
+#over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
+#print("OVER DEAL STOCKS")
+#print(over_deal_stock)
 ''''for DealCntSum test'''
