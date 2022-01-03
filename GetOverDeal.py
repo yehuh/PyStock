@@ -12,9 +12,8 @@ def getStockNoDF(stock_df_big, stock_df_small):
     small_index = []
     total_stocks = len(stock_df_big.index)
     small_stocks =len(stock_df_small.index)
-    for stock_large_index in range(total_stocks):#stock_df_big.index:
-        stock_to_be_found_str = str(stock_df_big.iloc[[stock_large_index],[0]]).split()
-        stock_to_be_found = stock_to_be_found_str[2]
+    for stock_large_index in stock_df_big.index:#range(total_stocks):#
+        stock_to_be_found = stock_df_big.loc[stock_large_index,'STOCK_NO']
         index_in_stock_df_small_as_large_df =-1
         for stock_small_index in range(start_pos,len(stock_df_small.index)):#range(small_stocks):
             #stock_df_small:
