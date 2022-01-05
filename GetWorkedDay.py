@@ -27,6 +27,20 @@ holidays_taiwan_2021.append(date(2021, 10, 11))
 holidays_taiwan_2021.append(date(2021, 12, 31))
 
 
+holidays_taiwan_2021.append(date(2022, 1, 1))
+holidays_taiwan_2021.append(date(2022, 1, 31))
+holidays_taiwan_2021.append(date(2022, 2, 1))
+holidays_taiwan_2021.append(date(2022, 2, 2))
+holidays_taiwan_2021.append(date(2022, 2, 3))
+holidays_taiwan_2021.append(date(2022, 2, 4))
+holidays_taiwan_2021.append(date(2022, 2, 28))
+holidays_taiwan_2021.append(date(2022, 4, 4))
+holidays_taiwan_2021.append(date(2022, 4, 5))
+holidays_taiwan_2021.append(date(2022, 5, 2))
+holidays_taiwan_2021.append(date(2022, 6, 3))
+holidays_taiwan_2021.append(date(2022, 9, 9))
+holidays_taiwan_2021.append(date(2022, 10, 10))
+
 def GetWorkedDay(count_days_from_today):
     days_ago = []
     for i in range(count_days_from_today):

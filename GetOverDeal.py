@@ -10,13 +10,20 @@ def getStockNoDF(stock_df_big, stock_df_small):
     start_pos = 0
     big_index = []
     small_index = []
-    total_stocks = len(stock_df_big.index)
+    big_stocks = len(stock_df_big.index)
     small_stocks =len(stock_df_small.index)
+    '''
+    if(small_stocks > big_stocks):
+        print("Small Stock Len:")
+        print(str(small_stocks))
+        print("Big Stock Len:")
+        print(str(big_stocks))
+        return -1
+    ''' 
     for stock_large_index in stock_df_big.index:#range(total_stocks):#
         stock_to_be_found = stock_df_big.loc[stock_large_index,'STOCK_NO']
         index_in_stock_df_small_as_large_df =-1
-        for stock_small_index in range(start_pos,len(stock_df_small.index)):#range(small_stocks):
-            #stock_df_small:
+        for stock_small_index in range(start_pos,len(stock_df_small.index)):
             stock_compare_to_str = str(stock_df_small.iloc[[stock_small_index],[0]]).split()
             stock_compare_to = stock_compare_to_str[2]
             if(str(stock_to_be_found) == str(stock_compare_to)):
@@ -24,17 +31,9 @@ def getStockNoDF(stock_df_big, stock_df_small):
                 index_in_stock_df_small_as_large_df = stock_small_index
                 break
         
-        if(stock_large_index<1):
-           stock_small_str = str(stock_df_small.iloc[[0],[0]]).split()
-           print("SMALL STOCK DF:")
-           
-           for str_id in stock_small_str:
-               print(str_id)
-        
-           print("----------------")
         if(index_in_stock_df_small_as_large_df<0):
             error_str = "STOCK_NO:"
-            error_str = error_str + str(+stock_to_be_found)
+            error_str = error_str + str(stock_to_be_found)
             error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
             print(error_str)
         
@@ -51,18 +50,25 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     stock_no_over_deal =[]
     deal_price_over_deal = []
     total_deal_amount =[]
-
-    #print("Deal------Price")
-    #deal_pr = str(deals_cnt_today.loc[0,["DEAL_PRICE"]])
-    #deal_str = deal_pr.split()
-    #print(float(deal_str[1]))
     
-
-    #error_str = "Stock no:"
-    #print(int(total_deal_cnt.loc[0,["DEAL_COUNT"]]))
+    dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today)
     over_deal_num = 0
     start_pos = 0
     test_cnt =0
+    for idex in dfStockNoDf.index:
+        idex_in_dc_tday = dfStockNoDf.loc[idex,'SMALL_INDEX']
+        deal_cnt_today = deals_cnt_today.iloc[idex_in_dc_tday, 1]
+        indx_in_dc_total = dfStockNoDf.loc[idex,'BIG_INDEX']
+        deal_cnt_total = total_deal_cnt.iloc[indx_in_dc_total,0]
+        deal_price_today = deals_cnt_today.iloc[idex_in_dc_tday, 2]
+        
+        if(deal_cnt_today> (deal_cnt_total-deal_cnt_today)):
+            deal_cnt_over_deal.append(deal_cnt_today)
+            stock_no_over_deal.append(deals_cnt_today.iloc[idex_in_dc_tday,0])
+            deal_price_over_deal.append(deal_price_today)
+            deal_amount_str = deal_price_today * deal_cnt_today
+            total_deal_amount.append(deal_price_today * deal_cnt_today)
+        '''
     for stock_index in total_deal_cnt.index:
         deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["DEAL_COUNT"]])
         stock_to_be_found = total_deal_cnt.loc[stock_index,["STOCK_NO"]]
@@ -104,6 +110,7 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
             deal_price_over_deal.append(deal_price_today)
             deal_amount_str = deal_price_today * deal_cnt_today
             total_deal_amount.append(deal_price_today * deal_cnt_today)
+        '''    
     
         '''
         print("deal_amount_str")
@@ -137,7 +144,7 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     return OverDealDf
 
 
-''' for OverDeal test'''
+''' for OverDeal test
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
@@ -162,6 +169,8 @@ file_name_str = file_name_str+"DealCntStocks.json"
 f = open(file_name_str)
 deal_cnt_stock = json.load(f)
 df_deal_cnt_today = pd.DataFrame(deal_cnt_stock)
+'''
+
 '''
 for i in range(7):
     file_name_str = real_work_day[i].strftime("%Y%m%d")
@@ -189,6 +198,8 @@ for i in range(7):
     #print("---------------------")
     #print(df)
     deal_cnt_per_day.append(df)
+'''    
+    
 '''
 
 #f = open("20211126And7DaysDealCntSum.json")
@@ -200,10 +211,10 @@ print(total_deal_cnt)
 print("Deal Cnt of Today is:")
 print(df_deal_cnt_today)
 
-df_test = getStockNoDF(total_deal_cnt,df_deal_cnt_today)
-print("INDEX DATAFRAME:")
-print(df_test)
-#over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
-#print("OVER DEAL STOCKS")
-#print(over_deal_stock)
-''''for DealCntSum test'''
+#df_test = getStockNoDF(total_deal_cnt, df_deal_cnt_today)
+#print("INDEX DATAFRAME:")
+#print(df_test)
+over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
+print("OVER DEAL STOCKS")
+print(over_deal_stock)
+for DealCntSum test'''
