@@ -65,13 +65,13 @@ import json
 from datetime import datetime, timedelta, date
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-real_work_day.append(date(2021, 11, 29))
-real_work_day.append(date(2021, 11, 26))
-real_work_day.append(date(2021, 11, 25))
-real_work_day.append(date(2021, 11, 24))
-real_work_day.append(date(2021, 11, 23))
-real_work_day.append(date(2021, 11, 22))
-real_work_day.append(date(2021, 11, 19))
+real_work_day.append(date(2022, 1, 21))
+real_work_day.append(date(2022, 1, 20))
+real_work_day.append(date(2022, 1, 19))
+real_work_day.append(date(2022, 1, 18))
+real_work_day.append(date(2022, 1, 17))
+real_work_day.append(date(2022, 1, 14))
+real_work_day.append(date(2022, 1, 13))
 
 
 
@@ -106,4 +106,6 @@ deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
 
 print("DEAL CNT SUM")
 print(deal_cnt_sum)
+file_name_str = "2022_0121__0113_DealCntSum.json"
+deal_cnt_sum.to_json(file_name_str, orient='records',force_ascii=False)
 '''for DealCntSum test'''
