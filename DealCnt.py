@@ -44,21 +44,6 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     return DealCntSum
 
 
-def FindOverDeal(total_deal_cnt, deal_cnt_today_df):
-    deal_cnt_over_deal =[]
-    stock_no_over_deal =[]
-
-    for stock_index in total_deal_cnt.index:
-        deal_cnt_sum = int(total_deal_cnt.loc[stock_index,["DEAL_COUNT"]])
-        deal_cnt_today = int(deal_cnt_today_df.loc[stock_index,["成交股數"]])
-        if(deal_cnt_today > (deal_cnt_sum- deal_cnt_today)):
-            deal_cnt_over_deal.append(deal_cnt_today)
-            stock_no_over_deal.append(deal_cnt_today_df.iloc[stock_index,0])
-        
-    over_deal_data = {"STOCK_NO":stock_no_over_deal, "DEAL_COUNT":deal_cnt_over_deal}
-    OverDealDf = pd.DataFrame(over_deal_data)
-    return OverDealDf
-
 ''' for DealCntSum test
 import GetWorkedDay
 import json
