@@ -80,17 +80,17 @@ couter_stock_data =[]
 df_counter =[]
 disp_flag = 0
 for idd in range(DaysToCalc):
-    k = r_counter[idd].text.split("\n")
+    data_str_buff = r_counter[idd].text.split("\n")
     index_line = 0
-    for i in range(len(k)):
-        if(k[i].find("代號")!=-1):
+    for i in range(len(data_str_buff)):
+        if(data_str_buff[i].find("代號")!=-1):
             index_line = i
             break
     
     for i in range(index_line):
-        k.pop(0)
+        data_str_buff.pop(0)
         
-    stock_data_index = k[0].split(",")    
+    stock_data_index = data_str_buff[0].split(",")    
     #print("                   ")
     #print("dataframe index" + str(idd))
     #print(stock_data_index)
@@ -105,11 +105,11 @@ for idd in range(DaysToCalc):
     
     index_str = index_str.rstrip(',')
 
-    k.pop(0)
-    k.insert(0,index_str)
+    data_str_buff.pop(0)
+    data_str_buff.insert(0,index_str)
 
     couter_stock_data.append("")
-    for data_str in k:
+    for data_str in data_str_buff:
         couter_stock_data[-1] += data_str
         couter_stock_data[-1] +='\n'
 
