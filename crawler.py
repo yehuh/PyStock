@@ -21,12 +21,12 @@ start_time = datetime.now()
 real_work_day = GetWorkedDay.GetWorkedDay(80)
 
 stock_closed_time = time(15,0,0)
-work_day_shift = 0
+WorkDayShift = 0
 if(date.today() ==  real_work_day[0].date()):
     print("today is work day")
     if(datetime.now().time() < stock_closed_time):
         print("Stock Dealing data of Today is not prepared")
-        work_day_shift =1
+        WorkDayShift =1
 else:
     print("today is not work day")
 
@@ -45,8 +45,8 @@ r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
     roc_year_conter = int(real_work_day[i].year) - 1911
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year_conter) + '/' + real_work_day[i+work_day_shift].strftime("%m/%d") + '&s=0,asc,0'))
-    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+work_day_shift].strftime("%Y%m%d") + '&type=ALL'))
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year_conter) + '/' + real_work_day[i+WorkDayShift].strftime("%m/%d") + '&s=0,asc,0'))
+    r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+WorkDayShift].strftime("%Y%m%d") + '&type=ALL'))
 
 
 
@@ -257,15 +257,20 @@ print(deal_cnt_per_day[0].head(10))
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 
+
+
 ''' export deal cnt as json'''
-for i in range(DaysToCalc):
-    file_name_str = real_work_day[i].strftime("%Y%m%d")
+for i in range(1):#(DaysToCalc):
+    file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
     deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
 print("Deal Count To JSON is Done!!!")
 ''''export deal cnt as json '''
-
+print("deal cnt today")
+print(deal_cnt_per_day[0])
+while(1):
+    tm.sleep(1)
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))

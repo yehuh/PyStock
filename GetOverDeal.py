@@ -59,10 +59,16 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
         idex_in_dc_tday = dfStockNoDf.loc[idex,'SMALL_INDEX']
         deal_cnt_today = deals_cnt_today.iloc[idex_in_dc_tday, 1]
         indx_in_dc_total = dfStockNoDf.loc[idex,'BIG_INDEX']
-        deal_cnt_total = total_deal_cnt.iloc[indx_in_dc_total,0]
+        deal_cnt_total = total_deal_cnt.iloc[indx_in_dc_total,1]
         deal_price_today = deals_cnt_today.iloc[idex_in_dc_tday, 2]
         
         if(deal_cnt_today> (deal_cnt_total-deal_cnt_today)):
+            if(test_cnt==0):
+                print("DEAL CNT TODAY")
+                print(deal_cnt_today)
+                print("DEAL CNT TOTOTAL - TODAY")
+                print(str(deal_cnt_total-deal_cnt_today))
+                test_cnt = test_cnt+1
             deal_cnt_over_deal.append(deal_cnt_today)
             stock_no_over_deal.append(deals_cnt_today.iloc[idex_in_dc_tday,0])
             deal_price_over_deal.append(deal_price_today)
@@ -151,13 +157,15 @@ from datetime import datetime, timedelta, date
 import DealCnt
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-real_work_day.append(date(2021, 11, 29))
-real_work_day.append(date(2021, 11, 26))
-real_work_day.append(date(2021, 11, 25))
-real_work_day.append(date(2021, 11, 24))
-real_work_day.append(date(2021, 11, 23))
-real_work_day.append(date(2021, 11, 22))
-real_work_day.append(date(2021, 11, 19))
+real_work_day.append(date(2022, 1, 21))
+real_work_day.append(date(2022, 1, 20))
+real_work_day.append(date(2022, 1, 19))
+real_work_day.append(date(2022, 1, 18))
+real_work_day.append(date(2022, 1, 17))
+real_work_day.append(date(2022, 1, 14))
+real_work_day.append(date(2022, 1, 13))
+real_work_day.append(date(2022, 1, 12))
+real_work_day.append(date(2022, 1, 11))
 
 
 deal_cnt_per_day =[]
@@ -203,16 +211,17 @@ for i in range(7):
     
 '''
 
-dc_sum = DealCnt.CalDealCntSum(7, deal_cnt_per_day)
+#dc_sum = DealCnt.CalDealCntSum(7, deal_cnt_per_day)
 
 #f = open("20211126And7DaysDealCntSum.json")
 #,orient='values',encoding='utf-8'
-total_deal_cnt = pd.read_json("20211129And7DaysBeforeDealCntSum.json")
+total_deal_cnt = pd.read_json("2022_0121__0113_DealCntSum.json")
 print("Total Deal Count IS:")
-print(dc_sum)
+print(total_deal_cnt)
 
 print("Deal Cnt of Today is:")
 print(df_deal_cnt_today)
+
 
 #df_test = getStockNoDF(total_deal_cnt, df_deal_cnt_today)
 #print("INDEX DATAFRAME:")

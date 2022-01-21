@@ -59,7 +59,7 @@ def FindOverDeal(total_deal_cnt, deal_cnt_today_df):
     OverDealDf = pd.DataFrame(over_deal_data)
     return OverDealDf
 
-''' for DealCntSum test'''
+''' for DealCntSum test
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
@@ -102,10 +102,14 @@ for i in range(7):
     print(df)
     deal_cnt_per_day.append(df)
 
+print("DEAL CNT TODAY")
+print(deal_cnt_per_day[0])
+
 deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
+
 
 print("DEAL CNT SUM")
 print(deal_cnt_sum)
 file_name_str = "2022_0121__0113_DealCntSum.json"
 deal_cnt_sum.to_json(file_name_str, orient='records',force_ascii=False)
-'''for DealCntSum test'''
+for DealCntSum test'''
