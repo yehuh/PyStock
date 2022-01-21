@@ -106,4 +106,4 @@ deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
 
 print("DEAL CNT SUM")
 print(deal_cnt_sum)
-''''for DealCntSum test'''
+'''for DealCntSum test'''

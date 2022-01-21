@@ -144,10 +144,11 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     return OverDealDf
 
 
-''' for OverDeal test
+''' for OverDeal test'''
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
+import DealCnt
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
 real_work_day.append(date(2021, 11, 29))
@@ -175,13 +176,13 @@ df_deal_cnt_today = pd.DataFrame(deal_cnt_stock)
 for i in range(7):
     file_name_str = real_work_day[i].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
-    print(file_name_str)
+    #print(file_name_str)
     f = open(file_name_str)
     deal_cnt_stock = json.load(f)
     df_dcs = pd.DataFrame(deal_cnt_stock)
-    prt_str = "DEAL COUNT OF DAY " + str(i)
-    print(prt_str)
-    print(df_dcs)
+    #prt_str = "DEAL COUNT OF DAY " + str(i)
+    #print(prt_str)
+    #print(df_dcs)
     for stock_data in deal_cnt_stock:
         stock_no_per_day.append(stock_data["STOCK_NO"])
         cnt_per_day.append(stock_data["DEAL_COUNT"])
@@ -202,11 +203,13 @@ for i in range(7):
     
 '''
 
+dc_sum = DealCnt.CalDealCntSum(7, deal_cnt_per_day)
+
 #f = open("20211126And7DaysDealCntSum.json")
 #,orient='values',encoding='utf-8'
 total_deal_cnt = pd.read_json("20211129And7DaysBeforeDealCntSum.json")
 print("Total Deal Count IS:")
-print(total_deal_cnt)
+print(dc_sum)
 
 print("Deal Cnt of Today is:")
 print(df_deal_cnt_today)
@@ -217,4 +220,4 @@ print(df_deal_cnt_today)
 over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
 print("OVER DEAL STOCKS")
 print(over_deal_stock)
-for DealCntSum test'''
+'''for DealCntSum test'''

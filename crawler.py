@@ -30,7 +30,6 @@ if(date.today() ==  real_work_day[0].date()):
 else:
     print("today is not work day")
 
-
 roc_year = int(real_work_day[0].year) - 1911
 print("Year of ROC Now:")
 print(str(roc_year))
@@ -45,7 +44,8 @@ DaysToCalc = 7
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
-    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year) + '/' + real_work_day[i+work_day_shift].strftime("%m/%d") + '&s=0,asc,0'))
+    roc_year_conter = int(real_work_day[i].year) - 1911
+    r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year_conter) + '/' + real_work_day[i+work_day_shift].strftime("%m/%d") + '&s=0,asc,0'))
     r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+work_day_shift].strftime("%Y%m%d") + '&type=ALL'))
 
 
@@ -94,8 +94,8 @@ for idd in range(DaysToCalc):
     
     for i in range(index_line):
         k.pop(0)
-    
-    stock_data_index = k[0].split(",")
+        
+    stock_data_index = k[0].split(",")    
     #print("                   ")
     #print("dataframe index" + str(idd))
     #print(stock_data_index)
@@ -138,6 +138,7 @@ print(df_counter[0])
 print("                   ")
 print("                   ")
 print("counter stock today are listed above")
+
 
 #dfts = DataFrameToJSONArray(df_buff2, 'OverDealCntCounter.json') # 引數(df資料,檔案儲存路徑)
 #dfts.funChangeDataFrameType() # 自動轉換DataFrame的列資料型別
