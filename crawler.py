@@ -152,13 +152,13 @@ for dayk in range(DaysToCalc):
     df.append(pd.concat([df_market[dayk], df_counter[dayk]], ignore_index=True))
 
 print("                   ")
-print("modified counter stock today ")
+print("stock today ")
 print(df[0])
 #print(df_buff.columns[1])
 #print(df_buff.columns[2])
 print("                   ")
 print("                   ")
-print("counter stock today above")
+print("stock today above")
 
 
 #讀取證券代號
@@ -251,7 +251,7 @@ for k in range(DaysToCalc):
     #
     #########df的證券代號與market_stock 比對後加入#########
     
-print("deal count 1st day = ")    
+print("deal count today = ")    
 print(deal_cnt_per_day[0].head(10))
 
 
