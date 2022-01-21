@@ -66,13 +66,6 @@ for i in range(DaysToCalc):
 '' ########################################整理上市股票資料，變成表格########################################
 
 
-#df = pd.read_csv(r[0].text, header = None)
-print("                   ")
-print("market stock today colum name")
-print(df_market[0])
-print("                   ")
-print("                   ")
-print("market stock today are listed above")
 
 
 ########################整理上櫃股票資料，變成表格########################
@@ -235,12 +228,12 @@ print(deal_cnt_per_day[0].head(10))
 
 
 ''' export deal cnt as json'''
-for i in range(1):#(DaysToCalc):
-    file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
-    file_name_str = file_name_str+"DealCntStocks.json"
-    deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
+#for i in range(DaysToCalc):#():
+#    file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
+#    file_name_str = file_name_str+"DealCntStocks.json"
+#    deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
-print("Deal Count To JSON is Done!!!")
+#print("Deal Count To JSON is Done!!!")
 ''''export deal cnt as json '''
 
 
@@ -255,14 +248,9 @@ file_name_str +="And"
 file_name_str +=str(DaysToCalc)
 file_name_str += "DaysBefore"
 file_name_str = file_name_str+"DealCntSum.json"
-deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
+total_deal_cnt.to_json(file_name_str, orient='records',force_ascii=False)
 print("DealCntSum To JSON is Done!!!")
 
-
-end_time = datetime.now()
-print("-------------")
-print("calculating time is")
-print(end_time - start_time)
 
 #print("Stock Cnt For Total Deal Count:")
 #print(len(total_deal_cnt))
@@ -272,26 +260,13 @@ print("Total Deal Count From Function:")
 print(total_deal_cnt)
 #print(len(total_deal_cnt))
 
-'''
-print("-------------")
-print("deal cnt 1st day")
-print(deal_cnt_frame_array[0])
-print("              ")
-print("-------------")
-print("deal cnt 2nd day")
-print(deal_cnt_frame_array[1])
-print("              ")
-print("-------------")
-print("deal cnt 3rd day")
-print(deal_cnt_frame_array[2])
-print("              ")
-print("              ")
-print("              ")
-'''
+
+print("Stock today")
+print(deal_cnt_per_day[0])
 
 import GetOverDeal
 
-OverDealDf = GetOverDeal(deal_cnt_per_day, total_deal_cnt)
+OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
 
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
@@ -308,5 +283,9 @@ print("-------------")
 print("             ")
 
 print("Computation is Done!!!!")
+end_time = datetime.now()
+print("-------------")
+print("calculating time is")
+print(end_time - start_time)
 while(1):
     tm.sleep(1)
