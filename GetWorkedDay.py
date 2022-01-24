@@ -41,6 +41,10 @@ holidays_taiwan_2021.append(date(2022, 6, 3))
 holidays_taiwan_2021.append(date(2022, 9, 9))
 holidays_taiwan_2021.append(date(2022, 10, 10))
 
+special_work_day = []
+special_work_day.append(date(2022, 1, 22))
+special_work_day.append(date(2022, 9, 11))
+
 def GetWorkedDay(count_days_from_today):
     days_ago = []
     for i in range(count_days_from_today):
@@ -52,6 +56,11 @@ def GetWorkedDay(count_days_from_today):
     for day in days_ago:
         if day.weekday() < 5:
             worked_day.append(day)
+        else:
+            for s_work_day in special_work_day:
+                if day == s_work_day:
+                    worked_day.append(day)
+        
     
     for dayy in worked_day:
         was_holiday = False
