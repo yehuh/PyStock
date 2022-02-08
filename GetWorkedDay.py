@@ -28,6 +28,8 @@ holidays_taiwan_2021.append(date(2021, 12, 31))
 
 
 holidays_taiwan_2021.append(date(2022, 1, 1))
+holidays_taiwan_2021.append(date(2022, 1, 27))
+holidays_taiwan_2021.append(date(2022, 1, 28))
 holidays_taiwan_2021.append(date(2022, 1, 31))
 holidays_taiwan_2021.append(date(2022, 2, 1))
 holidays_taiwan_2021.append(date(2022, 2, 2))
