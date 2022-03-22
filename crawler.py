@@ -276,9 +276,14 @@ OverDealDf.to_json(file_name_str, orient='records')
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.xlsx"
 OverDealDf.to_excel(file_name_str)
+
 print("-------------")
 print("over deal stock")
 print(OverDealDf)
+print("-------------")
+print("             ")
+print("DEAL_AMOUNT > 100000000")
+print(OverDealDf.loc[OverDealDf['DEAL_AMOUNT'] > 1000000000])
 print("-------------")
 print("             ")
 
