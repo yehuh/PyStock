@@ -7,6 +7,63 @@ Created on Wed Aug 25 21:35:17 2021
 
 import pandas as pd
 import copy
+import GetOverDeal
+
+def CalDealCntSumV2(deal_cnt_per_days, dispLog):
+    
+    daysTotal = len(deal_cnt_per_days)
+    smallest_deal_cnt_day =0
+    smallest_stock_amount = 2000
+    for i in range(daysTotal):
+        if(len(deal_cnt_per_days[i])<smallest_stock_amount):
+            smallest_deal_cnt_day = i
+            smallest_stock_amount = len(deal_cnt_per_days[i])
+    
+    if(dispLog == True):
+        print("Smallest Stock Amount is:")
+        print(str(smallest_stock_amount))
+        print("Smallest Stock Amount is Day " + str(smallest_deal_cnt_day))
+    
+    funcResult = copy.copy(deal_cnt_per_days[smallest_deal_cnt_day])
+    stuff_to_print = funcResult.loc[688,:]
+    print(stuff_to_print)
+    stuff_to_print = funcResult.loc[689,:]
+    print(stuff_to_print)
+    for day in range(daysTotal):
+        if(day == smallest_deal_cnt_day):
+            continue
+        
+        ordered_stock_df = GetOverDeal.getStockNoDF(
+            deal_cnt_per_days[day], funcResult)
+        if(dispLog == True):
+            print("Stock Order")
+            print(ordered_stock_df)
+        
+        debugFlag = False
+        print_num = 2
+        print_counter =0
+        deal_cnt_df = deal_cnt_per_days[day]
+        for i in range(len(ordered_stock_df)):
+            small_df_id = ordered_stock_df.loc[i,["SMALL_INDEX"]]
+            big_df_id = ordered_stock_df.loc[i,["BIG_INDEX"]]
+            if(int(small_df_id)!=int(big_df_id)):
+                debugFlag = True
+            buff = funcResult.iat[int(small_df_id),1] + deal_cnt_df.iat[int(big_df_id),1]
+            funcResult.iat[int(small_df_id),1] = buff
+            if(debugFlag==True & print_counter<3):
+                print("Small Df item:")
+                print(funcResult.iat[int(small_df_id),1])
+                print("Big Df item")
+                print(deal_cnt_df.iat[int(big_df_id),1])
+                print("Big + Small")
+                print(buff)
+                print_counter = print_counter+1
+                debugFlag = False
+            
+    
+    return funcResult
+            
+
 
 def CalDealCntSum(calc_days, deal_cnt_per_day):
     if(calc_days>len(deal_cnt_per_day)):
@@ -23,6 +80,7 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     #print(deal_cnt_per_day_rev)
     #print("                   ")
     #print("-------------------")
+    
     
     start_pos = 0
     for day in range(1,calc_days):
@@ -44,19 +102,21 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     return DealCntSum
 
 
-''' for DealCntSum test
+''' for DealCntSum test'''
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-real_work_day.append(date(2022, 1, 21))
-real_work_day.append(date(2022, 1, 20))
-real_work_day.append(date(2022, 1, 19))
-real_work_day.append(date(2022, 1, 18))
-real_work_day.append(date(2022, 1, 17))
-real_work_day.append(date(2022, 1, 14))
-real_work_day.append(date(2022, 1, 13))
+real_work_day.append(date(2022, 3, 31))
+real_work_day.append(date(2022, 3, 30))
+real_work_day.append(date(2022, 3, 29))
+real_work_day.append(date(2022, 3, 28))
+real_work_day.append(date(2022, 3, 25))
+real_work_day.append(date(2022, 3, 24))
+real_work_day.append(date(2022, 3, 23))
+real_work_day.append(date(2022, 3, 22))
+real_work_day.append(date(2022, 3, 21))
 
 
 
@@ -87,14 +147,20 @@ for i in range(7):
     print(df)
     deal_cnt_per_day.append(df)
 
-print("DEAL CNT TODAY")
-print(deal_cnt_per_day[0])
-
-deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
 
 
-print("DEAL CNT SUM")
-print(deal_cnt_sum)
-file_name_str = "2022_0121__0113_DealCntSum.json"
-deal_cnt_sum.to_json(file_name_str, orient='records',force_ascii=False)
-for DealCntSum test'''
+#deal_cnt_sum =  CalDealCntSum(7, deal_cnt_per_day)
+
+
+#print("DEAL CNT SUM")
+#print(deal_cnt_sum)
+#file_name_str = "2022_0121__0113_DealCntSum.json"
+#deal_cnt_sum.to_json(file_name_str, orient='records',force_ascii=False)
+
+
+deal_sum = CalDealCntSumV2(deal_cnt_per_day, False)
+print("DEAL CNT SUM V2")
+print(deal_sum)
+
+
+'''for DealCntSum test'''

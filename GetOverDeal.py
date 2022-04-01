@@ -36,6 +36,7 @@ def getStockNoDF(stock_df_big, stock_df_small):
             error_str = error_str + str(stock_to_be_found)
             error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
             print(error_str)
+            continue
         
         big_index.append(int(stock_large_index))
         small_index.append(int(index_in_stock_df_small_as_large_df))
@@ -82,15 +83,16 @@ from datetime import datetime, timedelta, date
 import DealCnt
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-real_work_day.append(date(2022, 1, 21))
-real_work_day.append(date(2022, 1, 20))
-real_work_day.append(date(2022, 1, 19))
-real_work_day.append(date(2022, 1, 18))
-real_work_day.append(date(2022, 1, 17))
-real_work_day.append(date(2022, 1, 14))
-real_work_day.append(date(2022, 1, 13))
-real_work_day.append(date(2022, 1, 12))
-real_work_day.append(date(2022, 1, 11))
+real_work_day.append(date(2022, 3, 31))
+real_work_day.append(date(2022, 3, 30))
+real_work_day.append(date(2022, 3, 29))
+real_work_day.append(date(2022, 3, 28))
+real_work_day.append(date(2022, 3, 25))
+real_work_day.append(date(2022, 3, 24))
+real_work_day.append(date(2022, 3, 23))
+real_work_day.append(date(2022, 3, 22))
+real_work_day.append(date(2022, 3, 21))
+
 
 
 deal_cnt_per_day =[]
