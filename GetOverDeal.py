@@ -16,14 +16,7 @@ def getStockNoDF_V2(stock_df_big, stock_df_small):
     small_index = []
     big_stocks = len(stock_df_big)
     small_stocks =len(stock_df_small)
-    '''
-    if(small_stocks > big_stocks):
-        print("Small Stock Len:")
-        print(str(small_stocks))
-        print("Big Stock Len:")
-        print(str(big_stocks))
-        return -1
-    ''' 
+
     big_df_buff = copy.copy(stock_df_big)
     big_df_buff.sort_values("STOCK_NO", inplace = True)
     print(big_df_buff)
@@ -50,10 +43,7 @@ def getStockNoDF_V2(stock_df_big, stock_df_small):
         
         if(index_in_stock_df_small_as_large_df<0):
             continue
-        #    error_str = "STOCK_NO:"
-        #    error_str = error_str + str(stock_to_be_found)
-        #    error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
-        #    print(error_str)
+
         
         
         big_index.append(int(stock_large_index))
@@ -62,7 +52,6 @@ def getStockNoDF_V2(stock_df_big, stock_df_small):
         small_df_stock_no.append(small_df_buff.iat[index_in_stock_df_small_as_large_df,0])
     
     index_data = {"BIG_INDEX":big_index, "SMALL_INDEX":small_index}
-    # "BIG_STOCK_NO":big_df_stock_no, "SMALL_STOCK_NO":small_df_stock_no}
     StockNoIndexDF = pd.DataFrame(index_data)
     return StockNoIndexDF
 
