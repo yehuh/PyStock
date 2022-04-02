@@ -24,17 +24,22 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
         print(str(smallest_stock_amount))
         print("Smallest Stock Amount is Day " + str(smallest_deal_cnt_day))
     
+    #rank_by_stock_no_df = copy.copy(deal_cnt_per_days[smallest_deal_cnt_day])
+    #rank_by_stock_no_df.sort_values("STOCK_NO", inplace = True)
     funcResult = copy.copy(deal_cnt_per_days[smallest_deal_cnt_day])
-    stuff_to_print = funcResult.loc[688,:]
-    print(stuff_to_print)
-    stuff_to_print = funcResult.loc[689,:]
-    print(stuff_to_print)
+    funcResult.sort_values("STOCK_NO", inplace = True)
+    
+    #print("rank_by_stock_no_df")
+    #print(rank_by_stock_no_df)
     for day in range(daysTotal):
         if(day == smallest_deal_cnt_day):
             continue
         
-        ordered_stock_df = GetOverDeal.getStockNoDF(
+        deal_cnt_per_days[day].sort_values("STOCK_NO", inplace = True)
+        ordered_stock_df = GetOverDeal.getStockNoDF_V2(
             deal_cnt_per_days[day], funcResult)
+        if(day==0):
+            print(ordered_stock_df)
         if(dispLog == True):
             print("Stock Order")
             print(ordered_stock_df)
@@ -46,19 +51,8 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
         for i in range(len(ordered_stock_df)):
             small_df_id = ordered_stock_df.loc[i,["SMALL_INDEX"]]
             big_df_id = ordered_stock_df.loc[i,["BIG_INDEX"]]
-            if(int(small_df_id)!=int(big_df_id)):
-                debugFlag = True
             buff = funcResult.iat[int(small_df_id),1] + deal_cnt_df.iat[int(big_df_id),1]
             funcResult.iat[int(small_df_id),1] = buff
-            if(debugFlag==True & print_counter<3):
-                print("Small Df item:")
-                print(funcResult.iat[int(small_df_id),1])
-                print("Big Df item")
-                print(deal_cnt_df.iat[int(big_df_id),1])
-                print("Big + Small")
-                print(buff)
-                print_counter = print_counter+1
-                debugFlag = False
             
     
     return funcResult

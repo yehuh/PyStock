@@ -5,6 +5,67 @@ Created on Sat Nov 27 19:38:50 2021
 @author: yehuh
 """
 import pandas as pd
+import copy
+
+
+def getStockNoDF_V2(stock_df_big, stock_df_small):
+    start_pos = 0
+    big_index = []
+    big_df_stock_no = []
+    small_df_stock_no = []
+    small_index = []
+    big_stocks = len(stock_df_big)
+    small_stocks =len(stock_df_small)
+    '''
+    if(small_stocks > big_stocks):
+        print("Small Stock Len:")
+        print(str(small_stocks))
+        print("Big Stock Len:")
+        print(str(big_stocks))
+        return -1
+    ''' 
+    big_df_buff = copy.copy(stock_df_big)
+    big_df_buff.sort_values("STOCK_NO", inplace = True)
+    print(big_df_buff)
+    small_df_buff = copy.copy(stock_df_small)
+    small_df_buff.sort_values("STOCK_NO", inplace = True)
+    print(small_df_buff)
+    for stock_large_index in range(len(big_df_buff)):#range(total_stocks):#
+        stock_to_be_found = big_df_buff.iat[stock_large_index,0]
+        index_in_stock_df_small_as_large_df =-1
+        for stock_small_index in range(start_pos,len(small_df_buff)):
+            #stock_compare_to_str = str(small_df_buff.iloc[[stock_small_index],[0]]).split()
+            stock_compare_to = small_df_buff.iat[stock_small_index,0]
+            #stock_compare_to = stock_compare_to_str[2]
+            if(str(stock_to_be_found) == str(stock_compare_to)):
+                start_pos = stock_small_index
+                index_in_stock_df_small_as_large_df = stock_small_index
+                break
+            if(int(stock_compare_to) > int(stock_to_be_found)):
+                error_str = "STOCK_NO:"
+                error_str = error_str + str(stock_to_be_found)
+                error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
+                print(error_str)
+                break
+        
+        if(index_in_stock_df_small_as_large_df<0):
+            continue
+        #    error_str = "STOCK_NO:"
+        #    error_str = error_str + str(stock_to_be_found)
+        #    error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
+        #    print(error_str)
+        
+        
+        big_index.append(int(stock_large_index))
+        big_df_stock_no.append(big_df_buff.iat[stock_large_index,0])
+        small_index.append(int(index_in_stock_df_small_as_large_df))
+        small_df_stock_no.append(small_df_buff.iat[index_in_stock_df_small_as_large_df,0])
+    
+    index_data = {"BIG_INDEX":big_index, "SMALL_INDEX":small_index}
+    # "BIG_STOCK_NO":big_df_stock_no, "SMALL_STOCK_NO":small_df_stock_no}
+    StockNoIndexDF = pd.DataFrame(index_data)
+    return StockNoIndexDF
+
 
 def getStockNoDF(stock_df_big, stock_df_small):
     start_pos = 0
@@ -132,8 +193,8 @@ for i in range(7):
     deal_cnt_per_day.append(df)
 '''    
     
-'''
 
+'''
 total_deal_cnt = pd.read_json("2022_0121__0113_DealCntSum.json")
 print("Total Deal Count IS:")
 print(total_deal_cnt)
@@ -149,3 +210,40 @@ over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
 print("OVER DEAL STOCKS")
 print(over_deal_stock)
 for DealCntSum test'''
+
+
+'''for getStockNoDF_V2 test
+
+import GetWorkedDay
+import json
+from datetime import datetime, timedelta, date
+#import DealCnt
+
+real_work_day = []#GetWorkedDay.GetWorkedDay(80)
+real_work_day.append(date(2022, 3, 31))
+real_work_day.append(date(2022, 3, 30))
+real_work_day.append(date(2022, 3, 29))
+real_work_day.append(date(2022, 3, 28))
+real_work_day.append(date(2022, 3, 25))
+real_work_day.append(date(2022, 3, 24))
+real_work_day.append(date(2022, 3, 23))
+real_work_day.append(date(2022, 3, 22))
+real_work_day.append(date(2022, 3, 21))
+
+file_name_str = real_work_day[0].strftime("%Y%m%d")
+file_name_str = file_name_str+"DealCntStocks.json"
+f = open(file_name_str)
+deal_cnt_stock = json.load(f)
+big_df = pd.DataFrame(deal_cnt_stock)
+file_name_str = real_work_day[4].strftime("%Y%m%d")
+file_name_str = file_name_str+"DealCntStocks.json"
+f = open(file_name_str)
+deal_cnt_stock = json.load(f)
+small_df = pd.DataFrame(deal_cnt_stock)
+
+stock_no_df = getStockNoDF_V2(big_df, small_df)
+
+print("Stock No Df")
+print(stock_no_df)
+
+for getStockNoDF_V2 test'''
