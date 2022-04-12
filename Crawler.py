@@ -228,12 +228,12 @@ print(deal_cnt_per_day[0].head(10))
 
 
 ''' export deal cnt as json'''
-#for i in range(DaysToCalc):#():
-#    file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
-#    file_name_str = file_name_str+"DealCntStocks.json"
-#    deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
+for i in range(DaysToCalc):#():
+    file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
+    file_name_str = file_name_str+"DealCntStocks.json"
+    deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
 
-#print("Deal Count To JSON is Done!!!")
+print("Deal Count To JSON is Done!!!")
 ''''export deal cnt as json '''
 
 
@@ -241,7 +241,8 @@ print("Caculating Days:")
 print(len(deal_cnt_per_day))
 import DealCnt
 
-total_deal_cnt = DealCnt.CalDealCntSum(len(deal_cnt_per_day), deal_cnt_per_day)
+total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
+#(len(deal_cnt_per_day), deal_cnt_per_day)
 
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str +="And"
@@ -277,13 +278,25 @@ file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.xlsx"
 OverDealDf.to_excel(file_name_str)
 
+
+for idex in OverDealDf.index:
+    try:
+        deal_amount =  float(OverDealDf.at[idex, "DEAL_AMOUNT"])
+    except:
+        stock_no = str(OverDealDf.at[idex,"STOCK_NO"])
+        print("Deal Mount of Stock " + stock_no)
+        print("is not Work!!!!")
+        OverDealDf.drop([idex], axis = 0, inplace = True)
+        continue
+
+
 print("-------------")
 print("over deal stock")
 print(OverDealDf)
 print("-------------")
 print("             ")
 print("DEAL_AMOUNT > 100000000")
-print(OverDealDf.loc[OverDealDf['DEAL_AMOUNT'] > 1000000000])
+print(OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000])
 print("-------------")
 print("             ")
 

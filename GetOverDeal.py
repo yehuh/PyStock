@@ -102,7 +102,7 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     deal_price_over_deal = []
     total_deal_amount =[]
     
-    dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today)
+    dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today)
     over_deal_num = 0
     start_pos = 0
     test_cnt =0
