@@ -8,28 +8,32 @@ import pandas as pd
 import copy
 
 
-def getStockNoDF_V2(stock_df_big, stock_df_small):
+def getStockNoDF_V2(stock_df_big, stock_df_small):#first_stock_df,sec_stock_df):
     start_pos = 0
     big_index = []
     big_df_stock_no = []
     small_df_stock_no = []
     small_index = []
-    big_stocks = len(stock_df_big)
-    small_stocks =len(stock_df_small)
+    #first_stock_num = len(first_stock_df)
+    #sec_stock_num =len(sec_stock_df)
+    #if(first_stock_num > sec_stock_num):
+    #    stock_df_big = first_stock_df
+    #    stock_df_small = sec_stock_df
+    #else:
+    #    stock_df_big = sec_stock_df
+    #    stock_df_small = first_stock_df
 
     big_df_buff = copy.copy(stock_df_big)
     big_df_buff.sort_values("STOCK_NO", inplace = True)
-    print(big_df_buff)
+    #print(big_df_buff)
     small_df_buff = copy.copy(stock_df_small)
     small_df_buff.sort_values("STOCK_NO", inplace = True)
-    print(small_df_buff)
+    #print(small_df_buff)
     for stock_large_index in range(len(big_df_buff)):#range(total_stocks):#
         stock_to_be_found = big_df_buff.iat[stock_large_index,0]
         index_in_stock_df_small_as_large_df =-1
         for stock_small_index in range(start_pos,len(small_df_buff)):
-            #stock_compare_to_str = str(small_df_buff.iloc[[stock_small_index],[0]]).split()
             stock_compare_to = small_df_buff.iat[stock_small_index,0]
-            #stock_compare_to = stock_compare_to_str[2]
             if(str(stock_to_be_found) == str(stock_compare_to)):
                 start_pos = stock_small_index
                 index_in_stock_df_small_as_large_df = stock_small_index
@@ -60,8 +64,6 @@ def getStockNoDF(stock_df_big, stock_df_small):
     start_pos = 0
     big_index = []
     small_index = []
-    big_stocks = len(stock_df_big.index)
-    small_stocks =len(stock_df_small.index)
     '''
     if(small_stocks > big_stocks):
         print("Small Stock Len:")
@@ -107,15 +109,20 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     start_pos = 0
     test_cnt =0
     for idex in dfStockNoDf.index:
-        idex_in_dc_tday = dfStockNoDf.loc[idex,'SMALL_INDEX']
-        deal_cnt_today = deals_cnt_today.iloc[idex_in_dc_tday, 1]
-        indx_in_dc_total = dfStockNoDf.loc[idex,'BIG_INDEX']
-        deal_cnt_total = total_deal_cnt.iloc[indx_in_dc_total,1]
-        deal_price_today = deals_cnt_today.iloc[idex_in_dc_tday, 2]
+        idex_in_dc_tday = dfStockNoDf.at[idex,'SMALL_INDEX']
+        try:
+            deal_cnt_today = float(deals_cnt_today.iat[idex_in_dc_tday, 1])
+            indx_in_dc_total = dfStockNoDf.at[idex,'BIG_INDEX']
+            deal_cnt_total = float(total_deal_cnt.iat[indx_in_dc_total,1])
+            deal_price_today = float(deals_cnt_today.iat[idex_in_dc_tday, 2])
+        except:
+            stock_no = str(deals_cnt_today.iat[idex_in_dc_tday,0])
+            print("Data of Stock " + stock_no+ " Is Not Exist!!")
+            continue  #skip this index
         
         if(deal_cnt_today> (deal_cnt_total-deal_cnt_today)):
             deal_cnt_over_deal.append(deal_cnt_today)
-            stock_no_over_deal.append(deals_cnt_today.iloc[idex_in_dc_tday,0])
+            stock_no_over_deal.append(deals_cnt_today.iat[idex_in_dc_tday,0])
             deal_price_over_deal.append(deal_price_today)
             deal_amount_str = deal_price_today * deal_cnt_today
             total_deal_amount.append(deal_price_today * deal_cnt_today)
@@ -192,12 +199,13 @@ print("Deal Cnt of Today is:")
 print(df_deal_cnt_today)
 
 
-#df_test = getStockNoDF(total_deal_cnt, df_deal_cnt_today)
-#print("INDEX DATAFRAME:")
-#print(df_test)
 over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
 print("OVER DEAL STOCKS")
 print(over_deal_stock)
+#df_test = getStockNoDF_V2(total_deal_cnt, df_deal_cnt_today)
+#print("INDEX DATAFRAME:")
+#print(df_test)
+
 for DealCntSum test'''
 
 
