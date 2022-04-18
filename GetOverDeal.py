@@ -8,7 +8,7 @@ import pandas as pd
 import copy
 
 
-def getStockNoDF_V2(stock_df_big, stock_df_small):#first_stock_df,sec_stock_df):
+def getStockNoDF_V2(stock_df_big, stock_df_small, dispLog):#first_stock_df,sec_stock_df):
     start_pos = 0
     big_index = []
     big_df_stock_no = []
@@ -42,7 +42,8 @@ def getStockNoDF_V2(stock_df_big, stock_df_small):#first_stock_df,sec_stock_df):
                 error_str = "STOCK_NO:"
                 error_str = error_str + str(stock_to_be_found)
                 error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
-                print(error_str)
+                if(dispLog == True):
+                    print(error_str)
                 break
         
         if(index_in_stock_df_small_as_large_df<0):
@@ -60,7 +61,7 @@ def getStockNoDF_V2(stock_df_big, stock_df_small):#first_stock_df,sec_stock_df):
     return StockNoIndexDF
 
 
-def getStockNoDF(stock_df_big, stock_df_small):
+def getStockNoDF(stock_df_big, stock_df_small, dispLog):
     start_pos = 0
     big_index = []
     small_index = []
@@ -87,7 +88,8 @@ def getStockNoDF(stock_df_big, stock_df_small):
             error_str = "STOCK_NO:"
             error_str = error_str + str(stock_to_be_found)
             error_str = error_str+" IS NOT EXIST IN SMALL STOCK DF!!!"
-            print(error_str)
+            if(dispLog == True):
+                print(error_str)
             continue
         
         big_index.append(int(stock_large_index))
@@ -104,21 +106,20 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     deal_price_over_deal = []
     total_deal_amount =[]
     
-    dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today)
-    over_deal_num = 0
-    start_pos = 0
-    test_cnt =0
+    #dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today,True)
+    dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today,False)
     for idex in dfStockNoDf.index:
         idex_in_dc_tday = dfStockNoDf.at[idex,'SMALL_INDEX']
         try:
-            deal_cnt_today = float(deals_cnt_today.iat[idex_in_dc_tday, 1])
+            deal_cnt_today = int(deals_cnt_today.iat[idex_in_dc_tday, 1])
             indx_in_dc_total = dfStockNoDf.at[idex,'BIG_INDEX']
-            deal_cnt_total = float(total_deal_cnt.iat[indx_in_dc_total,1])
+            deal_cnt_total = int(total_deal_cnt.iat[indx_in_dc_total,1])
             deal_price_today = float(deals_cnt_today.iat[idex_in_dc_tday, 2])
         except:
             stock_no = str(deals_cnt_today.iat[idex_in_dc_tday,0])
             print("Data of Stock " + stock_no+ " Is Not Exist!!")
             continue  #skip this index
+        
         
         if(deal_cnt_today> (deal_cnt_total-deal_cnt_today)):
             deal_cnt_over_deal.append(deal_cnt_today)
@@ -161,40 +162,41 @@ file_name_str = real_work_day[0].strftime("%Y%m%d")
 file_name_str = file_name_str+"DealCntStocks.json"
 f = open(file_name_str)
 deal_cnt_stock = json.load(f)
-df_deal_cnt_today = pd.DataFrame(deal_cnt_stock)
-'''
+#df_deal_cnt_today = pd.DataFrame(deal_cnt_stock)
+df_deal_cnt_today = pd.read_json("20220415DealCntStocks.json")
 
-'''
-for i in range(7):
-    file_name_str = real_work_day[i].strftime("%Y%m%d")
-    file_name_str = file_name_str+"DealCntStocks.json"
-    #print(file_name_str)
-    f = open(file_name_str)
-    deal_cnt_stock = json.load(f)
-    df_dcs = pd.DataFrame(deal_cnt_stock)
+
+
+#for i in range(7):
+#    file_name_str = real_work_day[i].strftime("%Y%m%d")
+#    file_name_str = file_name_str+"DealCntStocks.json"
+#    #print(file_name_str)
+#    f = open(file_name_str)
+#    deal_cnt_stock = json.load(f)
+#    df_dcs = pd.DataFrame(deal_cnt_stock)
     #prt_str = "DEAL COUNT OF DAY " + str(i)
     #print(prt_str)
     #print(df_dcs)
-    for stock_data in deal_cnt_stock:
-        stock_no_per_day.append(stock_data["STOCK_NO"])
-        cnt_per_day.append(stock_data["DEAL_COUNT"])
-        price_per_day.append(stock_data["DEAL_PRICE"])
+#    for stock_data in deal_cnt_stock:
+#        stock_no_per_day.append(stock_data["STOCK_NO"])
+#        cnt_per_day.append(stock_data["DEAL_COUNT"])
+#        price_per_day.append(stock_data["DEAL_PRICE"])
     
     
-    deal_cnt_data = {"STOCK_NO":stock_no_per_day, "DEAL_COUNT":cnt_per_day, "DEAL_PRICE":price_per_day}
-    df = pd.DataFrame(deal_cnt_data)
-    stock_no_per_day.clear()
-    cnt_per_day.clear()
-    price_per_day.clear()
-    deal_cnt_per_day.append(df)
-'''    
+#    deal_cnt_data = {"STOCK_NO":stock_no_per_day, "DEAL_COUNT":cnt_per_day, "DEAL_PRICE":price_per_day}
+#    df = pd.DataFrame(deal_cnt_data)
+#    stock_no_per_day.clear()
+#    cnt_per_day.clear()
+#    price_per_day.clear()
+#    deal_cnt_per_day.append(df)
+    
     
 
-'''
-total_deal_cnt = pd.read_json("2022_0121__0113_DealCntSum.json")
+
+##total_deal_cnt = pd.read_json("2022_0121__0113_DealCntSum.json")
+total_deal_cnt = pd.read_json("20220415And7DaysBeforeDealCntSum.json")
 print("Total Deal Count IS:")
 print(total_deal_cnt)
-
 print("Deal Cnt of Today is:")
 print(df_deal_cnt_today)
 
@@ -202,10 +204,26 @@ print(df_deal_cnt_today)
 over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
 print("OVER DEAL STOCKS")
 print(over_deal_stock)
-#df_test = getStockNoDF_V2(total_deal_cnt, df_deal_cnt_today)
+#index_df = getStockNoDF_V2(total_deal_cnt, over_deal_stock,False)
+index_df = getStockNoDF(total_deal_cnt, over_deal_stock, False)
+#print(df_deal_cnt_today.iloc[index_df.SMALL_INDEX])
+print("OVER DEAL TOTAL CNT STOCK")
+
+#big_df_buff = copy.copy(total_deal_cnt)
+#big_df_buff.sort_values("STOCK_NO", inplace = True)
+over_df = total_deal_cnt.iloc[index_df.BIG_INDEX]
+print(over_df)
+
+print(index_df)
+
+
+#for idex in range(len(index_df.index)):
+#    id_for_total_cnt = index_df.iat[idex,0]
+#    if(id_for_total_cnt == first_id):
+#        continue
+#    over_df.append(total_deal_cnt.iat[id_for_total_cnt,])
 #print("INDEX DATAFRAME:")
 #print(df_test)
-
 for DealCntSum test'''
 
 

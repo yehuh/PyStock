@@ -37,7 +37,7 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
         
         deal_cnt_per_days[day].sort_values("STOCK_NO", inplace = True)
         ordered_stock_df = GetOverDeal.getStockNoDF_V2(
-            deal_cnt_per_days[day], funcResult)
+            deal_cnt_per_days[day], funcResult, False)
         if(day==0):
             print(ordered_stock_df)
         if(dispLog == True):
@@ -49,9 +49,15 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
         print_counter =0
         deal_cnt_df = deal_cnt_per_days[day]
         for i in range(len(ordered_stock_df)):
-            small_df_id = ordered_stock_df.loc[i,["SMALL_INDEX"]]
-            big_df_id = ordered_stock_df.loc[i,["BIG_INDEX"]]
-            buff = funcResult.iat[int(small_df_id),1] + deal_cnt_df.iat[int(big_df_id),1]
+            small_df_id = ordered_stock_df.iat[i,1]
+            big_df_id = ordered_stock_df.iat[i,0]
+            try:
+                buff = funcResult.iat[small_df_id,1] + deal_cnt_df.iat[big_df_id,1]
+            except:
+                stock_no = str(deal_cnt_df.iat[big_df_id,0])
+                print("SUM Of STOCK NO: " + stock_no +" Is Failed!!")
+                continue
+                
             funcResult.iat[int(small_df_id),1] = buff
             
     
@@ -96,21 +102,29 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     return DealCntSum
 
 
-''' for DealCntSum test'''
+''' for DealCntSum test
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-real_work_day.append(date(2022, 3, 31))
-real_work_day.append(date(2022, 3, 30))
-real_work_day.append(date(2022, 3, 29))
-real_work_day.append(date(2022, 3, 28))
-real_work_day.append(date(2022, 3, 25))
-real_work_day.append(date(2022, 3, 24))
-real_work_day.append(date(2022, 3, 23))
-real_work_day.append(date(2022, 3, 22))
-real_work_day.append(date(2022, 3, 21))
+#real_work_day.append(date(2022, 3, 31))
+#real_work_day.append(date(2022, 3, 30))
+#real_work_day.append(date(2022, 3, 29))
+#real_work_day.append(date(2022, 3, 28))
+#real_work_day.append(date(2022, 3, 25))
+#real_work_day.append(date(2022, 3, 24))
+#real_work_day.append(date(2022, 3, 23))
+#real_work_day.append(date(2022, 3, 22))
+#real_work_day.append(date(2022, 3, 21))
+real_work_day.append(date(2022, 4, 15))
+real_work_day.append(date(2022, 4, 14))
+real_work_day.append(date(2022, 4, 13))
+real_work_day.append(date(2022, 4, 12))
+real_work_day.append(date(2022, 4, 11))
+real_work_day.append(date(2022, 4, 8))
+real_work_day.append(date(2022, 4, 7))
+real_work_day.append(date(2022, 4, 6))
 
 
 
@@ -157,4 +171,4 @@ print("DEAL CNT SUM V2")
 print(deal_sum)
 
 
-'''for DealCntSum test'''
+for DealCntSum test'''

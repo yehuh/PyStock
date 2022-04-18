@@ -300,10 +300,18 @@ print(OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000])
 print("-------------")
 print("             ")
 
+
+stock_df = GetOverDeal.getStockNoDF_V2(total_deal_cnt, OverDealDf)
+print("-------------")
+print("STOCK POS")
+print(stock_df)
+
 print("Computation is Done!!!!")
 end_time = datetime.now()
 print("-------------")
 print("calculating time is")
 print(end_time - start_time)
+
+
 while(1):
     tm.sleep(1)
