@@ -241,7 +241,9 @@ print("Caculating Days:")
 print(len(deal_cnt_per_day))
 import DealCnt
 
-total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
+#total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
+total_deal_cnt = DealCnt.CalDealCntSum(DaysToCalc,deal_cnt_per_day)
+#CalDealCntSum(calc_days, deal_cnt_per_day)
 #(len(deal_cnt_per_day), deal_cnt_per_day)
 
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
@@ -301,7 +303,7 @@ print("-------------")
 print("             ")
 
 
-stock_df = GetOverDeal.getStockNoDF_V2(total_deal_cnt, OverDealDf)
+stock_df = GetOverDeal.getStockNoDF_V2(total_deal_cnt, OverDealDf, False)
 print("-------------")
 print("STOCK POS")
 print(stock_df)
