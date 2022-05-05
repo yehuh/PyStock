@@ -235,7 +235,10 @@ print("--------------------------")
 for i in range(DaysToCalc):#():
     file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
+    deal_cnt_per_day[i].sort_values("STOCK_NO", inplace = True)
+    deal_cnt_per_day[i].reset_index(drop=True, inplace=True)
     deal_cnt_per_day[i].to_json(file_name_str, orient='records',force_ascii=False)
+    
 
 print("Deal Count To JSON is Done!!!")
 ''''export deal cnt as json '''
@@ -245,8 +248,10 @@ print("Caculating Days:")
 print(len(deal_cnt_per_day))
 import DealCnt
 
-#total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
-total_deal_cnt = DealCnt.CalDealCntSum(DaysToCalc,deal_cnt_per_day)
+total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
+total_deal_cnt.sort_values("STOCK_NO", inplace = True)
+total_deal_cnt.reset_index(drop=True, inplace=True)
+#total_deal_cnt = DealCnt.CalDealCntSum(DaysToCalc,deal_cnt_per_day)
 #CalDealCntSum(calc_days, deal_cnt_per_day)
 #(len(deal_cnt_per_day), deal_cnt_per_day)
 
