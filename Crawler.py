@@ -219,8 +219,12 @@ for k in range(DaysToCalc):
     #
     #########df的證券代號與market_stock 比對後加入#########
     
+    
 print("deal count today = ")    
-print(deal_cnt_per_day[0].head(10))
+print(deal_cnt_per_day[0].head(30))
+print("Tail Deal Count")
+print(deal_cnt_per_day[0].tail(30))
+print("--------------------------")
 
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################

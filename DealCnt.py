@@ -9,7 +9,7 @@ import pandas as pd
 import copy
 import GetOverDeal
 
-def CalDealCntSumV2(deal_cnt_per_days, dispLog):
+def CalDealCntSumV2(deal_cnt_per_days, dispLog = False):
     
     daysTotal = len(deal_cnt_per_days)
     smallest_deal_cnt_day =0
@@ -22,7 +22,7 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
     if(dispLog == True):
         print("Smallest Stock Amount is:")
         print(str(smallest_stock_amount))
-        print("Smallest Stock Amount is Day " + str(smallest_deal_cnt_day))
+        print("Smallest Stock Amount in Day " + str(smallest_deal_cnt_day))
     
     #rank_by_stock_no_df = copy.copy(deal_cnt_per_days[smallest_deal_cnt_day])
     #rank_by_stock_no_df.sort_values("STOCK_NO", inplace = True)
@@ -36,17 +36,18 @@ def CalDealCntSumV2(deal_cnt_per_days, dispLog):
             continue
         
         deal_cnt_per_days[day].sort_values("STOCK_NO", inplace = True)
+        deal_cnt_per_days[day].reset_index(drop=True, inplace=True)
         ordered_stock_df = GetOverDeal.getStockNoDF_V2(
             deal_cnt_per_days[day], funcResult, False)
-        if(day==0):
-            print(ordered_stock_df)
+        #if(day==0):
+        #    print(ordered_stock_df)
         if(dispLog == True):
             print("Stock Order")
             print(ordered_stock_df)
         
-        debugFlag = False
-        print_num = 2
-        print_counter =0
+#        debugFlag = False
+#        print_num = 2
+#        print_counter =0
         deal_cnt_df = deal_cnt_per_days[day]
         for i in range(len(ordered_stock_df)):
             small_df_id = ordered_stock_df.iat[i,1]
@@ -102,29 +103,29 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     return DealCntSum
 
 
-''' for DealCntSum test
+''' for DealCntSum test'''
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
 
 real_work_day = []#GetWorkedDay.GetWorkedDay(80)
-#real_work_day.append(date(2022, 3, 31))
-#real_work_day.append(date(2022, 3, 30))
-#real_work_day.append(date(2022, 3, 29))
-#real_work_day.append(date(2022, 3, 28))
-#real_work_day.append(date(2022, 3, 25))
-#real_work_day.append(date(2022, 3, 24))
-#real_work_day.append(date(2022, 3, 23))
-#real_work_day.append(date(2022, 3, 22))
-#real_work_day.append(date(2022, 3, 21))
-real_work_day.append(date(2022, 4, 15))
-real_work_day.append(date(2022, 4, 14))
-real_work_day.append(date(2022, 4, 13))
-real_work_day.append(date(2022, 4, 12))
-real_work_day.append(date(2022, 4, 11))
-real_work_day.append(date(2022, 4, 8))
-real_work_day.append(date(2022, 4, 7))
-real_work_day.append(date(2022, 4, 6))
+real_work_day.append(date(2022, 3, 31))
+real_work_day.append(date(2022, 3, 30))
+real_work_day.append(date(2022, 3, 29))
+real_work_day.append(date(2022, 3, 28))
+real_work_day.append(date(2022, 3, 25))
+real_work_day.append(date(2022, 3, 24))
+real_work_day.append(date(2022, 3, 23))
+real_work_day.append(date(2022, 3, 22))
+real_work_day.append(date(2022, 3, 21))
+#real_work_day.append(date(2022, 4, 15))
+#real_work_day.append(date(2022, 4, 14))
+#real_work_day.append(date(2022, 4, 13))
+#real_work_day.append(date(2022, 4, 12))
+#real_work_day.append(date(2022, 4, 11))
+#real_work_day.append(date(2022, 4, 8))
+#real_work_day.append(date(2022, 4, 7))
+#real_work_day.append(date(2022, 4, 6))
 
 
 
@@ -146,6 +147,9 @@ for i in range(7):
     
     deal_cnt_data = {"STOCK_NO":stock_no_per_day, "DEAL_COUNT":cnt_per_day, "DEAL_PRICE":price_per_day}
     df = pd.DataFrame(deal_cnt_data)
+    df.sort_values("STOCK_NO", inplace = True)
+    df.reset_index(drop=True, inplace=True)
+    
     stock_no_per_day.clear()
     cnt_per_day.clear()
     price_per_day.clear()
@@ -153,6 +157,10 @@ for i in range(7):
     print(i)
     print("---------------------")
     print(df)
+    print("---------------------")
+    print("DEAL CNT AFTER INDEX")
+    #df.set_index("STOCK_NO", inplace = True)
+    #print(df)
     deal_cnt_per_day.append(df)
 
 
@@ -171,4 +179,4 @@ print("DEAL CNT SUM V2")
 print(deal_sum)
 
 
-for DealCntSum test'''
+'''for DealCntSum test'''

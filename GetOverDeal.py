@@ -8,7 +8,7 @@ import pandas as pd
 import copy
 
 
-def getStockNoDF_V2(stock_df_big, stock_df_small, dispLog):#first_stock_df,sec_stock_df):
+def getStockNoDF_V2(stock_df_big, stock_df_small, dispLog = False):#first_stock_df,sec_stock_df):
     start_pos = 0
     big_index = []
     big_df_stock_no = []
@@ -106,8 +106,8 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     deal_price_over_deal = []
     total_deal_amount =[]
     
-    #dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today,True)
-    dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today,False)
+    dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today)
+    #dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today,False)
     for idex in dfStockNoDf.index:
         idex_in_dc_tday = dfStockNoDf.at[idex,'SMALL_INDEX']
         try:
@@ -134,7 +134,7 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     return OverDealDf
 
 
-''' for OverDeal test
+''' for OverDeal test'''
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
@@ -195,6 +195,11 @@ df_deal_cnt_today = pd.read_json("20220415DealCntStocks.json")
 
 ##total_deal_cnt = pd.read_json("2022_0121__0113_DealCntSum.json")
 total_deal_cnt = pd.read_json("20220415And7DaysBeforeDealCntSum.json")
+total_deal_cnt.sort_values("STOCK_NO", inplace = True)
+total_deal_cnt.reset_index(drop=True, inplace=True)
+df_deal_cnt_today.sort_values("STOCK_NO", inplace = True)
+df_deal_cnt_today.reset_index(drop=True, inplace=True)
+
 print("Total Deal Count IS:")
 print(total_deal_cnt)
 print("Deal Cnt of Today is:")
@@ -204,8 +209,8 @@ print(df_deal_cnt_today)
 over_deal_stock = GetOverDeal(df_deal_cnt_today, total_deal_cnt)
 print("OVER DEAL STOCKS")
 print(over_deal_stock)
-#index_df = getStockNoDF_V2(total_deal_cnt, over_deal_stock,False)
-index_df = getStockNoDF(total_deal_cnt, over_deal_stock, False)
+index_df = getStockNoDF_V2(total_deal_cnt, over_deal_stock,False)
+#index_df = getStockNoDF(total_deal_cnt, over_deal_stock, False)
 #print(df_deal_cnt_today.iloc[index_df.SMALL_INDEX])
 print("OVER DEAL TOTAL CNT STOCK")
 
@@ -214,7 +219,7 @@ print("OVER DEAL TOTAL CNT STOCK")
 over_df = total_deal_cnt.iloc[index_df.BIG_INDEX]
 print(over_df)
 
-print(index_df)
+#print(index_df)
 
 
 #for idex in range(len(index_df.index)):
@@ -224,7 +229,7 @@ print(index_df)
 #    over_df.append(total_deal_cnt.iat[id_for_total_cnt,])
 #print("INDEX DATAFRAME:")
 #print(df_test)
-for DealCntSum test'''
+'''for DealCntSum test'''
 
 
 '''for getStockNoDF_V2 test
@@ -250,13 +255,29 @@ file_name_str = file_name_str+"DealCntStocks.json"
 f = open(file_name_str)
 deal_cnt_stock = json.load(f)
 big_df = pd.DataFrame(deal_cnt_stock)
+big_df.sort_values("STOCK_NO", inplace=True)
+print("BIG DF")
+print(big_df.tail(20))
+print("-------------------")
+big_df.reset_index(drop=True, inplace=True)
+print("BIG DF Reindex")
+print(big_df.tail(20))
+print("-------------------")
 file_name_str = real_work_day[4].strftime("%Y%m%d")
 file_name_str = file_name_str+"DealCntStocks.json"
 f = open(file_name_str)
 deal_cnt_stock = json.load(f)
 small_df = pd.DataFrame(deal_cnt_stock)
+small_df.sort_values("STOCK_NO", inplace=True)
+print("SMALL DF")
+print(small_df.tail(20))
+print("-------------------")
+small_df.reset_index(drop=True, inplace=True)
+print("SMALL DF Reindex")
+print(small_df.tail(20))
+print("-------------------")
 
-stock_no_df = getStockNoDF_V2(big_df, small_df)
+stock_no_df = getStockNoDF_V2(big_df, small_df,True)
 
 print("Stock No Df")
 print(stock_no_df)
