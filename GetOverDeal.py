@@ -134,7 +134,7 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
     return OverDealDf
 
 
-''' for OverDeal test'''
+''' for OverDeal test
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
@@ -229,7 +229,7 @@ print(over_df)
 #    over_df.append(total_deal_cnt.iat[id_for_total_cnt,])
 #print("INDEX DATAFRAME:")
 #print(df_test)
-'''for DealCntSum test'''
+for DealCntSum test'''
 
 
 '''for getStockNoDF_V2 test

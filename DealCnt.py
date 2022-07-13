@@ -103,7 +103,7 @@ def CalDealCntSum(calc_days, deal_cnt_per_day):
     return DealCntSum
 
 
-''' for DealCntSum test'''
+''' for DealCntSum test
 import GetWorkedDay
 import json
 from datetime import datetime, timedelta, date
@@ -179,4 +179,4 @@ print("DEAL CNT SUM V2")
 print(deal_sum)
 
 
-'''for DealCntSum test'''
+for DealCntSum test'''
