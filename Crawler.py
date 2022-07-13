@@ -328,5 +328,20 @@ print("calculating time is")
 print(end_time - start_time)
 
 
+from google.cloud import bigquery
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_file('stocks-bigquery-key.json')
+	
+client = bigquery.Client(credentials=credentials)
+ 
+table_id = 'stocks-bigquery.stocks.daily_price'
+ 
+job = client.load_table_from_dataframe(OverDealDf, table_id)
+job.result()
+ 
+table = client.get_table(table_id)
+
+
 while(1):
     tm.sleep(1)
