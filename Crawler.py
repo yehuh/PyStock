@@ -330,18 +330,22 @@ print(end_time - start_time)
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import os
+
+credentials_path = './stocks-bigquery-key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
 credentials = service_account.Credentials.from_service_account_file('stocks-bigquery-key.json')
 	
 client = bigquery.Client(credentials=credentials)
  
-table_id = 'stocks-bigquery.stocks.daily_price'
+table_id = 'big-crow-300216.stock.OverDealCount'
  
 job = client.load_table_from_dataframe(OverDealDf, table_id)
 job.result()
  
 table = client.get_table(table_id)
 
-
+print(f'已存入{table.num_rows}筆資料到{table_id}')
 while(1):
     tm.sleep(1)
