@@ -220,18 +220,18 @@ for k in range(DaysToCalc):
     #########df的證券代號與market_stock 比對後加入#########
     
     
-print("deal count today = ")    
-print(deal_cnt_per_day[0].head(30))
-print("Tail Deal Count")
-print(deal_cnt_per_day[0].tail(30))
-print("--------------------------")
+#print("deal count today = ")    
+#print(deal_cnt_per_day[0].head(30))
+#print("Tail Deal Count")
+#print(deal_cnt_per_day[0].tail(30))
+#print("--------------------------")
 
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 
 
 
-''' export deal cnt as json'''
+''' export deal cnt as json
 for i in range(DaysToCalc):#():
     file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
@@ -241,7 +241,7 @@ for i in range(DaysToCalc):#():
     
 
 print("Deal Count To JSON is Done!!!")
-''''export deal cnt as json '''
+export deal cnt as json '''
 
 
 print("Caculating Days:")
@@ -255,6 +255,7 @@ total_deal_cnt.reset_index(drop=True, inplace=True)
 #CalDealCntSum(calc_days, deal_cnt_per_day)
 #(len(deal_cnt_per_day), deal_cnt_per_day)
 
+''' export DealCntSum as json
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str +="And"
 file_name_str +=str(DaysToCalc)
@@ -262,24 +263,26 @@ file_name_str += "DaysBefore"
 file_name_str = file_name_str+"DealCntSum.json"
 total_deal_cnt.to_json(file_name_str, orient='records',force_ascii=False)
 print("DealCntSum To JSON is Done!!!")
-
+export DealCntSum as json'''
 
 #print("Stock Cnt For Total Deal Count:")
 #print(len(total_deal_cnt))
 
 
-print("Total Deal Count From Function:")
-print(total_deal_cnt)
+#print("Total Deal Count From Function:")
+#print(total_deal_cnt)
 #print(len(total_deal_cnt))
 
 
-print("Stock today")
-print(deal_cnt_per_day[0])
+#print("Stock today")
+#print(deal_cnt_per_day[0])
 
 import GetOverDeal
 
 OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
 
+
+'''OverDealDf to excel
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
 OverDealDf.to_json(file_name_str, orient='records')
@@ -288,6 +291,7 @@ OverDealDf.to_json(file_name_str, orient='records')
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.xlsx"
 OverDealDf.to_excel(file_name_str)
+OverDealDf to excel'''
 
 
 for idex in OverDealDf.index:
@@ -312,10 +316,10 @@ print("-------------")
 print("             ")
 
 
-stock_df = GetOverDeal.getStockNoDF_V2(total_deal_cnt, OverDealDf, False)
-print("-------------")
-print("STOCK POS")
-print(stock_df)
+#stock_df = GetOverDeal.getStockNoDF_V2(total_deal_cnt, OverDealDf, False)
+#print("-------------")
+#print("STOCK POS")
+#print(stock_df)
 
 print("Computation is Done!!!!")
 end_time = datetime.now()
