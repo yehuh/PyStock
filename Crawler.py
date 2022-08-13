@@ -294,7 +294,9 @@ OverDealDf.to_excel(file_name_str)
 OverDealDf to excel'''
 
 
+work_day =[]
 for idex in OverDealDf.index:
+    work_day.append(real_work_day[0].date())
     try:
         deal_amount =  float(OverDealDf.at[idex, "DEAL_AMOUNT"])
     except:
@@ -305,13 +307,38 @@ for idex in OverDealDf.index:
         continue
 
 
+
+OverDealDf["DATE"] = work_day
+
+import ToGoogleCloud
+
+OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
+df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
+
+work_day_exist = False
+
+for idex in OverDealDf.index:
+    if(real_work_day[0].date() ==  OverDealDf.at[idex, "DATE"]):
+       work_day_exist = True
+       print("Work day exist")
+       break
+
+if(work_day_exist == False):
+    ToGoogleCloud.DfToGoogleCloud(OverDealDf_k_milium)
+    print("Stock Data To Google Cloud")
+       
+       
+#if(real_work_day[0].date() in df_from_cloud["DATE"]):
+#    print("Work day exist")
+    #ToGoogleCloud.DfToGoogleCloud(OverDealDf_k_milium)
+
 print("-------------")
 print("over deal stock")
 print(OverDealDf)
 print("-------------")
 print("             ")
 print("DEAL_AMOUNT > 100000000")
-print(OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000])
+print(OverDealDf_k_milium)
 print("-------------")
 print("             ")
 
@@ -321,15 +348,17 @@ print("             ")
 #print("STOCK POS")
 #print(stock_df)
 
-import ToGoogleCloud
 
-ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+
+
+
 
 print("Computation is Done!!!!")
 end_time = datetime.now()
 print("-------------")
 print("calculating time is")
 print(end_time - start_time)
+
 
 
 

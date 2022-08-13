@@ -48,12 +48,14 @@ def GetDF_FromGCP(dispLog=False):
                              FROM stock.OverDealCount
                              LIMIT 1000 """)
 
-    results = query_job.to_dataframe()
+    funcResults = query_job.to_dataframe()
     if (dispLog == True):
         #print(f'已存入{table.num_rows}筆資料到{table_id}')
         #print("Table schema: {}".format(table.schema))
         #print("Table description: {}".format(table.description))
-        print(results)
+        print(funcResults)
+    
+    return funcResults
 
 
 '''module test'''
@@ -76,11 +78,23 @@ deal_amount.append(100.87)
 deal_amount.append(200.87)
 deal_amount.append(300.87)
 
-#df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_AMOUNT":deal_amount}
-#df = pd.DataFrame(df_data)
+df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_AMOUNT":deal_amount}
+df = pd.DataFrame(df_data)
 
+from datetime import datetime
+from datetime import date
+toDay = date.today()
+print(type(toDay))
+#.strftime('%Y-%m-%d')
+date_today =[]
+
+for i in range(3):
+    date_today.append(toDay)
+
+df["DATE"] = date_today
 #DfToGoogleCloud(df, True)
 
-GetFromGCP(True)
+#df = GetDF_FromGCP()
+print(df)
 
 '''module test'''
