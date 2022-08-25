@@ -7,12 +7,12 @@ Created on Thu Jul 14 21:03:44 2022
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
-import os
-import db_dtypes
+#import os
+#import db_dtypes
 
 def DfToGoogleCloud(OverDealDf, dispLog = False):
-    credentials_path = './stocks-bigquery-key.json'
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
+    #credentials_path = './stocks-bigquery-key.json'
+    #os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
     credentials = service_account.Credentials.from_service_account_file('stocks-bigquery-key.json')
 	
@@ -30,8 +30,8 @@ def DfToGoogleCloud(OverDealDf, dispLog = False):
     
 
 def GetDF_FromGCP(dispLog=False):
-    credentials_path = './stocks-bigquery-key.json'
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
+    #credentials_path = './stocks-bigquery-key.json'
+    #os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
     credentials = service_account.Credentials.from_service_account_file('stocks-bigquery-key.json')
 
@@ -58,9 +58,10 @@ def GetDF_FromGCP(dispLog=False):
     return funcResults
 
 
-'''module test'''
+'''module test
 
 import pandas as pd
+from datetime import date
 
 deal_cnt =[]
 stock_no =[]
@@ -78,23 +79,13 @@ deal_amount.append(100.87)
 deal_amount.append(200.87)
 deal_amount.append(300.87)
 
-df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_AMOUNT":deal_amount}
-df = pd.DataFrame(df_data)
+#df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_AMOUNT":deal_amount}
+#df = pd.DataFrame(df_data)
 
-from datetime import datetime
-from datetime import date
-toDay = date.today()
-print(type(toDay))
-#.strftime('%Y-%m-%d')
-date_today =[]
-
-for i in range(3):
-    date_today.append(toDay)
-
-df["DATE"] = date_today
 #DfToGoogleCloud(df, True)
 
-#df = GetDF_FromGCP()
-print(df)
+df = GetDF_FromGCP()
+df_0812 = df[df.DATE == date(2022, 8, 12)]
+print(df_0812)
 
-'''module test'''
+module test'''
