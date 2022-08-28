@@ -54,7 +54,7 @@ def hello_pubsub(event, context):
     
     if(work_day_exist == False):
         print("Work day Not exist")
-        ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+        ToGoogleCloud.DfToGoogleCloud(OverDealDf,True)
         
         
     end_time = datetime.now()
