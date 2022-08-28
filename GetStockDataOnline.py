@@ -124,12 +124,6 @@ def GetStockData(day_cnt):
     for i in range(len(counter_stock)):
         market_stock.append(counter_stock[i])
 
-    print("----------------------")
-    print("Count of Stock in Taiwan")
-    print(len(market_stock))
-    print("                   ")
-    print("                   ")
-
     mod_market_stock =[]
     start_pos = 0
     for stock in market_stock:
@@ -150,30 +144,17 @@ def GetStockData(day_cnt):
 
     start_pos = 0
     for k in range(DaysToCalc):
-        print("len of df")
-        print(len(df[k].index))
-        print("                 ")
         deal_cnt =[]
         stock_no =[]
         deal_price = []
         if(df[k]is None):
-            print("dataframe on line not exist")
-            print("-------------------")
             continue
         #########df的證券代號與 market_stock 比對後加入#########
         for i in range(int(len(mod_market_stock))):
             if(mod_market_stock[i] is None):
                 continue
-            for j in range(start_pos,len(df[k].index)):  #,
-            #print("-------------")    
-            #print("counter no =")
-            #buff0 = df[k].iloc[j,:]
-            #buff1 = buff0.loc["代號"]
-            #print(buff0)
-            #print("              ")
+            for j in range(start_pos,len(df[k].index)):
                 if(df[k].iloc[j,0] is None):
-                    print("dataframe not exist")
-                    print("-------------------")
                     continue
                 if (mod_market_stock[i] == df[k].iloc[j,0]):
                     stock_no.append(mod_market_stock[i])

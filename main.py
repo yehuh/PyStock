@@ -38,8 +38,6 @@ def hello_world(request):
             deal_amount =  float(OverDealDf.at[idex, "DEAL_AMOUNT"])
         except:
             stock_no = str(OverDealDf.at[idex,"STOCK_NO"])
-            print("Deal Mount of Stock " + stock_no)
-            print("is not Work!!!!")
             OverDealDf.drop([idex], axis = 0, inplace = True)
             continue
 
@@ -60,14 +58,11 @@ def hello_world(request):
 
     if(work_day_exist == False):
         ToGoogleCloud.DfToGoogleCloud(OverDealDf)
-        print("Stock Data To Google Cloud")
        
        
     
-    
-    print("Computation is Done!!!!")
+        
     end_time = datetime.now()
-    print("-------------")
     print("calculating time is")
     print(end_time - start_time)
     
