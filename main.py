@@ -24,6 +24,7 @@ def hello_world(request):
     real_work_day = GetWorkedDay.GetWorkedDay(5)
     count_days = 7
     deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+    '''
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
     total_deal_cnt.reset_index(drop=True, inplace=True)
@@ -58,6 +59,8 @@ def hello_world(request):
 
     if(work_day_exist == False):
         ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+    
+    '''
        
        
     
