@@ -4,7 +4,7 @@ Created on Thu Jul 21 22:08:07 2022
 
 @author: yehuh
 """
-#import GetWorkedDay
+import GetWorkedDay
 #import GetStockDataOnline
 from datetime import datetime, timedelta, date, time
 #import DealCnt
@@ -21,7 +21,7 @@ def hello_world(request):
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
     #start_time = datetime.now()
-    #real_work_day = GetWorkedDay.GetWorkedDay(5)
+    real_work_day = GetWorkedDay.GetWorkedDay(5)
     #count_days = 7
     #deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     '''
