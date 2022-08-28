@@ -18,12 +18,13 @@ def hello_pubsub(event, context):
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
+    print("Trigger Act")
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     count_days = 7
     real_work_day = GetWorkedDay.GetWorkedDay(count_days)
     start_time = datetime.now()
     
-    deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+    #deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     '''
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
@@ -72,7 +73,7 @@ def hello_pubsub(event, context):
 
 
 
-def hello_world(request):
+#def hello_world(request):
     """Responds to any HTTP request.
     Args:
         request (flask.Request): HTTP request object.
