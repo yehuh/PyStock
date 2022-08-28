@@ -45,17 +45,18 @@ def hello_pubsub(event, context):
     
     df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
 
-    test_day = date(2022, 8, 12)
     work_day_exist = False
     for idex in df_from_cloud.index:
-        if(test_day ==  df_from_cloud.at[idex, "DATE"]):#real_work_day[0].date()
+        if(real_work_day[0].date() ==  df_from_cloud.at[idex, "DATE"]):
             work_day_exist = True
             print("Work day exist")
             break
     
     if(work_day_exist == False):
         print("Work day Not exist")
-    
+        ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+        
+        
     end_time = datetime.now()
     print("calculating time is")
     print(end_time - start_time)
@@ -76,8 +77,7 @@ def hello_pubsub(event, context):
     
     
 
-    #if(work_day_exist == False):
-    #    ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+    
     
 '''
     
