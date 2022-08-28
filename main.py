@@ -10,6 +10,21 @@ from datetime import datetime, timedelta, date, time
 #import DealCnt
 #import GetOverDeal
 #import ToGoogleCloud
+import base64
+
+def hello_pubsub(event, context):
+    """Triggered from a message on a Cloud Pub/Sub topic.
+    Args:
+         event (dict): Event payload.
+         context (google.cloud.functions.Context): Metadata for the event.
+    """
+    pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+    real_work_day = GetWorkedDay.GetWorkedDay(5)
+    print(pubsub_message)
+    print(context)
+    print(str(real_work_day[0]))
+
+
 
 def hello_world(request):
     """Responds to any HTTP request.
@@ -21,7 +36,7 @@ def hello_world(request):
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
     #start_time = datetime.now()
-    real_work_day = GetWorkedDay.GetWorkedDay(5)
+    #real_work_day = GetWorkedDay.GetWorkedDay(5)
     #count_days = 7
     #deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     '''
@@ -61,21 +76,18 @@ def hello_world(request):
         ToGoogleCloud.DfToGoogleCloud(OverDealDf)
     
     '''
-       
-       
-    
         
     #end_time = datetime.now()
     #print("calculating time is")
     #print(end_time - start_time)
     
-    request_json = request.get_json()
-    if request.args and 'message' in request.args:
-        return request.args.get('message')
-    elif request_json and 'message' in request_json:
-        return request_json['message']
-    else:
-        return str(real_work_day[0])
+    #request_json = request.get_json()
+    #if request.args and 'message' in request.args:
+    #    return request.args.get('message')
+    #elif request_json and 'message' in request_json:
+    #    return request_json['message']
+    #else:
+    #    return str(real_work_day[0])
 
 
 '''module test
