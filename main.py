@@ -26,20 +26,11 @@ def hello_pubsub(event, context):
     deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
-    
-    end_time = datetime.now()
-    print("calculating time is")
-    print(end_time - start_time)
-    
-    print(pubsub_message)
-    print(context)
-    #print(str(real_work_day[0]))    
-'''    
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
     total_deal_cnt.reset_index(drop=True, inplace=True)
     
-    #OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
-
+    OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
+    
     real_work_day = GetWorkedDay.GetWorkedDay(count_days)
     work_day =[]
     for idex in OverDealDf.index:
@@ -47,14 +38,10 @@ def hello_pubsub(event, context):
         try:
             deal_amount =  float(OverDealDf.at[idex, "DEAL_AMOUNT"])
         except:
-            #stock_no = str(OverDealDf.at[idex,"STOCK_NO"])
             OverDealDf.drop([idex], axis = 0, inplace = True)
             continue
-
-
-
+    
     OverDealDf["DATE"] = work_day
-    #OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
     
     df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
 
@@ -68,6 +55,26 @@ def hello_pubsub(event, context):
     
     if(work_day_exist == False):
         print("Work day Not exist")
+    
+    end_time = datetime.now()
+    print("calculating time is")
+    print(end_time - start_time)
+    
+    print(pubsub_message)
+    print(context)
+    #print(str(real_work_day[0]))    
+'''    
+    
+    
+
+    
+
+
+
+    
+    #OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
+    
+    
 
     #if(work_day_exist == False):
     #    ToGoogleCloud.DfToGoogleCloud(OverDealDf)
