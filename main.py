@@ -4,12 +4,12 @@ Created on Thu Jul 21 22:08:07 2022
 
 @author: yehuh
 """
-import GetWorkedDay
-import GetStockDataOnline
+#import GetWorkedDay
+#import GetStockDataOnline
 from datetime import datetime, timedelta, date, time
-import DealCnt
-import GetOverDeal
-import ToGoogleCloud
+#import DealCnt
+#import GetOverDeal
+#import ToGoogleCloud
 
 def hello_world(request):
     """Responds to any HTTP request.
@@ -20,9 +20,9 @@ def hello_world(request):
         Response object using
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
-    start_time = datetime.now()
-    real_work_day = GetWorkedDay.GetWorkedDay(5)
-    count_days = 7
+    #start_time = datetime.now()
+    #real_work_day = GetWorkedDay.GetWorkedDay(5)
+    #count_days = 7
     #deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     '''
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
@@ -65,9 +65,9 @@ def hello_world(request):
        
     
         
-    end_time = datetime.now()
-    print("calculating time is")
-    print(end_time - start_time)
+    #end_time = datetime.now()
+    #print("calculating time is")
+    #print(end_time - start_time)
     
     request_json = request.get_json()
     if request.args and 'message' in request.args:
