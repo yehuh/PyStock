@@ -5,11 +5,11 @@ Created on Thu Jul 21 22:08:07 2022
 @author: yehuh
 """
 import GetWorkedDay
-#import GetStockDataOnline
+import GetStockDataOnline
 from datetime import datetime, timedelta, date, time
-#import DealCnt
-#import GetOverDeal
-#import ToGoogleCloud
+import DealCnt
+import GetOverDeal
+import ToGoogleCloud
 import base64
 
 def hello_pubsub(event, context):
@@ -19,7 +19,53 @@ def hello_pubsub(event, context):
          context (google.cloud.functions.Context): Metadata for the event.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    real_work_day = GetWorkedDay.GetWorkedDay(5)
+    count_days = 7
+    real_work_day = GetWorkedDay.GetWorkedDay(count_days)
+    start_time = datetime.now()
+    
+    deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+    '''
+    total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
+    total_deal_cnt.sort_values("STOCK_NO", inplace = True)
+    total_deal_cnt.reset_index(drop=True, inplace=True)
+    
+    OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
+
+    real_work_day = GetWorkedDay.GetWorkedDay(count_days)
+    work_day =[]
+    for idex in OverDealDf.index:
+        work_day.append(real_work_day[0].date())
+        try:
+            deal_amount =  float(OverDealDf.at[idex, "DEAL_AMOUNT"])
+        except:
+            stock_no = str(OverDealDf.at[idex,"STOCK_NO"])
+            OverDealDf.drop([idex], axis = 0, inplace = True)
+            continue
+
+
+
+    OverDealDf["DATE"] = work_day
+    OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
+    
+    df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
+
+    work_day_exist = False
+
+    for idex in OverDealDf.index:
+        if(real_work_day[0].date() ==  OverDealDf.at[idex, "DATE"]):
+            work_day_exist = True
+            print("Work day exist")
+            break
+
+    if(work_day_exist == False):
+        ToGoogleCloud.DfToGoogleCloud(OverDealDf)
+    
+    '''
+        
+    end_time = datetime.now()
+    print("calculating time is")
+    print(end_time - start_time)
+    
     print(pubsub_message)
     print(context)
     print(str(real_work_day[0]))
