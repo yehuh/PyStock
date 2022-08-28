@@ -23,7 +23,7 @@ def hello_world(request):
     start_time = datetime.now()
     real_work_day = GetWorkedDay.GetWorkedDay(5)
     count_days = 7
-    deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+    #deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
     '''
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
