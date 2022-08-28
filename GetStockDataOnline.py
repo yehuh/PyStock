@@ -13,35 +13,40 @@ from io import StringIO
 import json
 import ast
 
-def GetStockData(day_cnt):
-    real_work_day = GetWorkedDay.GetWorkedDay(80)
-
-    stock_closed_time = time(15,0,0)
+def getRawCounterStock(DaysToCalc):
+    real_work_day = GetWorkedDay.GetWorkedDay(20)
+    stock_closed_time = time(15,10,0)
     WorkDayShift = 0
-    if(date.today() ==  real_work_day[0].date()):
-        print("today is work day")
-        if(datetime.now().time() < stock_closed_time):
-            print("Stock Dealing data of Today is not prepared")
-            WorkDayShift =1
-    else:
-        print("today is not work day")
-
-    roc_year = int(real_work_day[0].year) - 1911
-    print("Year of ROC Now:")
-    print(str(roc_year))
-
-
-    ##############################下載股價##############################
-    DaysToCalc = day_cnt
+    if(datetime.now().time() < stock_closed_time):
+        WorkDayShift =1
+    
     r_counter=[]
-    r_market=[]
     for i in range(DaysToCalc):
         roc_year_conter = int(real_work_day[i].year) - 1911
         r_counter.append(requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&o=csv&d=' + str(roc_year_conter) + '/' + real_work_day[i+WorkDayShift].strftime("%m/%d") + '&s=0,asc,0'))
+    
+    return r_counter
+
+def getRawMarketStock(DaysToCalc):
+    real_work_day = GetWorkedDay.GetWorkedDay(20)
+    stock_closed_time = time(15,10,0)
+    WorkDayShift = 0
+    if(datetime.now().time() < stock_closed_time):
+        WorkDayShift =1
+    
+    r_market=[]
+    for i in range(DaysToCalc):
+        roc_year_conter = int(real_work_day[i].year) - 1911
         r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+WorkDayShift].strftime("%Y%m%d") + '&type=ALL'))
-        '' ##############################下載股價##############################
     
-    
+    return r_market
+
+
+
+def GetStockData(day_cnt):    
+    r_market = getRawMarketStock(day_cnt)
+    r_counter = getRawCounterStock(day_cnt)
+    DaysToCalc = day_cnt
     
     ########################################整理上市股票資料，變成表格########################################
     df_market =[]
