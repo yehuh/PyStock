@@ -46,6 +46,7 @@ def getRawMarketStock(DaysToCalc):
 def GetStockData(day_cnt):    
     r_market = getRawMarketStock(day_cnt)
     r_counter = getRawCounterStock(day_cnt)
+    print("Get Raw Data Done!!")
     DaysToCalc = day_cnt
     
     ########################################整理上市股票資料，變成表格########################################
@@ -61,7 +62,7 @@ def GetStockData(day_cnt):
         df_buff3 = df_buff2.rename(columns = {"證券代號": "代號", "漲跌價差": "漲跌"}, inplace = False)
         df_market.append(df_buff3)
     '' ########################################整理上市股票資料，變成表格########################################
-    
+    print("Raw Market Data To Dataframe Done!!")
     
     ########################整理上櫃股票資料，變成表格########################
     couter_stock_data =[]
@@ -106,6 +107,8 @@ def GetStockData(day_cnt):
         df_buff3 = df_buff2.rename(columns = {"最後賣價": "收盤價"}, inplace = False)
         df_counter.append(df_buff3)
     '' ########################整理上櫃股票資料，變成表格########################
+    print("Raw Cuonter Data To Dataframe Done!!")
+    
     
     ########將上市與上櫃股票整合為一個表格########
     df =[]
@@ -133,7 +136,7 @@ def GetStockData(day_cnt):
                 start_pos = j
                 break
     '' ###############讀取證券代號並比對今日有交易的股票代號###############
-
+    print("Stock No Compare Done!!")
 
 
     ###########找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
