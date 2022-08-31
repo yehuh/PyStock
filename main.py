@@ -24,12 +24,15 @@ def hello_pubsub(event, context):
     start_time = datetime.now()
     
     deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+    print("Get Stock Data Done!!")
     
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
     total_deal_cnt.reset_index(drop=True, inplace=True)
+    print("Stock Deal Sum Done!!")
     
     OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
+    print("Get Over Deal Stock Done!!")
     
     real_work_day = GetWorkedDay.GetWorkedDay(count_days)
     work_day =[]
@@ -44,6 +47,7 @@ def hello_pubsub(event, context):
     OverDealDf["DATE"] = work_day
     
     df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
+    print("Get Data From Google Done!!")
 
     work_day_exist = False
     for idex in df_from_cloud.index:
