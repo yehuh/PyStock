@@ -8,7 +8,8 @@ import time as tm
 #import DataFrameToJSONArray
 import json
 import GetWorkedDay
-import StockOnline
+#import StockOnline
+import GetStockDataOnline
 
 
 #找出台股上市上櫃代號
@@ -39,8 +40,10 @@ print(str(roc_year))
 
 
 
-##############################下載股價##############################
+
 DaysToCalc = 7
+'''
+##############################下載股價##############################
 r_counter=[]
 r_market=[]
 for i in range(DaysToCalc):
@@ -151,12 +154,12 @@ for stock in market_stock:
             start_pos = j
             break
 '' ###############讀取證券代號並比對今日有交易的股票代號###############
-
+'''
 
 
 ###########找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
 deal_cnt_per_day = []
-
+'''
 #print("len of df")
 #print(len(df[0].index))
 #print("                 ")
@@ -198,8 +201,9 @@ for k in range(DaysToCalc):
                     d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
                 except:
                     d_p_tmp = 0.0
+                    stock_str = "Stock No: "+str(mod_market_stock[i])
+                    print(stock_str)
                     print("deal price not exist!!")
-                    print(df[k].iloc[j,3])
                     continue
                 stock_no.append(mod_market_stock[i])
                 deal_price.append(d_p_tmp)
@@ -231,7 +235,7 @@ for k in range(DaysToCalc):
 
 
 ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
-
+'''
 
 
 ''' export deal cnt as json
@@ -246,6 +250,8 @@ for i in range(DaysToCalc):#():
 print("Deal Count To JSON is Done!!!")
 export deal cnt as json '''
 
+count_days = 7
+deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))

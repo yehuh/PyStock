@@ -43,7 +43,7 @@ def getRawMarketStock(DaysToCalc):
 
 
 
-def GetStockData(day_cnt):    
+def GetStockData(day_cnt, dispLog = False):    
     r_market = getRawMarketStock(day_cnt)
     r_counter = getRawCounterStock(day_cnt)
     print("Get Raw Data Done!!")
@@ -136,7 +136,7 @@ def GetStockData(day_cnt):
                 start_pos = j
                 break
     '' ###############讀取證券代號並比對今日有交易的股票代號###############
-    print("Stock No Compare Done!!")
+    print("StockNo Compare Done!!")
 
 
     ###########找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
@@ -144,7 +144,7 @@ def GetStockData(day_cnt):
 
 
 
-
+    real_work_day = GetWorkedDay.GetWorkedDay(20)
     start_pos = 0
     for k in range(DaysToCalc):
         deal_cnt =[]
@@ -153,6 +153,9 @@ def GetStockData(day_cnt):
         if(df[k]is None):
             continue
         #########df的證券代號與 market_stock 比對後加入#########
+        if(dispLog ==True):
+            print("-------------------------------------")
+            print(real_work_day[k].strftime("%Y-%m-%d"))
         for i in range(int(len(mod_market_stock))):
             if(mod_market_stock[i] is None):
                 continue
@@ -164,8 +167,10 @@ def GetStockData(day_cnt):
                         d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
                     except:
                         d_p_tmp = 0.0
-                        print("deal price not exist!!")
-                        print(df[k].iloc[j,3])
+                        stock_str = "Stock No: "+str(mod_market_stock[i])
+                        if(dispLog ==True):
+                            print(stock_str)
+                            print("deal price not exist!!")
                         continue
                     stock_no.append(mod_market_stock[i])
                     deal_price.append(d_p_tmp)
@@ -180,6 +185,9 @@ def GetStockData(day_cnt):
         df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_PRICE":deal_price}
         df_temp = pd.DataFrame(df_data)
         deal_cnt_per_day.append(df_temp)
+        if(dispLog ==True):
+            print("-------------------------------------")
+            print("                                     ")
     
         #########df的證券代號與market_stock 比對後加入#########
 
