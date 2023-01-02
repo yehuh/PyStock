@@ -7,6 +7,7 @@ Created on Thu Jul 14 21:03:44 2022
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from datetime import datetime
 #import os
 #import db_dtypes
 
@@ -50,9 +51,57 @@ def GetDF_FromGCP(dispLog=False):
 
     funcResults = query_job.to_dataframe()
     if (dispLog == True):
-        #print(f'已存入{table.num_rows}筆資料到{table_id}')
-        #print("Table schema: {}".format(table.schema))
-        #print("Table description: {}".format(table.description))
+        print(f'已存入{table.num_rows}筆資料到{table_id}')
+        print("Table schema: {}".format(table.schema))
+        print("Table description: {}".format(table.description))
+        print(funcResults)
+    
+    return funcResults
+
+
+def GetDF_FromGCP_Date(selectDay,dispLog=False):
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    try:
+        date_str = selectDay.strftime("%Y-%m-%d")
+    except:
+        if(dispLog):
+            print("Select Day not exist!!")
+            print("Set Today as Selection!!")
+    date_str = "'"+date_str+"'"
+    if(dispLog):
+        print(date_str)
+        
+    credentials = service_account.Credentials.from_service_account_file('stocks-bigquery-key.json')
+
+    client = bigquery.Client(credentials=credentials)
+
+    table_id = 'big-crow-300216.stock.OverDealCount'
+
+    ##job = client.load_table_from_dataframe(OverDealDf, table_id)
+    ##job.result()
+
+    table = client.get_table(table_id)
+    querr = """
+            SELECT *
+            FROM stock.OverDealCount
+            """
+    str_buff = "WHERE DATE = "+ date_str+"\n\rLIMIT 1000"       
+    
+    querr = querr+str_buff
+    if(dispLog):
+        print("""
+              SELECT *
+              FROM stock.OverDealCount
+              LIMIT 1000 """)
+        print(querr)
+    
+    query_job = client.query(querr)
+
+    funcResults = query_job.to_dataframe()
+    if (dispLog == True):
+        print(f'已存入{table.num_rows}筆資料到{table_id}')
+        print("Table schema: {}".format(table.schema))
+        print("Table description: {}".format(table.description))
         print(funcResults)
     
     return funcResults
