@@ -160,12 +160,14 @@ def GetStockData(day_cnt):
                 if(df[k].iloc[j,0] is None):
                     continue
                 if (mod_market_stock[i] == df[k].iloc[j,0]):
-                    stock_no.append(mod_market_stock[i])
                     try:
                         d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
                     except:
-                        d_p_tmp = -0.8787
-                        
+                        d_p_tmp = 0.0
+                        print("deal price not exist!!")
+                        print(df[k].iloc[j,3])
+                        continue
+                    stock_no.append(mod_market_stock[i])
                     deal_price.append(d_p_tmp)
                     d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                     deal_cnt.append(int(d_c_temp))
