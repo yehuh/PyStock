@@ -43,7 +43,9 @@ print(str(roc_year))
 
 DaysToCalc = 7
 deal_cnt_per_day = GetStockDataOnline.GetStockData(DaysToCalc, True)
-''' export deal cnt as json
+
+''' 
+############################# export deal cnt as json #############################
 for i in range(DaysToCalc):#():
     file_name_str = real_work_day[i+WorkDayShift].strftime("%Y%m%d")
     file_name_str = file_name_str+"DealCntStocks.json"
@@ -53,7 +55,8 @@ for i in range(DaysToCalc):#():
     
 
 print("Deal Count To JSON is Done!!!")
-export deal cnt as json '''
+############################# export deal cnt as json #############################
+'''
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))
@@ -66,7 +69,8 @@ total_deal_cnt.reset_index(drop=True, inplace=True)
 #CalDealCntSum(calc_days, deal_cnt_per_day)
 #(len(deal_cnt_per_day), deal_cnt_per_day)
 
-''' export DealCntSum as json
+''' 
+######################## export DealCntSum as json ########################
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str +="And"
 file_name_str +=str(DaysToCalc)
@@ -74,7 +78,8 @@ file_name_str += "DaysBefore"
 file_name_str = file_name_str+"DealCntSum.json"
 total_deal_cnt.to_json(file_name_str, orient='records',force_ascii=False)
 print("DealCntSum To JSON is Done!!!")
-export DealCntSum as json'''
+######################## export DealCntSum as json ########################
+'''
 
 #print("Stock Cnt For Total Deal Count:")
 #print(len(total_deal_cnt))
@@ -93,7 +98,8 @@ import GetOverDeal
 OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
 
 
-'''OverDealDf to excel
+'''
+######################## OverDealDf to excel ########################
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.json"
 OverDealDf.to_json(file_name_str, orient='records')
@@ -102,7 +108,8 @@ OverDealDf.to_json(file_name_str, orient='records')
 file_name_str = real_work_day[WorkDayShift].strftime("%Y%m%d")
 file_name_str = file_name_str+"OverDealStocks.xlsx"
 OverDealDf.to_excel(file_name_str)
-OverDealDf to excel'''
+######################## OverDealDf to excel ########################
+'''
 
 
 work_day =[]
@@ -120,10 +127,11 @@ for idex in OverDealDf.index:
 
 
 OverDealDf["DATE"] = work_day
-
-import ToGoogleCloud
-
 OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
+
+'''
+##################### To Stock Data To Cloud Google #####################
+import ToGoogleCloud
 df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
 
 work_day_exist = False
@@ -136,12 +144,11 @@ for idex in OverDealDf.index:
 
 if(work_day_exist == False):
     ToGoogleCloud.DfToGoogleCloud(OverDealDf_k_milium)
-    print("Stock Data To Google Cloud")
+    print("Stock Data To Cloud Google")
+
+##################### To Stock Data To Cloud Google #####################
+'''       
        
-       
-#if(real_work_day[0].date() in df_from_cloud["DATE"]):
-#    print("Work day exist")
-    #ToGoogleCloud.DfToGoogleCloud(OverDealDf_k_milium)
 
 print("-------------")
 print("over deal stock")
