@@ -46,7 +46,7 @@ def hello_pubsub(event, context):
     
     OverDealDf["DATE"] = work_day
     
-    df_from_cloud = ToGoogleCloud.GetDF_FromGCP()
+    df_from_cloud = ToGoogleCloud.GetDF_FromGCP_Date(real_work_day[0], False)
     print("Get Data From Google Done!!")
 
     work_day_exist = False
