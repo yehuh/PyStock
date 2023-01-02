@@ -19,7 +19,7 @@ def hello_pubsub(event, context):
          context (google.cloud.functions.Context): Metadata for the event.
     """
     print("Trigger Act")
-    pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+    #pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     count_days = 7
     start_time = datetime.now()
     
@@ -65,7 +65,7 @@ def hello_pubsub(event, context):
     print("calculating time is")
     print(end_time - start_time)
     
-    print(pubsub_message)
+    #print(pubsub_message)
     print(context)
     #print(str(real_work_day[0]))    
 '''    
