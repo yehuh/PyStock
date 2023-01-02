@@ -251,7 +251,7 @@ print("Deal Count To JSON is Done!!!")
 export deal cnt as json '''
 
 count_days = 7
-deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days)
+deal_cnt_per_day = GetStockDataOnline.GetStockData(count_days, True)
 
 print("Caculating Days:")
 print(len(deal_cnt_per_day))

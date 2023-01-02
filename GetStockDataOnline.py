@@ -156,6 +156,8 @@ def GetStockData(day_cnt, dispLog = False):
         if(dispLog ==True):
             print("-------------------------------------")
             print(real_work_day[k].strftime("%Y-%m-%d"))
+            
+        deal_price_exist_in_the_day = True
         for i in range(int(len(mod_market_stock))):
             if(mod_market_stock[i] is None):
                 continue
@@ -166,11 +168,14 @@ def GetStockData(day_cnt, dispLog = False):
                     try:
                         d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
                     except:
+                        
                         d_p_tmp = 0.0
                         stock_str = "Stock No: "+str(mod_market_stock[i])
                         if(dispLog ==True):
+                            if(deal_price_exist_in_the_day == True):
+                                deal_price_exist_in_the_day = False
+                                print("deal price not exist!!")
                             print(stock_str)
-                            print("deal price not exist!!")
                         continue
                     stock_no.append(mod_market_stock[i])
                     deal_price.append(d_p_tmp)
