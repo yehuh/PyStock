@@ -15,10 +15,10 @@ import ast
 
 def getRawCounterStock(DaysToCalc):
     real_work_day = GetWorkedDay.GetWorkedDay(20)
-    stock_closed_time = time(15,10,0)
+    #stock_closed_time = time(15,10,0)
     WorkDayShift = 0
-    if(datetime.now().time() < stock_closed_time):
-        WorkDayShift =1
+    #if(datetime.now().time() < stock_closed_time):
+    #    WorkDayShift =1
     
     r_counter=[]
     for i in range(DaysToCalc):
@@ -29,10 +29,10 @@ def getRawCounterStock(DaysToCalc):
 
 def getRawMarketStock(DaysToCalc):
     real_work_day = GetWorkedDay.GetWorkedDay(20)
-    stock_closed_time = time(15,10,0)
+    #stock_closed_time = time(15,10,0)
     WorkDayShift = 0
-    if(datetime.now().time() < stock_closed_time):
-        WorkDayShift =1
+    #if(datetime.now().time() < stock_closed_time):
+    #    WorkDayShift =1
     
     r_market=[]
     for i in range(DaysToCalc):
@@ -43,9 +43,10 @@ def getRawMarketStock(DaysToCalc):
 
 
 
-def GetStockData(day_cnt):    
+def GetStockData(day_cnt, dispLog = False):    
     r_market = getRawMarketStock(day_cnt)
     r_counter = getRawCounterStock(day_cnt)
+    print("Get Raw Data Done!!")
     DaysToCalc = day_cnt
     
     ########################################整理上市股票資料，變成表格########################################
@@ -61,7 +62,7 @@ def GetStockData(day_cnt):
         df_buff3 = df_buff2.rename(columns = {"證券代號": "代號", "漲跌價差": "漲跌"}, inplace = False)
         df_market.append(df_buff3)
     '' ########################################整理上市股票資料，變成表格########################################
-    
+    print("Raw Market Data To Dataframe Done!!")
     
     ########################整理上櫃股票資料，變成表格########################
     couter_stock_data =[]
@@ -106,6 +107,8 @@ def GetStockData(day_cnt):
         df_buff3 = df_buff2.rename(columns = {"最後賣價": "收盤價"}, inplace = False)
         df_counter.append(df_buff3)
     '' ########################整理上櫃股票資料，變成表格########################
+    print("Raw Cuonter Data To Dataframe Done!!")
+    
     
     ########將上市與上櫃股票整合為一個表格########
     df =[]
@@ -124,12 +127,6 @@ def GetStockData(day_cnt):
     for i in range(len(counter_stock)):
         market_stock.append(counter_stock[i])
 
-    print("----------------------")
-    print("Count of Stock in Taiwan")
-    print(len(market_stock))
-    print("                   ")
-    print("                   ")
-
     mod_market_stock =[]
     start_pos = 0
     for stock in market_stock:
@@ -139,7 +136,7 @@ def GetStockData(day_cnt):
                 start_pos = j
                 break
     '' ###############讀取證券代號並比對今日有交易的股票代號###############
-
+    print("StockNo Compare Done!!")
 
 
     ###########找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
@@ -147,41 +144,40 @@ def GetStockData(day_cnt):
 
 
 
-
+    real_work_day = GetWorkedDay.GetWorkedDay(20)
     start_pos = 0
     for k in range(DaysToCalc):
-        print("len of df")
-        print(len(df[k].index))
-        print("                 ")
         deal_cnt =[]
         stock_no =[]
         deal_price = []
         if(df[k]is None):
-            print("dataframe on line not exist")
-            print("-------------------")
             continue
         #########df的證券代號與 market_stock 比對後加入#########
+        if(dispLog ==True):
+            print("-------------------------------------")
+            print(real_work_day[k].strftime("%Y-%m-%d"))
+            
+        deal_price_exist_in_the_day = True
         for i in range(int(len(mod_market_stock))):
             if(mod_market_stock[i] is None):
                 continue
-            for j in range(start_pos,len(df[k].index)):  #,
-            #print("-------------")    
-            #print("counter no =")
-            #buff0 = df[k].iloc[j,:]
-            #buff1 = buff0.loc["代號"]
-            #print(buff0)
-            #print("              ")
+            for j in range(start_pos,len(df[k].index)):
                 if(df[k].iloc[j,0] is None):
-                    print("dataframe not exist")
-                    print("-------------------")
                     continue
                 if (mod_market_stock[i] == df[k].iloc[j,0]):
-                    stock_no.append(mod_market_stock[i])
                     try:
                         d_p_tmp = ast.literal_eval(df[k].iloc[j,3])
                     except:
-                        d_p_tmp = -0.8787
                         
+                        d_p_tmp = 0.0
+                        stock_str = "Stock No: "+str(mod_market_stock[i])
+                        if(dispLog ==True):
+                            if(deal_price_exist_in_the_day == True):
+                                deal_price_exist_in_the_day = False
+                                print("deal price not exist!!")
+                            print(stock_str)
+                        continue
+                    stock_no.append(mod_market_stock[i])
                     deal_price.append(d_p_tmp)
                     d_c_temp = str(df[k].iloc[j,2]).replace(",", "")
                     deal_cnt.append(int(d_c_temp))
@@ -194,6 +190,9 @@ def GetStockData(day_cnt):
         df_data = {"STOCK_NO":stock_no, "DEAL_COUNT":deal_cnt, "DEAL_PRICE":deal_price}
         df_temp = pd.DataFrame(df_data)
         deal_cnt_per_day.append(df_temp)
+        if(dispLog ==True):
+            print("-------------------------------------")
+            print("                                     ")
     
         #########df的證券代號與market_stock 比對後加入#########
 
