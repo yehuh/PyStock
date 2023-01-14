@@ -17,8 +17,8 @@ def getRawCounterStock(DaysToCalc):
     real_work_day = GetWorkedDay.GetWorkedDay(20)
     stock_closed_time = time(15,10,0)
     WorkDayShift = 0
-    #if(datetime.now().time() < stock_closed_time):
-    #    WorkDayShift =1
+    if(datetime.now().time() < stock_closed_time):
+        WorkDayShift =1
     
     r_counter=[]
     for i in range(DaysToCalc):
@@ -31,8 +31,8 @@ def getRawMarketStock(DaysToCalc):
     real_work_day = GetWorkedDay.GetWorkedDay(20)
     stock_closed_time = time(15,10,0)
     WorkDayShift = 0
-    #if(datetime.now().time() < stock_closed_time):
-    #    WorkDayShift =1
+    if(datetime.now().time() < stock_closed_time):
+        WorkDayShift =1
     
     r_market=[]
     for i in range(DaysToCalc):
