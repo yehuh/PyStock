@@ -100,13 +100,15 @@ def getStockNoDF(stock_df_big, stock_df_small, dispLog):
     return StockNoIndexDF
 
 
-def GetOverDeal(deals_cnt_today, total_deal_cnt):
+def GetOverDeal(deals_cnt_today, total_deal_cnt, dispLog = False):
     deal_cnt_over_deal =[]
     stock_no_over_deal =[]
     deal_price_over_deal = []
     total_deal_amount =[]
     
     dfStockNoDf = getStockNoDF_V2(total_deal_cnt, deals_cnt_today)
+    if(dispLog == True):
+        print(dfStockNoDf)
     #dfStockNoDf = getStockNoDF(total_deal_cnt, deals_cnt_today,False)
     for idex in dfStockNoDf.index:
         idex_in_dc_tday = dfStockNoDf.at[idex,'SMALL_INDEX']
@@ -115,13 +117,18 @@ def GetOverDeal(deals_cnt_today, total_deal_cnt):
             indx_in_dc_total = dfStockNoDf.at[idex,'BIG_INDEX']
             deal_cnt_total = int(total_deal_cnt.iat[indx_in_dc_total,1])
             deal_price_today = float(deals_cnt_today.iat[idex_in_dc_tday, 2])
-        except:
             stock_no = str(deals_cnt_today.iat[idex_in_dc_tday,0])
+        except:
             print("Data of Stock " + stock_no+ " Is Not Exist!!")
             continue  #skip this index
         
         
         if(deal_cnt_today> (deal_cnt_total-deal_cnt_today)):
+            if(dispLog == True):
+                print("Data of Stock " + stock_no+ " Is OverDeal!!")
+                print("Deal Today:  " + str(deal_cnt_today))
+                print("Deal Totol: "+str(deal_cnt_total-deal_cnt_today))
+                
             deal_cnt_over_deal.append(deal_cnt_today)
             stock_no_over_deal.append(deals_cnt_today.iat[idex_in_dc_tday,0])
             deal_price_over_deal.append(deal_price_today)
