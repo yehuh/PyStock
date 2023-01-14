@@ -11,6 +11,7 @@ import DealCnt
 import GetOverDeal
 import ToGoogleCloud
 import base64
+import copy
 
 def hello_pubsub(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
@@ -29,9 +30,12 @@ def hello_pubsub(event, context):
     total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
     total_deal_cnt.sort_values("STOCK_NO", inplace = True)
     total_deal_cnt.reset_index(drop=True, inplace=True)
+    deal_cnt_today  = copy.copy(deal_cnt_per_day[0])
+    deal_cnt_today.sort_values("STOCK_NO", inplace = True)
+    deal_cnt_today.reset_index(drop=True, inplace=True)
     print("Stock Deal Sum Done!!")
     
-    OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
+    OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_today, total_deal_cnt)
     print("Get Over Deal Stock Done!!")
     
     real_work_day = GetWorkedDay.GetWorkedDay(count_days)

@@ -42,7 +42,7 @@ print(str(roc_year))
 
 
 DaysToCalc = 7
-deal_cnt_per_day = GetStockDataOnline.GetStockData(DaysToCalc, True)
+deal_cnt_per_day = GetStockDataOnline.GetStockData(DaysToCalc, False)
 
 ''' 
 ############################# export deal cnt as json #############################
@@ -61,10 +61,14 @@ print("Deal Count To JSON is Done!!!")
 print("Caculating Days:")
 print(len(deal_cnt_per_day))
 import DealCnt
+import copy
 
 total_deal_cnt = DealCnt.CalDealCntSumV2(deal_cnt_per_day,False)
 total_deal_cnt.sort_values("STOCK_NO", inplace = True)
 total_deal_cnt.reset_index(drop=True, inplace=True)
+deal_cnt_today  = copy.copy(deal_cnt_per_day[0])
+deal_cnt_today.sort_values("STOCK_NO", inplace = True)
+deal_cnt_today.reset_index(drop=True, inplace=True)
 #total_deal_cnt = DealCnt.CalDealCntSum(DaysToCalc,deal_cnt_per_day)
 #CalDealCntSum(calc_days, deal_cnt_per_day)
 #(len(deal_cnt_per_day), deal_cnt_per_day)
@@ -95,7 +99,7 @@ print("DealCntSum To JSON is Done!!!")
 
 import GetOverDeal
 
-OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_per_day[0], total_deal_cnt)
+OverDealDf = GetOverDeal.GetOverDeal(deal_cnt_today, total_deal_cnt, False)
 
 
 '''
