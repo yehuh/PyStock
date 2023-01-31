@@ -14,7 +14,7 @@ import json
 import ast
 
 def getRawCounterStock(DaysToCalc):
-    real_work_day = GetWorkedDay.GetWorkedDay(20)
+    real_work_day = GetWorkedDay.GetWorkedDay(30)
     stock_closed_time = time(15,10,0)
     WorkDayShift = 0
     if(datetime.now().time() < stock_closed_time):
@@ -27,8 +27,14 @@ def getRawCounterStock(DaysToCalc):
     
     return r_counter
 
-def getRawMarketStock(DaysToCalc):
-    real_work_day = GetWorkedDay.GetWorkedDay(20)
+def getRawMarketStock(DaysToCalc,dispLog = False):
+    real_work_days = GetWorkedDay.GetWorkedDay(30)
+    if(dispLog == True):
+        print("Work Day Are:")
+        for dayy in real_work_days:
+            print(dayy.date())
+        
+        
     stock_closed_time = time(15,10,0)
     WorkDayShift = 0
     if(datetime.now().time() < stock_closed_time):
@@ -36,15 +42,18 @@ def getRawMarketStock(DaysToCalc):
     
     r_market=[]
     for i in range(DaysToCalc):
-        roc_year_conter = int(real_work_day[i].year) - 1911
-        r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_day[i+WorkDayShift].strftime("%Y%m%d") + '&type=ALL'))
+        roc_year_conter = int(real_work_days[i].year) - 1911
+        r_market.append(requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + real_work_days[i+WorkDayShift].strftime("%Y%m%d") + '&type=ALL'))
     
     return r_market
 
 
 
 def GetStockData(day_cnt, dispLog = False):    
-    r_market = getRawMarketStock(day_cnt)
+    r_market = getRawMarketStock(day_cnt, dispLog)
+    if(dispLog == True):
+        print(f'Length of Market Data {len(r_market)}.')
+        
     r_counter = getRawCounterStock(day_cnt)
     print("Get Raw Data Done!!")
     DaysToCalc = day_cnt
@@ -52,7 +61,20 @@ def GetStockData(day_cnt, dispLog = False):
     ########################################整理上市股票資料，變成表格########################################
     df_market =[]
     for i in range(DaysToCalc):
-        df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=["證券代號" in l for l in     r_market[i].text.split("\n")].index(True)-1)
+        csv_arrs = r_market[i].text.split("\n")
+        if(dispLog == True):
+            print(f"Day {i}")
+            print(f'Line Cnt of Market Data {len(csv_arrs)}.')
+        mar_index_line = -1
+        for j in range(len(csv_arrs)):
+            if(csv_arrs[j].find("證券代號")!=-1):
+                mar_index_line = j-1
+                break
+        
+        if(dispLog == True):
+            print(f'Line of Market Data Index: {mar_index_line}.')
+            
+        df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=mar_index_line)
   
         df_buff1 = df_buff.drop(columns=["證券名稱","成交筆數","成交金額","開盤價","最高價","最低價"])#,"收盤價"
         df_buff2 = df_buff1.drop(columns=["最後揭示買價","最後揭示買量","最後揭示賣價","最後揭示賣量","本益比"])
@@ -144,7 +166,7 @@ def GetStockData(day_cnt, dispLog = False):
 
 
 
-    real_work_day = GetWorkedDay.GetWorkedDay(20)
+    real_work_day = GetWorkedDay.GetWorkedDay(40)
     start_pos = 0
     for k in range(DaysToCalc):
         deal_cnt =[]

@@ -47,6 +47,8 @@ holidays_taiwan_2023 = []
 holidays_taiwan_2023.append(date(2022, 9, 9))
 holidays_taiwan_2023.append(date(2022, 10, 10))
 holidays_taiwan_2023.append(date(2023, 1, 2))
+holidays_taiwan_2023.append(date(2023, 1, 18))
+holidays_taiwan_2023.append(date(2023, 1, 19))
 holidays_taiwan_2023.append(date(2023, 1, 20))
 holidays_taiwan_2023.append(date(2023, 1, 23))
 holidays_taiwan_2023.append(date(2023, 1, 24))
