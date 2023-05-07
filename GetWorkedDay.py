@@ -69,14 +69,12 @@ holidays_taiwan_2023.append(date(2023, 10, 10))
 #1/20~29
 
 special_work_day = []
-special_work_day.append(date(2022, 1, 22))
-special_work_day.append(date(2022, 9, 11))
-special_work_day.append(date(2023, 1, 7))
-special_work_day.append(date(2023, 2, 4))
-special_work_day.append(date(2023, 2, 18))
-special_work_day.append(date(2023, 3, 25))
-special_work_day.append(date(2023, 6, 17))
-special_work_day.append(date(2023, 9, 23))
+special_work_day.append(date(2022, 1,   22))
+special_work_day.append(date(2022, 9,   11))
+special_work_day.append(date(2023, 1,   7))
+special_work_day.append(date(2023, 3,   25))
+special_work_day.append(date(2023, 6,   17))
+special_work_day.append(date(2023, 9,   23))
 
 def GetWorkedDay(count_days_from_today):
     days_ago = []

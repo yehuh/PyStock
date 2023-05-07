@@ -131,7 +131,7 @@ for idex in OverDealDf.index:
 
 
 OverDealDf["DATE"] = work_day
-OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 1000000000]
+OverDealDf_k_milium = OverDealDf[OverDealDf.DEAL_AMOUNT > 450000000]
 
 '''
 ##################### To Stock Data To Cloud Google #####################
@@ -159,7 +159,7 @@ print("over deal stock")
 print(OverDealDf)
 print("-------------")
 print("             ")
-print("DEAL_AMOUNT > 100000000")
+print("DEAL_AMOUNT > 450000000")
 print(OverDealDf_k_milium)
 print("-------------")
 print("             ")
