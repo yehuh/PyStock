@@ -69,7 +69,7 @@ holidays_taiwan_2023.append(date(2023, 10, 10))
 #1/20~29
 
 #day_off typhoon
-holidays_taiwan_2023.append(date(2023, 10, 10))
+holidays_taiwan_2023.append(date(2023, 8, 4))
 
 special_work_day = []
 special_work_day.append(date(2022, 1,   22))
