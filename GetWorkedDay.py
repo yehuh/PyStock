@@ -63,13 +63,16 @@ holidays_taiwan_2023.append(date(2023, 4, 5))
 holidays_taiwan_2023.append(date(2023, 5, 1))
 holidays_taiwan_2023.append(date(2023, 6, 22))
 holidays_taiwan_2023.append(date(2023, 6, 23))
+
+#day_off typhoon
+holidays_taiwan_2023.append(date(2023, 8, 3))
+
 holidays_taiwan_2023.append(date(2023, 9, 29))
 holidays_taiwan_2023.append(date(2023, 10, 9))
 holidays_taiwan_2023.append(date(2023, 10, 10))
 #1/20~29
 
-#day_off typhoon
-holidays_taiwan_2023.append(date(2023, 8, 4))
+
 
 special_work_day = []
 special_work_day.append(date(2022, 1,   22))
