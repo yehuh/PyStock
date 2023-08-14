@@ -61,6 +61,10 @@ holidays_taiwan_2023.append(date(2023, 4, 5))
 holidays_taiwan_2023.append(date(2023, 5, 1))
 holidays_taiwan_2023.append(date(2023, 6, 22))
 holidays_taiwan_2023.append(date(2023, 6, 23))
+
+#typhoon
+holidays_taiwan_2023.append(date(2023, 8, 3))
+
 holidays_taiwan_2023.append(date(2023, 9, 29))
 holidays_taiwan_2023.append(date(2023, 10, 9))
 holidays_taiwan_2023.append(date(2023, 10, 10))
