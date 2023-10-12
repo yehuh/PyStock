@@ -78,7 +78,6 @@ special_work_day.append(date(2023, 2, 4))
 special_work_day.append(date(2023, 2, 18))
 special_work_day.append(date(2023, 3, 25))
 special_work_day.append(date(2023, 6, 17))
-special_work_day.append(date(2023, 9, 23))
 
 def GetWorkedDay(count_days_from_today):
     days_ago = []
@@ -108,3 +107,10 @@ def GetWorkedDay(count_days_from_today):
             real_work_day.append(dayy)
             
     return real_work_day
+
+'''
+w_days = GetWorkedDay(20)
+
+for w_day in w_days:
+    print(w_day)
+'''
