@@ -52,7 +52,20 @@ def GetStockData(day_cnt, dispLog = False):
     ########################################整理上市股票資料，變成表格########################################
     df_market =[]
     for i in range(DaysToCalc):
-        df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=["證券代號" in l for l in     r_market[i].text.split("\n")].index(True)-1)
+        str_io = StringIO(r_market[i].text.replace("=", ""))
+        temp_strs = r_market[i].text.split("\n")
+        head_id = 0
+        for temp_str in temp_strs:
+            if temp_str.find ("證券代號")!=-1:
+                break
+            head_id = head_id+1
+            
+        df_buff = ""
+        if(head_id < 1):
+            return
+    
+        df_buff = pd.read_csv(str_io, header=[head_id-1])
+        #df_buff = pd.read_csv(StringIO(r_market[i].text.replace("=", "")), header=["證券代號" in l for l in     r_market[i].text.split("\n")].index(True)-1)
   
         df_buff1 = df_buff.drop(columns=["證券名稱","成交筆數","成交金額","開盤價","最高價","最低價"])#,"收盤價"
         df_buff2 = df_buff1.drop(columns=["最後揭示買價","最後揭示買量","最後揭示賣價","最後揭示賣量","本益比"])
@@ -199,4 +212,19 @@ def GetStockData(day_cnt, dispLog = False):
 
     ''#################找出證券代號中對應的成交量並存於 deal_cnt_per_day#################
     return deal_cnt_per_day
-    
+
+'''
+raw_market = getRawMarketStock(7)
+for i in range(7):
+    str_io = StringIO(raw_market[i].text.replace("=", ""))
+    temp_strs = raw_market[i].text.split("\n")
+    head_id = 0
+    for temp_str in temp_strs:
+        if temp_str.find ("證券代號")!=-1:
+            break
+        head_id = head_id+1;    
+    start_row = head_id
+    if(head_id > 0):
+        df_buff = pd.read_csv(str_io, header=[head_id-1])
+        print(df_buff)
+'''
